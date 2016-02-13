@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/gameLogic.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">src/</a> gameLogic.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">67.52% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>79/117</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">52.08% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>25/48</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">78.57% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>11/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">67.52% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>79/117</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">48×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//TODO: have not written refresh method if there is no move can make.
+var gameLogic;
+(function (gameLogic) {
+    gameLogic.ROWS = 8;
+    gameLogic.COLS = 6;
+    gameLogic.num_of_players = 2;
+    gameLogic.total_turns = 10;
+    gameLogic.num_of_colors = 3;
+    /** Returns the initial EncloseCombat board, which is a ROWSxCOLS matrix containing the initial of a certain color. */
+    function getInitialBoard() {
+        var board = [];
+        for (var i = 0; i &lt; gameLogic.ROWS; i++) {
+            board[i] = [];
+            for (var j = 0; j &lt; gameLogic.COLS; j++) {
+                // board[i][j] = getRandomColor();
+                board[i][j] = 'C';
+            }
+        }
+        return board;
+    }
+    /** Between 1 to num_of_colors, a random number is chosen and return a corresponding color */
+<span class="fstat-no" title="function not covered" >    function getRandomColor() {</span>
+<span class="cstat-no" title="statement not covered" >        var res = Math.floor((Math.random() * gameLogic.num_of_colors) + 1);</span>
+<span class="cstat-no" title="statement not covered" >        switch (res) {</span>
+            case 1:
+<span class="cstat-no" title="statement not covered" >                return 'C'; </span>// short for cyan
+<span class="cstat-no" title="statement not covered" >                break;</span>
+            case 2:
+<span class="cstat-no" title="statement not covered" >                return 'G'; </span>// short for green
+<span class="cstat-no" title="statement not covered" >                break;</span>
+            case 3:
+<span class="cstat-no" title="statement not covered" >                return 'B'; </span>// short for blue
+<span class="cstat-no" title="statement not covered" >                break;</span>
+            default:
+<span class="cstat-no" title="statement not covered" >                break;</span>
+        }
+    }
+    function getIntialScores() {
+        var scores = [];
+        for (var i = 0; i &lt; gameLogic.num_of_players; i++) {
+            scores[i] = 0;
+        }
+        return scores;
+    }
+    /** Set the first turn to be 1, and the intial score for all players to be 0 */
+    function getInitialState() {
+        return { board: getInitialBoard(), delta: null, current_turn: 1, scores: getIntialScores() };
+    }
+    gameLogic.getInitialState = getInitialState;
+    /**
+     * Returns true if the game ended in a tie because game reaches the maximum of turns,
+     * and at least two players have the identical scores.
+     */
+    function isTie(FState) {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (FState.current_turn &gt;= gameLogic.total_turns &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >twoOrMoreHaveSameScores(FState.scores))</span> {
+<span class="cstat-no" title="statement not covered" >            return true;</span>
+        }
+        return false;
+    }
+    /** Check if at least two players have the same scores
+     * reference: http://superivan.iteye.com/blog/1131328
+     * UNTESTED
+    */
+<span class="fstat-no" title="function not covered" >    function twoOrMoreHaveSameScores(scores) {</span>
+<span class="cstat-no" title="statement not covered" >        var s = scores.join(",") + ",";</span>
+<span class="cstat-no" title="statement not covered" >        for (var i = 0; i &lt; scores.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            if (s.replace(scores[i] + ",", "").indexOf(scores[i] + ",") &gt; -1) {</span>
+<span class="cstat-no" title="statement not covered" >                return true;</span>
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        return false;</span>
+    }
+    /**
+     * Return the winner (either '1' or '2' or '3' ...) or '' if there is no winner.
+     * getWinner will return the player with highest score at the final turn.
+     */
+    function getWinner(S) {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (isTie(S)) {
+<span class="cstat-no" title="statement not covered" >            return '';</span>
+        }
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (S.current_turn == gameLogic.total_turns) {
+            // Find the one with maximum score
+<span class="cstat-no" title="statement not covered" >            var max = Math.max.apply(null, S.scores);</span>
+<span class="cstat-no" title="statement not covered" >            for (var i = 0; i &lt; S.scores.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                if (max == S.scores[i]) {</span>
+<span class="cstat-no" title="statement not covered" >                    return i + 1 + '';</span>
+                }
+            }
+        }
+        return '';
+    }
+    /**
+     * Returns the move that should be performed when player
+     * with index turnIndexBeforeMove makes a move in cell row X col.
+     */
+    function createMove(stateBeforeMove, moves, turnIndexBeforeMove) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (!stateBeforeMove) {
+            stateBeforeMove = getInitialState();
+        }
+        var board = stateBeforeMove.board;
+        checkMove(board, moves);
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (isTie(stateBeforeMove) || getWinner(stateBeforeMove) !== '') {
+<span class="cstat-no" title="statement not covered" >            throw new Error("Can only make a move if the game is not over!");</span>
+        }
+        var boardAfterMove = angular.copy(board);
+        // TODO: to refill the board
+        for (var j = 0; j &lt; moves.length - 1; j++) {
+            boardAfterMove[moves[j].row][moves[j].col] = turnIndexBeforeMove === 0 ? 'X' : <span class="branch-1 cbranch-no" title="branch not covered" >'O';</span>
+        }
+        // boardAfterMove[row][col] = turnIndexBeforeMove === 0 ? 'X' : 'O';
+        /**Get the updated scores */
+        var scores = updateScores(stateBeforeMove.scores, turnIndexBeforeMove, moves);
+        var stateAfterMove = {
+            board: boardAfterMove,
+            delta: moves,
+            current_turn: stateBeforeMove.current_turn + 1,
+            scores: scores
+        };
+        var winner = getWinner(stateAfterMove);
+        var currentScore = scores;
+        var turnIndexAfterMove;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (winner !== '' || isTie(stateAfterMove)) {
+            // Game over.
+<span class="cstat-no" title="statement not covered" >            turnIndexAfterMove = -1;</span>
+        }
+        else {
+            // Game continues. Now it's the opponent's turn (the turn switches from 0 to 1 and 1 to 0).
+            turnIndexAfterMove = gameLogic.num_of_players - 1 - turnIndexBeforeMove;
+        }
+        return { turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove };
+    }
+    gameLogic.createMove = createMove;
+    /** TODO: update scores. For now, it is based on the number of points in the circle */
+    function updateScores(scores, turn, moves) {
+        var res = scores;
+        res[turn] += moves.length - 1;
+        return res;
+    }
+    /** check if this move sticks to the rule and throws responding error */
+    function checkMove(board, moves) {
+        // it should have at least three points
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (moves.length &lt;= 3) {
+<span class="cstat-no" title="statement not covered" >            throw new Error("You should draw a circle with at least three points");</span>
+<span class="cstat-no" title="statement not covered" >            return false;</span>
+        }
+        // last point should be the first point 
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (!(moves[0].row == moves[moves.length - 1].row &amp;&amp; moves[0].col == moves[moves.length - 1].col)) {
+<span class="cstat-no" title="statement not covered" >            throw new Error("You should draw a enclosed circle");</span>
+<span class="cstat-no" title="statement not covered" >            return false;</span>
+        }
+        // there should not be duplicate points except for the last point
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (checkDuplicate(moves)) {
+<span class="cstat-no" title="statement not covered" >            throw new Error("You should a enclosed circle without duplicates");</span>
+<span class="cstat-no" title="statement not covered" >            return false;</span>
+        }
+        for (var i = 1; i &lt; moves.length; i++) {
+            // points should be next the previous one
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (!(Math.abs(moves[i].row - moves[i - 1].row) &lt;= 1 &amp;&amp; Math.abs(moves[i].col - moves[i - 1].col) &lt;= 1)) {
+<span class="cstat-no" title="statement not covered" >                throw new Error("Point selected should be closed to the previous one");</span>
+<span class="cstat-no" title="statement not covered" >                return false;</span>
+            }
+            // Points should all be the same color
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (board[moves[i].row][moves[i].col] != board[moves[i - 1].row][moves[i - 1].col]) {
+<span class="cstat-no" title="statement not covered" >                throw new Error("Points should all be the same color");</span>
+<span class="cstat-no" title="statement not covered" >                return false;</span>
+            }
+        }
+        return true;
+    }
+    /** Check if there are any duplicate points in the moves except for the last one */
+    function checkDuplicate(moves) {
+        var tmp = [];
+        for (var i = 0; i &lt; moves.length - 1; i++) {
+            tmp[i] = moves[i].row * gameLogic.ROWS + moves[i].col * gameLogic.COLS;
+        }
+        var s = tmp.join(",") + ",";
+        for (var i = 0; i &lt; tmp.length; i++) {
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (s.replace(tmp[i] + ",", "").indexOf(tmp[i] + ",") &gt; -1) {
+<span class="cstat-no" title="statement not covered" >                return true;</span>
+            }
+        }
+        return false;
+    }
+    function checkMoveOk(stateTransition) {
+        // We can assume that turnIndexBeforeMove and stateBeforeMove are legal, and we need
+        // to verify that the move is OK.
+        var turnIndexBeforeMove = stateTransition.turnIndexBeforeMove;
+        var stateBeforeMove = stateTransition.stateBeforeMove;
+        var move = stateTransition.move;
+        var deltaValue = stateTransition.move.stateAfterMove.delta;
+        var expectedMove = createMove(stateBeforeMove, deltaValue, turnIndexBeforeMove);
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (!angular.equals(move, expectedMove)) {
+<span class="cstat-no" title="statement not covered" >            throw new Error("Expected move=" + angular.toJson(expectedMove, true) +</span>
+                ", but got stateTransition=" + angular.toJson(stateTransition, true));
+        }
+    }
+    gameLogic.checkMoveOk = checkMoveOk;
+<span class="fstat-no" title="function not covered" >    function forSimpleTestHtml() {</span>
+<span class="cstat-no" title="statement not covered" >        var move = gameLogic.createMove(null, [{ row: 0, col: 0 }], 0);</span>
+<span class="cstat-no" title="statement not covered" >        log.log("move=", move);</span>
+<span class="cstat-no" title="statement not covered" >        var params = {</span>
+            turnIndexBeforeMove: 0,
+            stateBeforeMove: null,
+            move: move,
+            numberOfPlayers: 2 };
+<span class="cstat-no" title="statement not covered" >        gameLogic.checkMoveOk(params);</span>
+    }
+    gameLogic.forSimpleTestHtml = forSimpleTestHtml;
+})(gameLogic || (gameLogic = {}));
+//# sourceMappingURL=gameLogic.js.map</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Feb 13 2016 09:55:03 GMT-0500 (EST)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
