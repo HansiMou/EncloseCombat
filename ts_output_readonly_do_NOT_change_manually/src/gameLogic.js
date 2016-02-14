@@ -89,6 +89,84 @@ var gameLogic;
         }
         return '';
     }
+    /** return wether one number is in the array */
+    function contains(a, row, col) {
+        for (var i = 0; i < a.length; i++) {
+            if (a[i].row === row && a[i].col === col) {
+                return true;
+            }
+        }
+        return false;
+    }
+    function getBoardAndScore(board, moves) {
+        var score = 0;
+        var boardAfterMove = board;
+        var helper = [];
+        // initialize the auxiliary boolean[][] array. 
+        for (var i = 0; i < gameLogic.ROWS; i++) {
+            helper[i] = [];
+            for (var j = 0; j < gameLogic.COLS; j++) {
+                helper[i][j] = false;
+            }
+        }
+        // Value inside of the circle will be set to 'true', otherwise false  
+        for (var i = 0; i < gameLogic.ROWS; i++) {
+            var left = 0;
+            var right = 0;
+            outer: while (left < gameLogic.COLS) {
+                if (contains(moves, i, left)) {
+                    helper[i][left] = true;
+                    score++;
+                    right = left + 1;
+                    inner: while (right < gameLogic.COLS) {
+                        if (contains(moves, i, right)) {
+                            for (var j = left + 1; j <= right; j++) {
+                                helper[i][j] = true;
+                                score++;
+                            }
+                            left = right + 1;
+                            break inner;
+                        }
+                        else {
+                            helper[i][right++] = false;
+                        }
+                    }
+                    if (right === gameLogic.COLS) {
+                        break outer;
+                    }
+                }
+                else {
+                    helper[i][left++] = false;
+                }
+            }
+        }
+        //   refill the circle with the chips above and refill the above empty ones with random color
+        for (var j = gameLogic.COLS - 1; j >= 0; j--) {
+            var flag = gameLogic.ROWS - 1;
+            for (var i = gameLogic.ROWS - 1; i >= 0; i--) {
+                var tmp = getColor(boardAfterMove, helper, flag, i, j);
+                flag = tmp.flag;
+                boardAfterMove[i][j] = tmp.color;
+                flag--;
+            }
+        }
+        return { score: score, board: boardAfterMove };
+    }
+    function getColor(board, helper, flag, row, col) {
+        while (flag >= 0) {
+            if (helper[flag][col] === false) {
+                break;
+            }
+            else {
+                flag--;
+            }
+        }
+        if (flag < 0) {
+            //   return {color: getRandomColor(), flag: flag};
+            return { color: 'R', flag: flag };
+        }
+        return { color: board[flag][col], flag: flag };
+    }
     /**
      * Returns the move that should be performed when player
      * with index turnIndexBeforeMove makes a move in cell row X col.
@@ -102,14 +180,12 @@ var gameLogic;
         if (isTie(stateBeforeMove) || getWinner(stateBeforeMove) !== '') {
             throw new Error("Can only make a move if the game is not over!");
         }
-        var boardAfterMove = angular.copy(board);
         // TODO: to refill the board
-        for (var j = 0; j < moves.length - 1; j++) {
-            boardAfterMove[moves[j].row][moves[j].col] = turnIndexBeforeMove === 0 ? 'X' : 'O';
-        }
-        // boardAfterMove[row][col] = turnIndexBeforeMove === 0 ? 'X' : 'O';
+        var tmp = getBoardAndScore(board, moves);
+        var boardAfterMove = tmp.board;
         /**Get the updated scores */
-        var scores = updateScores(stateBeforeMove.scores, turnIndexBeforeMove, moves);
+        var scores = stateBeforeMove.scores;
+        scores[turnIndexBeforeMove] += tmp.score;
         var stateAfterMove = {
             board: boardAfterMove,
             delta: moves,
@@ -130,12 +206,6 @@ var gameLogic;
         return { turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove };
     }
     gameLogic.createMove = createMove;
-    /** TODO: update scores. For now, it is based on the number of points in the circle */
-    function updateScores(scores, turn, moves) {
-        var res = scores;
-        res[turn] += moves.length - 1;
-        return res;
-    }
     /** check if this move sticks to the rule and throws responding error */
     function checkMove(board, moves) {
         // it should have at least three points
@@ -150,7 +220,7 @@ var gameLogic;
         }
         // there should not be duplicate points except for the last point
         if (checkDuplicate(moves)) {
-            throw new Error("You should a enclosed circle without duplicates");
+            throw new Error("You should a draw enclosed circle without duplicates");
             return false;
         }
         for (var i = 1; i < moves.length; i++) {
@@ -171,7 +241,7 @@ var gameLogic;
     function checkDuplicate(moves) {
         var tmp = [];
         for (var i = 0; i < moves.length - 1; i++) {
-            tmp[i] = moves[i].row * gameLogic.ROWS + moves[i].col * gameLogic.COLS;
+            tmp[i] = moves[i].row * gameLogic.COLS + moves[i].col;
         }
         var s = tmp.join(",") + ",";
         for (var i = 0; i < tmp.length; i++) {

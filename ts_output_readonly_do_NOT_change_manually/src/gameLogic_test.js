@@ -37,15 +37,49 @@ describe("In EncloseCombat", function () {
             }
         }
     }
-    it("drawing a small rectangle (four chips) from initial state is legal", function () {
-        expectMove(OK, ONE_TURN, null, null, 1, [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 1 }, { row: 1, col: 0 }, { row: 0, col: 0 }], [['X', 'X', 'C', 'C', 'C', 'C'],
-            ['X', 'X', 'C', 'C', 'C', 'C'],
+    it("drawing one small chip from initial state at upper left is illegal", function () {
+        expectMove(ILLEGAL, ONE_TURN, null, null, 1, [{ row: 0, col: 0 }], [['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [0, 0], 2);
+    });
+    it("drawing a small rectangle (four chips) from initial state at upper left is legal", function () {
+        expectMove(OK, ONE_TURN, null, null, 1, [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 1 }, { row: 1, col: 0 }, { row: 0, col: 0 }], [['R', 'R', 'C', 'C', 'C', 'C'],
+            ['R', 'R', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2);
+    });
+    it("drawing a small rectangle (four chips) from initial state at right bottom is legal", function () {
+        expectMove(OK, ONE_TURN, null, null, 1, [{ row: 6, col: 4 }, { row: 6, col: 5 }, { row: 7, col: 5 }, { row: 7, col: 4 }, { row: 6, col: 4 }], [['C', 'C', 'C', 'C', 'R', 'R'],
+            ['C', 'C', 'C', 'C', 'R', 'R'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2);
+    });
+    it("drawing a complex shape (9 chips) from initial state at right bottom is legal", function () {
+        expectMove(OK, ONE_TURN, null, null, 1, [{ row: 3, col: 1 }, { row: 3, col: 2 }, { row: 3, col: 3 }, { row: 3, col: 4 }, { row: 3, col: 5 },
+            { row: 4, col: 5 }, { row: 4, col: 4 }, { row: 4, col: 3 }, { row: 4, col: 2 },
+            { row: 5, col: 2 }, { row: 6, col: 2 }, { row: 6, col: 3 }, { row: 6, col: 4 }, { row: 6, col: 5 },
+            { row: 7, col: 5 }, { row: 7, col: 4 }, { row: 7, col: 3 }, { row: 7, col: 2 }, { row: 7, col: 1 },
+            { row: 6, col: 1 }, { row: 5, col: 1 }, { row: 4, col: 1 }, { row: 3, col: 1 }], [['C', 'R', 'R', 'R', 'R', 'R'],
+            ['C', 'R', 'R', 'R', 'R', 'R'],
+            ['C', 'R', 'R', 'R', 'R', 'R'],
+            ['C', 'R', 'R', 'R', 'R', 'R'],
+            ['C', 'R', 'R', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C'],
+            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [22, 0], 2);
     });
     //   it("placing X in 0x0 from initial state but setting the turn to yourself is illegal", function() {
     //     expectMove(ILLEGAL, X_TURN, null, 0, 0,

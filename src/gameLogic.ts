@@ -16,6 +16,16 @@ interface IState {
   scores: number[];
 }
 
+interface ScoreAndBoard {
+    board: Board;
+    score: number;
+}
+
+interface ColorsAndFlag {
+    color: string;
+    flag: number;
+}
+
 module gameLogic {
   export const ROWS = 8;
   export const COLS = 6;
@@ -109,6 +119,93 @@ module gameLogic {
       }
       return '';
   }
+  /** return wether one number is in the array */
+  function contains(a: BoardDelta[], row: number, col: number) {
+        for (let i = 0; i < a.length; i++) {
+            if (a[i].row === row && a[i].col === col) {
+                return true;
+            }
+        }
+        return false;
+    }
+  function getBoardAndScore(board: Board, moves: BoardDelta[]): ScoreAndBoard{
+      let score = 0;
+      let boardAfterMove = board;
+      
+      let helper: boolean[][] = [];
+      
+      // initialize the auxiliary boolean[][] array. 
+      for (let i = 0; i < ROWS; i++){
+          helper[i] = [];
+          for (let j = 0; j < COLS; j++){
+              helper[i][j] = false;
+          }
+      }
+      // Value inside of the circle will be set to 'true', otherwise false  
+      for (let i = 0; i < ROWS; i++){
+          let left = 0;
+          let right = 0;
+          
+          outer:
+          while (left < COLS){
+              if (contains(moves, i, left)){
+                  helper[i][left] = true;
+                  score++;
+                  
+                  right = left+1;
+                  inner:
+                  while (right < COLS){
+                      if (contains(moves, i, right)){
+                          for (let j = left+1; j <= right; j++){
+                              helper[i][j] = true;
+                              score++;
+                          }
+                          left = right+1;
+                          break inner;
+                      }
+                      else{
+                          helper[i][right++] = false;
+                      }
+                  }
+                  if (right === COLS){
+                      break outer;
+                  }
+                  
+              }
+              else{
+                  helper[i][left++] = false;
+              }
+          }
+      }
+    //   refill the circle with the chips above and refill the above empty ones with random color
+      
+      for (let j = COLS-1; j >= 0; j--){
+          let flag = ROWS-1;
+          for (let i = ROWS-1; i >= 0; i--){
+              let tmp = getColor(boardAfterMove, helper, flag, i, j);
+              flag = tmp.flag;
+              boardAfterMove[i][j] = tmp.color;
+              flag--;
+          }
+      }
+      return {score: score, board: boardAfterMove};
+  }
+  
+  function getColor(board: Board, helper: boolean[][], flag: number, row: number, col: number): ColorsAndFlag{
+      while(flag >= 0){
+          if (helper[flag][col] === false){
+              break;
+          }
+          else{
+              flag--;
+          }
+      }
+      if (flag < 0){
+        //   return {color: getRandomColor(), flag: flag};
+        return {color: 'R', flag: flag};
+      }
+      return {color: board[flag][col], flag: flag};
+  }
 
   /**
    * Returns the move that should be performed when player
@@ -127,16 +224,14 @@ module gameLogic {
       throw new Error("Can only make a move if the game is not over!");
     }
     
-    let boardAfterMove = angular.copy(board);
-    
     // TODO: to refill the board
-    for (let j = 0; j < moves.length-1; j++){
-        boardAfterMove[moves[j].row][moves[j].col] = turnIndexBeforeMove === 0 ? 'X' : 'O';
-    }
-    // boardAfterMove[row][col] = turnIndexBeforeMove === 0 ? 'X' : 'O';
+    let tmp = getBoardAndScore(board, moves);
+    let boardAfterMove = tmp.board;
     
     /**Get the updated scores */
-    let scores: number[] = updateScores(stateBeforeMove.scores, turnIndexBeforeMove, moves);
+    let scores: number[] = stateBeforeMove.scores;
+    scores[turnIndexBeforeMove] += tmp.score;
+    
     let stateAfterMove: IState = {
         board: boardAfterMove,
         delta: moves,
@@ -157,12 +252,6 @@ module gameLogic {
     }
     return {turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove};
   }
-  /** TODO: update scores. For now, it is based on the number of points in the circle */
-  function updateScores(scores: number[], turn: number, moves: BoardDelta[]): number[]{
-      let res = scores;
-      res[turn] += moves.length-1;
-      return res;
-  }
   
   /** check if this move sticks to the rule and throws responding error */
   function checkMove(board: Board, moves: BoardDelta[]): boolean{
@@ -179,7 +268,7 @@ module gameLogic {
       }
       // there should not be duplicate points except for the last point
       if (checkDuplicate(moves)){
-          throw new Error("You should a enclosed circle without duplicates");
+          throw new Error("You should a draw enclosed circle without duplicates");
           return false;
       }
       for (let i = 1; i < moves.length; i++){
@@ -201,7 +290,7 @@ module gameLogic {
   function checkDuplicate(moves: BoardDelta[]): boolean{
       let tmp: number[] = [];
       for (let i = 0; i < moves.length-1; i++){
-          tmp[i] = moves[i].row*ROWS+moves[i].col*COLS;
+          tmp[i] = moves[i].row * COLS + moves[i].col;
       }
       
       let s = tmp.join(",")+",";

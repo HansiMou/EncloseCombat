@@ -1,8 +1,8 @@
 {
-  "name": "TicTacToe",
+  "name": "EncloseCombat",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yoav-zibin/TicTacToe.git"
+    "url": "https://github.com/HansiMou/EncloseCombat.git"
   },
   "version": "1.0.0",
   "devDependencies": {
@@ -37,5 +37,5 @@
     "start": "http-server -a localhost -p 9000 -c-1",
     "test": "grunt"
   },
-  "author": "Yoav Zibin"
+  "author": "Hans Mou"
 }
