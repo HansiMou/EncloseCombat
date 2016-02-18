@@ -15,7 +15,10 @@ interface IState {
   current_turn: number;
   scores: number[];
 }
-
+interface Colrange {
+    left: number;
+    right: number;
+}
 interface ScoreAndBoard {
     board: Board;
     score: number;
@@ -143,40 +146,33 @@ module gameLogic {
       }
       // Value inside of the circle will be set to 'true', otherwise false  
       for (let i = 0; i < ROWS; i++){
-          let left = 0;
-          let right = 0;
-          
-          outer:
-          while (left < COLS){
-              if (contains(moves, i, left)){
-                  helper[i][left] = true;
-                  score++;
-                  
-                  right = left+1;
-                  inner:
-                  while (right < COLS){
-                      if (contains(moves, i, right)){
-                          for (let j = left+1; j <= right; j++){
-                              helper[i][j] = true;
-                              score++;
-                          }
-                          left = right+1;
-                          break inner;
-                      }
-                      else{
-                          helper[i][right++] = false;
-                      }
-                  }
-                  if (right === COLS){
-                      break outer;
-                  }
-                  
+          let range = foundRangeOfCertainRow(moves, i);
+          for (let j = 0; j < COLS; j++){
+              if (j >= range.left && j <= range.right){
+                helper[i][j] = true;
               }
               else{
-                  helper[i][left++] = false;
+                  helper[i][j] = false;
               }
           }
       }
+      for (let i = 0; i < COLS; i++){
+          let range = foundRangeOfCertainCol(moves, i);
+          for (let j = 0; j < ROWS; j++){
+              if (j >= range.left && j <= range.right && helper[j][i] == true){
+                score++;
+              }
+              else{
+                  helper[j][i] = false;
+              }
+          }
+      }
+      for (let i = 0; i < ROWS; i++){
+          for (let j = 0; j < COLS; j++){
+              if (helper[i][j] === true)
+          }
+      }
+    //   throw new Error(angular.toJson(helper, true));
     //   refill the circle with the chips above and refill the above empty ones with random color
       
       for (let j = COLS-1; j >= 0; j--){
@@ -190,7 +186,30 @@ module gameLogic {
       }
       return {score: score, board: boardAfterMove};
   }
-  
+  function foundRangeOfCertainRow(moves: BoardDelta[], row: number): Colrange{
+      let left = 100;
+      let right = -2;
+      
+      for (let i = 0; i < moves.length; i++){
+          if (moves[i].row === row){
+              left = Math.min(moves[i].col, left);
+              right = Math.max(moves[i].col, right);
+          }
+      }
+      return {left: left, right: right};
+  }
+  function foundRangeOfCertainCol(moves: BoardDelta[], col: number): Colrange{
+      let left = 100;
+      let right = -2;
+      
+      for (let i = 0; i < moves.length; i++){
+          if (moves[i].col === col){
+              left = Math.min(moves[i].row, left);
+              right = Math.max(moves[i].row, right);
+          }
+      }
+      return {left: left, right: right};
+  }
   function getColor(board: Board, helper: boolean[][], flag: number, row: number, col: number): ColorsAndFlag{
       while(flag >= 0){
           if (helper[flag][col] === false){

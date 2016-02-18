@@ -111,35 +111,28 @@ var gameLogic;
         }
         // Value inside of the circle will be set to 'true', otherwise false  
         for (var i = 0; i < gameLogic.ROWS; i++) {
-            var left = 0;
-            var right = 0;
-            outer: while (left < gameLogic.COLS) {
-                if (contains(moves, i, left)) {
-                    helper[i][left] = true;
-                    score++;
-                    right = left + 1;
-                    inner: while (right < gameLogic.COLS) {
-                        if (contains(moves, i, right)) {
-                            for (var j = left + 1; j <= right; j++) {
-                                helper[i][j] = true;
-                                score++;
-                            }
-                            left = right + 1;
-                            break inner;
-                        }
-                        else {
-                            helper[i][right++] = false;
-                        }
-                    }
-                    if (right === gameLogic.COLS) {
-                        break outer;
-                    }
+            var range = foundRangeOfCertainRow(moves, i);
+            for (var j = 0; j < gameLogic.COLS; j++) {
+                if (j >= range.left && j <= range.right) {
+                    helper[i][j] = true;
                 }
                 else {
-                    helper[i][left++] = false;
+                    helper[i][j] = false;
                 }
             }
         }
+        for (var i = 0; i < gameLogic.COLS; i++) {
+            var range = foundRangeOfCertainCol(moves, i);
+            for (var j = 0; j < gameLogic.ROWS; j++) {
+                if (j >= range.left && j <= range.right && helper[j][i] == true) {
+                    score++;
+                }
+                else {
+                    helper[j][i] = false;
+                }
+            }
+        }
+        //   throw new Error(angular.toJson(helper, true));
         //   refill the circle with the chips above and refill the above empty ones with random color
         for (var j = gameLogic.COLS - 1; j >= 0; j--) {
             var flag = gameLogic.ROWS - 1;
@@ -151,6 +144,28 @@ var gameLogic;
             }
         }
         return { score: score, board: boardAfterMove };
+    }
+    function foundRangeOfCertainRow(moves, row) {
+        var left = 100;
+        var right = -2;
+        for (var i = 0; i < moves.length; i++) {
+            if (moves[i].row === row) {
+                left = Math.min(moves[i].col, left);
+                right = Math.max(moves[i].col, right);
+            }
+        }
+        return { left: left, right: right };
+    }
+    function foundRangeOfCertainCol(moves, col) {
+        var left = 100;
+        var right = -2;
+        for (var i = 0; i < moves.length; i++) {
+            if (moves[i].col === col) {
+                left = Math.min(moves[i].row, left);
+                right = Math.max(moves[i].row, right);
+            }
+        }
+        return { left: left, right: right };
     }
     function getColor(board, helper, flag, row, col) {
         while (flag >= 0) {
