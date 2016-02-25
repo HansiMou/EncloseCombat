@@ -42,8 +42,8 @@ module gameLogic {
     for (let i = 0; i < ROWS; i++) {
       board[i] = [];
       for (let j = 0; j < COLS; j++) {
-        // board[i][j] = getRandomColor();
-        board[i][j] = 'C';
+        board[i][j] = getRandomColor();
+        // board[i][j] = 'R';
       }
     }
     return board;
@@ -53,7 +53,7 @@ module gameLogic {
       let res = Math.floor((Math.random() * num_of_colors) + 1);
       switch (res) {
           case 1:
-              return 'C'; // short for cyan
+              return 'R'; // short for red
               break;
           case 2:
               return 'G'; // short for green
@@ -167,11 +167,6 @@ module gameLogic {
               }
           }
       }
-      for (let i = 0; i < ROWS; i++){
-          for (let j = 0; j < COLS; j++){
-              if (helper[i][j] === true)
-          }
-      }
     //   throw new Error(angular.toJson(helper, true));
     //   refill the circle with the chips above and refill the above empty ones with random color
       
@@ -220,8 +215,8 @@ module gameLogic {
           }
       }
       if (flag < 0){
-        //   return {color: getRandomColor(), flag: flag};
-        return {color: 'R', flag: flag};
+          return {color: getRandomColor(), flag: flag};
+        // return {color: 'G', flag: flag};
       }
       return {color: board[flag][col], flag: flag};
   }
@@ -236,7 +231,7 @@ module gameLogic {
       stateBeforeMove = getInitialState();
     }
     let board: Board = stateBeforeMove.board;
-     
+    // log.info(["before", angular.toJson(board)]);
     checkMove(board, moves);
       
     if (isTie(stateBeforeMove) || getWinner(stateBeforeMove) !== '') {
@@ -244,11 +239,12 @@ module gameLogic {
     }
     
     // TODO: to refill the board
-    let tmp = getBoardAndScore(board, moves);
-    let boardAfterMove = tmp.board;
-    
+    let boardAfterMove = angular.copy(board);
+    let tmp = getBoardAndScore(boardAfterMove, moves);
+    boardAfterMove = tmp.board;
+    // log.info(["after", angular.toJson(boardAfterMove)]);
     /**Get the updated scores */
-    let scores: number[] = stateBeforeMove.scores;
+    let scores: number[] = angular.copy(stateBeforeMove.scores);
     scores[turnIndexBeforeMove] += tmp.score;
     
     let stateAfterMove: IState = {
@@ -259,17 +255,19 @@ module gameLogic {
     };
     
     let winner = getWinner(stateAfterMove);
-    
+    let endMatchScores: number[];
     let currentScore: number[] = scores;
     let turnIndexAfterMove: number;
     if (winner !== '' || isTie(stateAfterMove)) {
       // Game over.
       turnIndexAfterMove = -1;
+      endMatchScores = winner === '1' ? [1, 0] : winner === '2' ? [0, 1] : [0, 0];
     } else {
       // Game continues. Now it's the opponent's turn (the turn switches from 0 to 1 and 1 to 0).
       turnIndexAfterMove = num_of_players - 1 - turnIndexBeforeMove;
+      endMatchScores = null;
     }
-    return {turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove};
+    return {endMatchScores: endMatchScores, turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove};
   }
   
   /** check if this move sticks to the rule and throws responding error */
@@ -281,7 +279,7 @@ module gameLogic {
       }
       
       // last point should be the first point 
-      if (!(moves[0].row == moves[moves.length-1].row && moves[0].col == moves[moves.length-1].col)){
+      if (!(moves[0].row === moves[moves.length-1].row && moves[0].col === moves[moves.length-1].col)){
           throw new Error("You should draw a enclosed circle");
           return false;
       }
@@ -298,7 +296,8 @@ module gameLogic {
           }
           
           // Points should all be the same color
-          if (board[moves[i].row][moves[i].col] != board[moves[i-1].row][moves[i-1].col]){
+          if (board[moves[i].row][moves[i].col] !== board[moves[i-1].row][moves[i-1].col]){
+              log.info("after", angular.toJson(board));
               throw new Error("Points should all be the same color");
               return false;
           }
@@ -334,7 +333,10 @@ module gameLogic {
           ", but got stateTransition=" + angular.toJson(stateTransition, true))
     }
   }
-
+  
+  export function checkMoveOkNoOp(stateTransition: IStateTransition): void {
+  }
+  
   export function forSimpleTestHtml() {
     var move = gameLogic.createMove(null, [{row:0, col:0}], 0);
     log.log("move=", move);

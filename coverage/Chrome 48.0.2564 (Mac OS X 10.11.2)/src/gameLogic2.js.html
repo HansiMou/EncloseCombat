@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for src/gameLogic.js</title>
+    <title>Code coverage report for src/gameLogic2.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -16,7 +16,7 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../index.html">all files</a> / <a href="index.html">src/</a> gameLogic.js
+      <a href="../index.html">all files</a> / <a href="index.html">src/</a> gameLogic2.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
@@ -632,19 +632,19 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//TODO: have not written refresh method if there is no move can make.
-var gameLogic;
-(function (gameLogic) {
-    gameLogic.ROWS = 8;
-    gameLogic.COLS = 6;
-    gameLogic.num_of_players = 2;
-    gameLogic.total_turns = 10;
-    gameLogic.num_of_colors = 3;
+var gameLogic2;
+(function (gameLogic2) {
+    gameLogic2.ROWS = 8;
+    gameLogic2.COLS = 6;
+    gameLogic2.num_of_players = 2;
+    gameLogic2.total_turns = 10;
+    gameLogic2.num_of_colors = 3;
     /** Returns the initial EncloseCombat board, which is a ROWSxCOLS matrix containing the initial of a certain color. */
     function getInitialBoard() {
         var board = [];
-        for (var i = 0; i &lt; gameLogic.ROWS; i++) {
+        for (var i = 0; i &lt; gameLogic2.ROWS; i++) {
             board[i] = [];
-            for (var j = 0; j &lt; gameLogic.COLS; j++) {
+            for (var j = 0; j &lt; gameLogic2.COLS; j++) {
                 // board[i][j] = getRandomColor();
                 board[i][j] = 'C';
             }
@@ -653,7 +653,7 @@ var gameLogic;
     }
     /** Between 1 to num_of_colors, a random number is chosen and return a corresponding color */
 <span class="fstat-no" title="function not covered" >    function getRandomColor() {</span>
-<span class="cstat-no" title="statement not covered" >        var res = Math.floor((Math.random() * gameLogic.num_of_colors) + 1);</span>
+<span class="cstat-no" title="statement not covered" >        var res = Math.floor((Math.random() * gameLogic2.num_of_colors) + 1);</span>
 <span class="cstat-no" title="statement not covered" >        switch (res) {</span>
             case 1:
 <span class="cstat-no" title="statement not covered" >                return 'C'; </span>// short for cyan
@@ -670,7 +670,7 @@ var gameLogic;
     }
     function getIntialScores() {
         var scores = [];
-        for (var i = 0; i &lt; gameLogic.num_of_players; i++) {
+        for (var i = 0; i &lt; gameLogic2.num_of_players; i++) {
             scores[i] = 0;
         }
         return scores;
@@ -679,13 +679,13 @@ var gameLogic;
     function getInitialState() {
         return { board: getInitialBoard(), delta: null, current_turn: 1, scores: getIntialScores() };
     }
-    gameLogic.getInitialState = getInitialState;
+    gameLogic2.getInitialState = getInitialState;
     /**
      * Returns true if the game ended in a tie because game reaches the maximum of turns,
      * and at least two players have the identical scores.
      */
     function isTie(FState) {
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (FState.current_turn &gt;= gameLogic.total_turns &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >twoOrMoreHaveSameScores(FState.scores))</span> {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (FState.current_turn &gt;= gameLogic2.total_turns &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >twoOrMoreHaveSameScores(FState.scores))</span> {
 <span class="cstat-no" title="statement not covered" >            return true;</span>
         }
         return false;
@@ -711,7 +711,7 @@ var gameLogic;
         <span class="missing-if-branch" title="if path not taken" >I</span>if (isTie(S)) {
 <span class="cstat-no" title="statement not covered" >            return '';</span>
         }
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (S.current_turn == gameLogic.total_turns) {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (S.current_turn == gameLogic2.total_turns) {
             // Find the one with maximum score
 <span class="cstat-no" title="statement not covered" >            var max = Math.max.apply(null, S.scores);</span>
 <span class="cstat-no" title="statement not covered" >            for (var i = 0; i &lt; S.scores.length; i++) {</span>
@@ -736,16 +736,16 @@ var gameLogic;
         var boardAfterMove = board;
         var helper = [];
         // initialize the auxiliary boolean[][] array. 
-        for (var i = 0; i &lt; gameLogic.ROWS; i++) {
+        for (var i = 0; i &lt; gameLogic2.ROWS; i++) {
             helper[i] = [];
-            for (var j = 0; j &lt; gameLogic.COLS; j++) {
+            for (var j = 0; j &lt; gameLogic2.COLS; j++) {
                 helper[i][j] = false;
             }
         }
         // Value inside of the circle will be set to 'true', otherwise false  
-        for (var i = 0; i &lt; gameLogic.ROWS; i++) {
+        for (var i = 0; i &lt; gameLogic2.ROWS; i++) {
             var range = foundRangeOfCertainRow(moves, i);
-            for (var j = 0; j &lt; gameLogic.COLS; j++) {
+            for (var j = 0; j &lt; gameLogic2.COLS; j++) {
                 if (j &gt;= range.left &amp;&amp; j &lt;= range.right) {
                     helper[i][j] = true;
                 }
@@ -754,9 +754,9 @@ var gameLogic;
                 }
             }
         }
-        for (var i = 0; i &lt; gameLogic.COLS; i++) {
+        for (var i = 0; i &lt; gameLogic2.COLS; i++) {
             var range = foundRangeOfCertainCol(moves, i);
-            for (var j = 0; j &lt; gameLogic.ROWS; j++) {
+            for (var j = 0; j &lt; gameLogic2.ROWS; j++) {
                 if (j &gt;= range.left &amp;&amp; j &lt;= range.right &amp;&amp; helper[j][i] == true) {
                     score++;
                 }
@@ -767,9 +767,9 @@ var gameLogic;
         }
         //   throw new Error(angular.toJson(helper, true));
         //   refill the circle with the chips above and refill the above empty ones with random color
-        for (var j = gameLogic.COLS - 1; j &gt;= 0; j--) {
-            var flag = gameLogic.ROWS - 1;
-            for (var i = gameLogic.ROWS - 1; i &gt;= 0; i--) {
+        for (var j = gameLogic2.COLS - 1; j &gt;= 0; j--) {
+            var flag = gameLogic2.ROWS - 1;
+            for (var i = gameLogic2.ROWS - 1; i &gt;= 0; i--) {
                 var tmp = getColor(boardAfterMove, helper, flag, i, j);
                 flag = tmp.flag;
                 boardAfterMove[i][j] = tmp.color;
@@ -849,11 +849,11 @@ var gameLogic;
         }
         else {
             // Game continues. Now it's the opponent's turn (the turn switches from 0 to 1 and 1 to 0).
-            turnIndexAfterMove = gameLogic.num_of_players - 1 - turnIndexBeforeMove;
+            turnIndexAfterMove = gameLogic2.num_of_players - 1 - turnIndexBeforeMove;
         }
         return { turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove };
     }
-    gameLogic.createMove = createMove;
+    gameLogic2.createMove = createMove;
     /** check if this move sticks to the rule and throws responding error */
     function checkMove(board, moves) {
         // it should have at least three points
@@ -889,7 +889,7 @@ var gameLogic;
     function checkDuplicate(moves) {
         var tmp = [];
         for (var i = 0; i &lt; moves.length - 1; i++) {
-            tmp[i] = moves[i].row * gameLogic.COLS + moves[i].col;
+            tmp[i] = moves[i].row * gameLogic2.COLS + moves[i].col;
         }
         var s = tmp.join(",") + ",";
         for (var i = 0; i &lt; tmp.length; i++) {
@@ -912,7 +912,7 @@ var gameLogic;
                 ", but got stateTransition=" + angular.toJson(stateTransition, true));
         }
     }
-    gameLogic.checkMoveOk = checkMoveOk;
+    gameLogic2.checkMoveOk = checkMoveOk;
 <span class="fstat-no" title="function not covered" >    function forSimpleTestHtml() {</span>
 <span class="cstat-no" title="statement not covered" >        var move = gameLogic.createMove(null, [{ row: 0, col: 0 }], 0);</span>
 <span class="cstat-no" title="statement not covered" >        log.log("move=", move);</span>
@@ -923,15 +923,15 @@ var gameLogic;
             numberOfPlayers: 2 };
 <span class="cstat-no" title="statement not covered" >        gameLogic.checkMoveOk(params);</span>
     }
-    gameLogic.forSimpleTestHtml = forSimpleTestHtml;
-})(gameLogic || (gameLogic = {}));
-//# sourceMappingURL=gameLogic.js.map</pre></td></tr>
+    gameLogic2.forSimpleTestHtml = forSimpleTestHtml;
+})(gameLogic2 || (gameLogic2 = {}));
+//# sourceMappingURL=gameLogic2.js.map</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Feb 24 2016 10:06:17 GMT-0500 (EST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Feb 24 2016 10:16:33 GMT-0500 (EST)
 </div>
 </div>
 <script src="../prettify.js"></script>

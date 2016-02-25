@@ -12,8 +12,7 @@ var gameLogic;
         for (var i = 0; i < gameLogic.ROWS; i++) {
             board[i] = [];
             for (var j = 0; j < gameLogic.COLS; j++) {
-                // board[i][j] = getRandomColor();
-                board[i][j] = 'C';
+                board[i][j] = getRandomColor();
             }
         }
         return board;
@@ -23,7 +22,7 @@ var gameLogic;
         var res = Math.floor((Math.random() * gameLogic.num_of_colors) + 1);
         switch (res) {
             case 1:
-                return 'C'; // short for cyan
+                return 'R'; // short for red
                 break;
             case 2:
                 return 'G'; // short for green
@@ -177,8 +176,7 @@ var gameLogic;
             }
         }
         if (flag < 0) {
-            //   return {color: getRandomColor(), flag: flag};
-            return { color: 'R', flag: flag };
+            return { color: getRandomColor(), flag: flag };
         }
         return { color: board[flag][col], flag: flag };
     }
@@ -191,15 +189,18 @@ var gameLogic;
             stateBeforeMove = getInitialState();
         }
         var board = stateBeforeMove.board;
+        // log.info(["before", angular.toJson(board)]);
         checkMove(board, moves);
         if (isTie(stateBeforeMove) || getWinner(stateBeforeMove) !== '') {
             throw new Error("Can only make a move if the game is not over!");
         }
         // TODO: to refill the board
-        var tmp = getBoardAndScore(board, moves);
-        var boardAfterMove = tmp.board;
+        var boardAfterMove = angular.copy(board);
+        var tmp = getBoardAndScore(boardAfterMove, moves);
+        boardAfterMove = tmp.board;
+        // log.info(["after", angular.toJson(boardAfterMove)]);
         /**Get the updated scores */
-        var scores = stateBeforeMove.scores;
+        var scores = angular.copy(stateBeforeMove.scores);
         scores[turnIndexBeforeMove] += tmp.score;
         var stateAfterMove = {
             board: boardAfterMove,
@@ -208,17 +209,20 @@ var gameLogic;
             scores: scores
         };
         var winner = getWinner(stateAfterMove);
+        var endMatchScores;
         var currentScore = scores;
         var turnIndexAfterMove;
         if (winner !== '' || isTie(stateAfterMove)) {
             // Game over.
             turnIndexAfterMove = -1;
+            endMatchScores = winner === '1' ? [1, 0] : winner === '2' ? [0, 1] : [0, 0];
         }
         else {
             // Game continues. Now it's the opponent's turn (the turn switches from 0 to 1 and 1 to 0).
             turnIndexAfterMove = gameLogic.num_of_players - 1 - turnIndexBeforeMove;
+            endMatchScores = null;
         }
-        return { turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove };
+        return { endMatchScores: endMatchScores, turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove };
     }
     gameLogic.createMove = createMove;
     /** check if this move sticks to the rule and throws responding error */
@@ -229,7 +233,7 @@ var gameLogic;
             return false;
         }
         // last point should be the first point 
-        if (!(moves[0].row == moves[moves.length - 1].row && moves[0].col == moves[moves.length - 1].col)) {
+        if (!(moves[0].row === moves[moves.length - 1].row && moves[0].col === moves[moves.length - 1].col)) {
             throw new Error("You should draw a enclosed circle");
             return false;
         }
@@ -245,7 +249,8 @@ var gameLogic;
                 return false;
             }
             // Points should all be the same color
-            if (board[moves[i].row][moves[i].col] != board[moves[i - 1].row][moves[i - 1].col]) {
+            if (board[moves[i].row][moves[i].col] !== board[moves[i - 1].row][moves[i - 1].col]) {
+                log.info("after", angular.toJson(board));
                 throw new Error("Points should all be the same color");
                 return false;
             }
@@ -280,6 +285,9 @@ var gameLogic;
         }
     }
     gameLogic.checkMoveOk = checkMoveOk;
+    function checkMoveOkNoOp(stateTransition) {
+    }
+    gameLogic.checkMoveOkNoOp = checkMoveOkNoOp;
     function forSimpleTestHtml() {
         var move = gameLogic.createMove(null, [{ row: 0, col: 0 }], 0);
         log.log("move=", move);

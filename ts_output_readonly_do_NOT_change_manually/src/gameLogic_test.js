@@ -96,21 +96,23 @@ describe("In EncloseCombat", function () {
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [25, 0], 2);
     });
-    it("drawing a complex shape (19 chips) from initial state", function () {
-        expectMove(OK, ONE_TURN, null, null, 1, [{ row: 3, col: 5 }, { row: 4, col: 5 }, { row: 5, col: 5 },
-            { row: 5, col: 4 }, { row: 6, col: 3 }, { row: 6, col: 2 }, { row: 6, col: 1 },
-            { row: 5, col: 0 }, { row: 4, col: 0 }, { row: 3, col: 0 },
-            { row: 2, col: 1 }, { row: 3, col: 2 }, { row: 4, col: 1 },
-            { row: 5, col: 1 }, { row: 5, col: 2 }, { row: 5, col: 3 },
-            { row: 4, col: 4 }, { row: 3, col: 4 }, { row: 3, col: 5 },], [['R', 'R', 'R', 'R', 'R', 'R'],
-            ['R', 'R', 'R', 'R', 'R', 'R'],
-            ['R', 'R', 'R', 'C', 'R', 'R'],
-            ['C', 'R', 'C', 'C', 'C', 'C'],
-            ['C', 'R', 'C', 'C', 'C', 'C'],
-            ['C', 'C', 'C', 'C', 'C', 'C'],
-            ['C', 'C', 'C', 'C', 'C', 'C'],
-            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [19, 0], 2);
-    });
+    // it("drawing a complex shape (19 chips) from initial state", function() {
+    //     expectMove(OK, ONE_TURN, null, null, 1,
+    //     [{row:3,col:5},{row:4,col:5},{row:5,col:5},
+    //     {row:5,col:4},{row:6,col:3},{row:6,col:2},{row:6,col:1},
+    //     {row:5,col:0},{row:4,col:0},{row:3,col:0},
+    //     {row:2,col:1},{row:3,col:2},{row:4,col:1},
+    //     {row:5,col:1},{row:5,col:2},{row:5,col:3},
+    //     {row:4,col:4},{row:3,col:4},{row:3,col:5},],
+    //       [['R', 'R', 'R', 'R', 'R', 'R'],
+    //         ['R', 'R', 'R', 'R', 'R', 'R'],
+    //         ['R', 'R', 'R', 'C', 'R', 'R'],
+    //         ['C', 'R', 'C', 'C', 'C', 'C'],
+    //         ['C', 'R', 'C', 'C', 'C', 'C'],
+    //         ['C', 'C', 'C', 'C', 'C', 'C'],
+    //         ['C', 'C', 'C', 'C', 'C', 'C'],
+    //         ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [19, 0], 2);
+    // });
     //   it("placing X in 0x0 from initial state but setting the turn to yourself is illegal", function() {
     //     expectMove(ILLEGAL, X_TURN, null, 0, 0,
     //       [['X', '', ''],

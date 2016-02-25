@@ -10,15 +10,16 @@ var game;
     game.move = null;
     game.state = null;
     game.isHelpModalShown = false;
+    game.moves = new Array();
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
-        log.log("Translation of 'RULES_OF_TICTACTOE' is " + translate('RULES_OF_TICTACTOE'));
+        log.log("Translation of 'RULES_OF_ENCLOSECOMBAT' is " + translate('RULES_OF_ENCLOSECOMBAT'));
         resizeGameAreaService.setWidthToHeight(1);
         moveService.setGame({
             minNumberOfPlayers: 2,
             maxNumberOfPlayers: 2,
-            checkMoveOk: gameLogic.checkMoveOk,
+            checkMoveOk: gameLogic.checkMoveOkNoOp,
             updateUI: updateUI
         });
         // See http://www.sitepoint.com/css3-animation-javascript-event-handlers/
@@ -37,21 +38,21 @@ var game;
     game.init = init;
     function getTranslations() {
         return {
-            RULES_OF_TICTACTOE: {
-                en: "Rules of MyTicTacToe",
-                iw: "חוקי המשחק",
+            RULES_OF_ENCLOSECOMBAT: {
+                en: "Rules of EncloseCombat",
+                cn: "画圈大战的规则",
             },
             RULES_SLIDE1: {
-                en: "You and your opponent take turns to mark the grid in an empty spot. The first mark is X, then O, then X, then O, etc.",
-                iw: "אתה והיריב מסמנים איקס או עיגול כל תור",
+                en: "You and your opponent take turns to draw an enclosed circle over the chips of same color.",
+                cn: "你和你的对手轮流操作，在相同颜色的卡片上围成一个闭合的形状。然后这个形状上和其内的卡片会消失，上面的会掉下来，新的卡片也会补充进来。",
             },
             RULES_SLIDE2: {
-                en: "The first to mark a whole row, column or diagonal wins.",
-                iw: "הראשון שמסמן שורה, עמודה או אלכסון מנצח",
+                en: "The more chips you include in that circle, the higher score you get.",
+                cn: "形状越大分数越高，十个回合之后分数高的人获胜。",
             },
             CLOSE: {
                 en: "Close",
-                iw: "סגור",
+                cn: "关闭",
             },
         };
     }
@@ -96,8 +97,18 @@ var game;
             }
         }
     }
-    function cellClicked(row, col) {
-        log.info("Clicked on cell:", row, col);
+    function cellPressedDown(row, col) {
+        game.moves.push({ row: row, col: col });
+    }
+    game.cellPressedDown = cellPressedDown;
+    function cellEnter(row, col) {
+        if (game.moves.length !== 0 && !(game.moves.length === 1 && game.moves[0] === { row: row, col: col })) {
+            game.moves.push({ row: row, col: col });
+        }
+    }
+    game.cellEnter = cellEnter;
+    function cellPressedUp() {
+        log.info("Slided on cell:", angular.toJson(game.moves));
         if (window.location.search === '?throwException') {
             throw new Error("Throwing the error because URL has '?throwException'");
         }
@@ -105,33 +116,43 @@ var game;
             return;
         }
         try {
-            var nextMove = gameLogic.createMove(game.state, row, col, game.move.turnIndexAfterMove);
+            var nextMove = gameLogic.createMove(game.state, game.moves, game.move.turnIndexAfterMove);
             game.canMakeMove = false; // to prevent making another move
             moveService.makeMove(nextMove);
+            game.moves = new Array();
         }
         catch (e) {
-            log.info(["Cell is already full in position:", row, col]);
+            log.info(e);
+            game.moves = new Array();
             return;
         }
     }
-    game.cellClicked = cellClicked;
+    game.cellPressedUp = cellPressedUp;
     function shouldShowImage(row, col) {
-        var cell = game.state.board[row][col];
-        return cell !== "";
+        return true;
     }
     game.shouldShowImage = shouldShowImage;
-    function isPieceX(row, col) {
-        return game.state.board[row][col] === 'X';
+    function isPieceR(row, col) {
+        return game.state.board[row][col] === 'R';
     }
-    game.isPieceX = isPieceX;
-    function isPieceO(row, col) {
-        return game.state.board[row][col] === 'O';
+    game.isPieceR = isPieceR;
+    function isPieceG(row, col) {
+        return game.state.board[row][col] === 'G';
     }
-    game.isPieceO = isPieceO;
+    game.isPieceG = isPieceG;
+    function isPieceB(row, col) {
+        return game.state.board[row][col] === 'B';
+    }
+    game.isPieceB = isPieceB;
     function shouldSlowlyAppear(row, col) {
+        var b = false;
+        for (var i = 0; i < game.state.delta.length; i++) {
+            if (game.state.delta[i].row === row && game.state.delta[i].col === col) {
+                b = true;
+            }
+        }
         return !game.animationEnded &&
-            game.state.delta &&
-            game.state.delta.row === row && game.state.delta.col === col;
+            game.state.delta && b;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
     function clickedOnModal(evt) {

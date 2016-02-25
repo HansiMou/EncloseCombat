@@ -1,4 +1,4 @@
-interface SupportedLanguages { en: string, iw: string};
+interface SupportedLanguages { en: string, cn: string};
 interface Translations {
   [index: string]: SupportedLanguages;
 }
@@ -13,16 +13,17 @@ module game {
   export let move: IMove = null;
   export let state: IState = null;
   export let isHelpModalShown: boolean = false;
+  export let moves: BoardDelta[] = new Array();
 
   export function init() {
     translate.setTranslations(getTranslations());
     translate.setLanguage('en');
-    log.log("Translation of 'RULES_OF_TICTACTOE' is " + translate('RULES_OF_TICTACTOE'));
+    log.log("Translation of 'RULES_OF_ENCLOSECOMBAT' is " + translate('RULES_OF_ENCLOSECOMBAT'));
     resizeGameAreaService.setWidthToHeight(1);
     moveService.setGame({
       minNumberOfPlayers: 2,
       maxNumberOfPlayers: 2,
-      checkMoveOk: gameLogic.checkMoveOk,
+      checkMoveOk: gameLogic.checkMoveOkNoOp,
       updateUI: updateUI
     });
 
@@ -43,21 +44,21 @@ module game {
 
   function getTranslations(): Translations {
     return {
-      RULES_OF_TICTACTOE: {
-        en: "Rules of MyTicTacToe",
-        iw: "חוקי המשחק",
+      RULES_OF_ENCLOSECOMBAT: {
+        en: "Rules of EncloseCombat",
+        cn: "画圈大战的规则",
       },
       RULES_SLIDE1: {
-        en: "You and your opponent take turns to mark the grid in an empty spot. The first mark is X, then O, then X, then O, etc.",
-        iw: "אתה והיריב מסמנים איקס או עיגול כל תור",
+        en: "You and your opponent take turns to draw an enclosed circle over the chips of same color.",
+        cn: "你和你的对手轮流操作，在相同颜色的卡片上围成一个闭合的形状。然后这个形状上和其内的卡片会消失，上面的会掉下来，新的卡片也会补充进来。",
       },
       RULES_SLIDE2: {
-        en: "The first to mark a whole row, column or diagonal wins.",
-        iw: "הראשון שמסמן שורה, עמודה או אלכסון מנצח",
+        en: "The more chips you include in that circle, the higher score you get.",
+        cn: "形状越大分数越高，十个回合之后分数高的人获胜。",
       },
       CLOSE:  {
         en: "Close",
-        iw: "סגור",
+        cn: "关闭",
       },
     };
   }
@@ -106,9 +107,16 @@ module game {
       }
     }
   }
-
-  export function cellClicked(row: number, col: number): void {
-    log.info("Clicked on cell:", row, col);
+  export function cellPressedDown(row: number, col: number): void{
+      moves.push({row: row, col: col});
+  }
+  export function cellEnter(row: number, col: number): void{
+      if (moves.length !== 0 && !(moves.length === 1 && moves[0]==={row: row, col:col})){
+          moves.push({row: row, col: col});
+      }
+  }
+  export function cellPressedUp(): void {
+    log.info("Slided on cell:", angular.toJson(moves));
     if (window.location.search === '?throwException') { // to test encoding a stack trace with sourcemap
       throw new Error("Throwing the error because URL has '?throwException'");
     }
@@ -117,32 +125,42 @@ module game {
     }
     try {
       let nextMove = gameLogic.createMove(
-          state, row, col, move.turnIndexAfterMove);
+          state, moves, move.turnIndexAfterMove);
       canMakeMove = false; // to prevent making another move
       moveService.makeMove(nextMove);
+      moves = new Array();
     } catch (e) {
-      log.info(["Cell is already full in position:", row, col]);
+      log.info(e);
+      moves = new Array();
       return;
     }
   }
 
   export function shouldShowImage(row: number, col: number): boolean {
-    let cell = state.board[row][col];
-    return cell !== "";
+    return true;
   }
 
-  export function isPieceX(row: number, col: number): boolean {
-    return state.board[row][col] === 'X';
+  export function isPieceR(row: number, col: number): boolean {
+    return state.board[row][col] === 'R';
   }
 
-  export function isPieceO(row: number, col: number): boolean {
-    return state.board[row][col] === 'O';
+  export function isPieceG(row: number, col: number): boolean {
+    return state.board[row][col] === 'G';
+  }
+  
+  export function isPieceB(row: number, col: number): boolean {
+    return state.board[row][col] === 'B';
   }
 
   export function shouldSlowlyAppear(row: number, col: number): boolean {
+    let b: boolean = false;
+    for (let i = 0; i < state.delta.length; i++) {
+        if (state.delta[i].row === row && state.delta[i].col === col) {
+            b = true;
+        }
+    }
     return !animationEnded &&
-        state.delta &&
-        state.delta.row === row && state.delta.col === col;
+        state.delta && b;
   }
 
   export function clickedOnModal(evt: Event) {
