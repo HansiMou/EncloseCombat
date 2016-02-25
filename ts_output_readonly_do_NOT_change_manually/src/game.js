@@ -26,6 +26,7 @@ var game;
         document.addEventListener("animationend", animationEndedCallback, false); // standard
         document.addEventListener("webkitAnimationEnd", animationEndedCallback, false); // WebKit
         document.addEventListener("oanimationend", animationEndedCallback, false); // Opera
+        setTimeout(animationEndedCallback, 1000); // Just in case animationEnded is not fired by some browser.
         var w = window;
         if (w["HTMLInspector"]) {
             setInterval(function () {
@@ -57,6 +58,7 @@ var game;
         };
     }
     function animationEndedCallback() {
+        log.info("Hi");
         $rootScope.$apply(function () {
             log.info("Animation ended");
             game.animationEnded = true;
@@ -68,7 +70,8 @@ var game;
             return;
         }
         game.isComputerTurn = false; // to make sure the computer can only move once.
-        moveService.makeMove(aiService.findComputerMove(game.move));
+        log.info("computer");
+        moveService.makeMove(aiService.findSimplyComputerMove(game.move));
     }
     function updateUI(params) {
         log.info("Game got updateUI:", params);
@@ -146,9 +149,11 @@ var game;
     game.isPieceB = isPieceB;
     function shouldSlowlyAppear(row, col) {
         var b = false;
-        for (var i = 0; i < game.state.delta.length; i++) {
-            if (game.state.delta[i].row === row && game.state.delta[i].col === col) {
-                b = true;
+        if (game.state.delta !== null) {
+            for (var i = 0; i < game.state.delta.length; i++) {
+                if (game.state.delta[i].row === row && game.state.delta[i].col === col) {
+                    b = true;
+                }
             }
         }
         return !game.animationEnded &&

@@ -227,6 +227,12 @@ var gameLogic;
     gameLogic.createMove = createMove;
     /** check if this move sticks to the rule and throws responding error */
     function checkMove(board, moves) {
+        // all moves should be positive
+        for (var i = 0; i < moves.length; i++) {
+            if (moves[i].row < 0 || moves[i].col < 0 || moves[i].row >= 8 || moves[i].col >= 6) {
+                throw new Error("All moves should be positive");
+            }
+        }
         // it should have at least three points
         if (moves.length <= 3) {
             throw new Error("You should draw a circle with at least three points");

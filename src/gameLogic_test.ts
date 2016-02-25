@@ -19,12 +19,14 @@ describe("In EncloseCombat", function() {
       boardAfterMove: Board,
       turnIndexAfterMove: number,
       scoresAfterMove: number[],
-      current_turnAfterMove: number): void {
+      current_turnAfterMove: number,
+      endMatchScores: number[]): void {
     let stateTransition: IStateTransition = {
       turnIndexBeforeMove: turnIndexBeforeMove,
       stateBeforeMove: boardBeforeMove ? {board: boardBeforeMove, delta: null, 
           current_turn: current_turnBeforeMove, scores: scoresBeforeMove} : null,
       move: {
+          endMatchScores: endMatchScores,
         turnIndexAfterMove: turnIndexAfterMove,
         stateAfterMove: {board: boardAfterMove, delta: moves,
             current_turn: current_turnAfterMove, scores: scoresAfterMove}
@@ -56,7 +58,7 @@ it("drawing one small chip from initial state at upper left is illegal", functio
         ['C', 'C', 'C', 'C', 'C', 'C'],
         ['C', 'C', 'C', 'C', 'C', 'C'],
         ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [0, 0], 2);
+        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [0, 0], 2, null);
 });
 
 it("drawing a small rectangle (four chips) from initial state at upper left is legal", function() {
@@ -69,7 +71,7 @@ it("drawing a small rectangle (four chips) from initial state at upper left is l
         ['C', 'C', 'C', 'C', 'C', 'C'],
         ['C', 'C', 'C', 'C', 'C', 'C'],
         ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2);
+        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2, null);
 });
 
 it("drawing a small rectangle (four chips) from initial state at right bottom is legal", function() {
@@ -82,7 +84,7 @@ it("drawing a small rectangle (four chips) from initial state at right bottom is
         ['C', 'C', 'C', 'C', 'C', 'C'],
         ['C', 'C', 'C', 'C', 'C', 'C'],
         ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2);
+        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2, null);
 });
 
 
@@ -100,7 +102,7 @@ it("drawing a complex shape (9 chips) from initial state at right bottom is lega
         ['C', 'R', 'R', 'C', 'C', 'C'],
         ['C', 'C', 'C', 'C', 'C', 'C'],
         ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [22, 0], 2);
+        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [22, 0], 2, null);
 });
 
 it("drawing a complex shape (25 chips) from initial state", function() {
@@ -118,7 +120,7 @@ it("drawing a complex shape (25 chips) from initial state", function() {
         ['C', 'C', 'R', 'R', 'R', 'C'],
         ['C', 'C', 'R', 'R', 'R', 'C'],
         ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [25, 0], 2);
+        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [25, 0], 2, null);
 });
 
 // it("drawing a complex shape (19 chips) from initial state", function() {

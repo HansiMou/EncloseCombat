@@ -1,4 +1,40 @@
 module aiService {
+  /** Returns a simply random move that the computer player should do for the given state in move. */
+  export function findSimplyComputerMove(move: IMove): IMove{
+    let possibleMove: IMove = null;
+    for (let i = 0; i < gameLogic.ROWS; i++) {
+      for (let j = 1; j < gameLogic.COLS; j++) {
+          for (let k = 0; k <= 3; k++){
+              try {
+                let moves = new Array();
+                moves.push({row: i, col: j-1});
+                moves.push({row: i, col: j});
+                switch(k){
+                    case 0:
+                    moves.push({row: i-1, col: j-1});
+                    break;
+                    case 1:
+                    moves.push({row: i-1, col: j});
+                    break;
+                    case 2:
+                    moves.push({row: i+1, col: j});
+                    break;
+                    case 3:
+                    moves.push({row: i+1, col: j-1});
+                    break;
+                }
+                moves.push({row: i, col: j-1}); 
+                possibleMove = gameLogic.createMove(move.stateAfterMove, moves, move.turnIndexAfterMove);
+                return possibleMove;
+                break;
+            } catch (e) {
+            // Move is illegal
+            }
+          }
+      }
+    }
+    return possibleMove;
+  }
   /** Returns the move that the computer player should do for the given state in move. */
   export function findComputerMove(move: IMove): IMove {
     return createComputerMove(move,
@@ -15,7 +51,7 @@ module aiService {
     for (let i = 0; i < gameLogic.ROWS; i++) {
       for (let j = 0; j < gameLogic.COLS; j++) {
         try {
-          possibleMoves.push(gameLogic.createMove(state, i, j, turnIndexBeforeMove));
+        //   possibleMoves.push(gameLogic.createMove(state, i, j, turnIndexBeforeMove));
         } catch (e) {
           // The cell in that position was full.
         }

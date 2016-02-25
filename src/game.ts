@@ -31,6 +31,7 @@ module game {
     document.addEventListener("animationend", animationEndedCallback, false); // standard
     document.addEventListener("webkitAnimationEnd", animationEndedCallback, false); // WebKit
     document.addEventListener("oanimationend", animationEndedCallback, false); // Opera
+    setTimeout(animationEndedCallback, 1000); // Just in case animationEnded is not fired by some browser.
 
     let w: any = window;
     if (w["HTMLInspector"]) {
@@ -64,6 +65,7 @@ module game {
   }
 
   function animationEndedCallback() {
+      log.info("Hi");
     $rootScope.$apply(function () {
       log.info("Animation ended");
       animationEnded = true;
@@ -76,7 +78,8 @@ module game {
       return;
     }
     isComputerTurn = false; // to make sure the computer can only move once.
-    moveService.makeMove(aiService.findComputerMove(move));
+    log.info("computer");
+    moveService.makeMove(aiService.findSimplyComputerMove(move));
   }
 
   function updateUI(params: IUpdateUI): void {
@@ -154,9 +157,11 @@ module game {
 
   export function shouldSlowlyAppear(row: number, col: number): boolean {
     let b: boolean = false;
-    for (let i = 0; i < state.delta.length; i++) {
-        if (state.delta[i].row === row && state.delta[i].col === col) {
-            b = true;
+    if (state.delta !== null){
+        for (let i = 0; i < state.delta.length; i++) {
+            if (state.delta[i].row === row && state.delta[i].col === col) {
+                b = true;
+            }
         }
     }
     return !animationEnded &&

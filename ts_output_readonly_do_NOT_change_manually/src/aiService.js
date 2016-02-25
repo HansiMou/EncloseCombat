@@ -1,5 +1,42 @@
 var aiService;
 (function (aiService) {
+    /** Returns a simply random move that the computer player should do for the given state in move. */
+    function findSimplyComputerMove(move) {
+        var possibleMove = null;
+        for (var i = 0; i < gameLogic.ROWS; i++) {
+            for (var j = 1; j < gameLogic.COLS; j++) {
+                for (var k = 0; k <= 3; k++) {
+                    try {
+                        var moves = new Array();
+                        moves.push({ row: i, col: j - 1 });
+                        moves.push({ row: i, col: j });
+                        switch (k) {
+                            case 0:
+                                moves.push({ row: i - 1, col: j - 1 });
+                                break;
+                            case 1:
+                                moves.push({ row: i - 1, col: j });
+                                break;
+                            case 2:
+                                moves.push({ row: i + 1, col: j });
+                                break;
+                            case 3:
+                                moves.push({ row: i + 1, col: j - 1 });
+                                break;
+                        }
+                        moves.push({ row: i, col: j - 1 });
+                        possibleMove = gameLogic.createMove(move.stateAfterMove, moves, move.turnIndexAfterMove);
+                        return possibleMove;
+                        break;
+                    }
+                    catch (e) {
+                    }
+                }
+            }
+        }
+        return possibleMove;
+    }
+    aiService.findSimplyComputerMove = findSimplyComputerMove;
     /** Returns the move that the computer player should do for the given state in move. */
     function findComputerMove(move) {
         return createComputerMove(move, 
@@ -16,7 +53,6 @@ var aiService;
         for (var i = 0; i < gameLogic.ROWS; i++) {
             for (var j = 0; j < gameLogic.COLS; j++) {
                 try {
-                    possibleMoves.push(gameLogic.createMove(state, i, j, turnIndexBeforeMove));
                 }
                 catch (e) {
                 }

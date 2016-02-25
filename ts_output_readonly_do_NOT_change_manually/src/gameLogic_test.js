@@ -8,12 +8,13 @@ describe("In EncloseCombat", function () {
     //   let X_WIN_SCORES = [1, 0];
     //   let O_WIN_SCORES = [0, 1];
     //   let TIE_SCORES = [0, 0];
-    function expectMove(isOk, turnIndexBeforeMove, boardBeforeMove, scoresBeforeMove, current_turnBeforeMove, moves, boardAfterMove, turnIndexAfterMove, scoresAfterMove, current_turnAfterMove) {
+    function expectMove(isOk, turnIndexBeforeMove, boardBeforeMove, scoresBeforeMove, current_turnBeforeMove, moves, boardAfterMove, turnIndexAfterMove, scoresAfterMove, current_turnAfterMove, endMatchScores) {
         var stateTransition = {
             turnIndexBeforeMove: turnIndexBeforeMove,
             stateBeforeMove: boardBeforeMove ? { board: boardBeforeMove, delta: null,
                 current_turn: current_turnBeforeMove, scores: scoresBeforeMove } : null,
             move: {
+                endMatchScores: endMatchScores,
                 turnIndexAfterMove: turnIndexAfterMove,
                 stateAfterMove: { board: boardAfterMove, delta: moves,
                     current_turn: current_turnAfterMove, scores: scoresAfterMove }
@@ -45,7 +46,7 @@ describe("In EncloseCombat", function () {
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
-            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [0, 0], 2);
+            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [0, 0], 2, null);
     });
     it("drawing a small rectangle (four chips) from initial state at upper left is legal", function () {
         expectMove(OK, ONE_TURN, null, null, 1, [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 1 }, { row: 1, col: 0 }, { row: 0, col: 0 }], [['R', 'R', 'C', 'C', 'C', 'C'],
@@ -55,7 +56,7 @@ describe("In EncloseCombat", function () {
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
-            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2);
+            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2, null);
     });
     it("drawing a small rectangle (four chips) from initial state at right bottom is legal", function () {
         expectMove(OK, ONE_TURN, null, null, 1, [{ row: 6, col: 4 }, { row: 6, col: 5 }, { row: 7, col: 5 }, { row: 7, col: 4 }, { row: 6, col: 4 }], [['C', 'C', 'C', 'C', 'R', 'R'],
@@ -65,7 +66,7 @@ describe("In EncloseCombat", function () {
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
-            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2);
+            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2, null);
     });
     it("drawing a complex shape (9 chips) from initial state at right bottom is legal", function () {
         expectMove(OK, ONE_TURN, null, null, 1, [{ row: 3, col: 1 }, { row: 3, col: 2 }, { row: 3, col: 3 }, { row: 3, col: 4 }, { row: 3, col: 5 },
@@ -79,7 +80,7 @@ describe("In EncloseCombat", function () {
             ['C', 'R', 'R', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
-            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [22, 0], 2);
+            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [22, 0], 2, null);
     });
     it("drawing a complex shape (25 chips) from initial state", function () {
         expectMove(OK, ONE_TURN, null, null, 1, [{ row: 7, col: 0 }, { row: 6, col: 1 }, { row: 5, col: 2 }, { row: 4, col: 3 },
@@ -94,7 +95,7 @@ describe("In EncloseCombat", function () {
             ['C', 'C', 'R', 'R', 'R', 'C'],
             ['C', 'C', 'R', 'R', 'R', 'C'],
             ['C', 'C', 'C', 'C', 'C', 'C'],
-            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [25, 0], 2);
+            ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [25, 0], 2, null);
     });
     // it("drawing a complex shape (19 chips) from initial state", function() {
     //     expectMove(OK, ONE_TURN, null, null, 1,
