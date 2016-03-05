@@ -1,7 +1,7 @@
 ;
 var game;
 (function (game) {
-    // I export all variables to make it easy to debug in the browser by
+    // I export all letiables to make it easy to debug in the browser by
     // simply typing in the console:
     // game.state
     game.animationEnded = false;
@@ -172,7 +172,102 @@ var game;
 })(game || (game = {}));
 angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
     .run(function () {
+    'use strict';
+    var gameArea = document.getElementById("gameArea");
+    dragAndDropService.addDragListener("gameArea", handleDragEvent);
+    var rowsNum = gameLogic.ROWS;
+    var colsNum = gameLogic.COLS;
+    var draggingPiece = null;
+    var nextZIndex = 0;
+    var draggingStartedRowCol = null; // The {row: YY, col: XX} where dragging started.
+    function handleDragEvent(type, clientX, clientY) {
+        // Center point in gameArea
+        var x = clientX - gameArea.offsetLeft;
+        var y = clientY - gameArea.offsetTop;
+        var row, col;
+        // Is outside gameArea?
+        if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= gameArea.clientHeight) {
+            if (draggingPiece) {
+                // Drag the piece where the touch is (without snapping to a square).
+                var size = getSquareWidthHeight();
+                setDraggingPieceTopLeft({ top: y - size.height / 2, left: x - size.width / 2 });
+            }
+            else {
+                return;
+            }
+        }
+        else {
+            // Inside gameArea. Let's find the containing square's row and col
+            col = Math.floor(colsNum * x / gameArea.clientWidth);
+            row = Math.floor(rowsNum * y / gameArea.clientHeight);
+            var cy = gameArea.clientHeight / 2 / rowsNum * (row * 2 + 1);
+            var cx = gameArea.clientWidth / 2 / colsNum * (col * 2 + 1);
+            var percent = Math.sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy)) / (gameArea.clientHeight / 2 / rowsNum);
+            if (percent > 0.5)
+                return;
+            if (type === "touchstart" && !draggingStartedRowCol) {
+                // drag started
+                draggingStartedRowCol = { row: row, col: col };
+                game.moves.push(draggingStartedRowCol);
+                draggingPiece = document.getElementById("e2e_test_div_" + draggingStartedRowCol.row + "x" + draggingStartedRowCol.col);
+                draggingPiece.style['z-index'] = ++nextZIndex;
+                game.moves = new Array();
+                game.moves.push({ row: row, col: col });
+            }
+            if (!draggingPiece) {
+                return;
+            }
+            if (type === "touchend") {
+                if (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col)) {
+                    game.moves.push({ row: row, col: col });
+                }
+                log.info(angular.toJson(game.moves));
+                dragDone();
+            }
+            else {
+                // Drag continue
+                if (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col)) {
+                    game.moves.push({ row: row, col: col });
+                }
+            }
+        }
+        if (type === "touchend" || type === "touchcancel" || type === "touchleave") {
+            // drag ended
+            // return the piece to it's original style (then angular will take care to hide it).
+            draggingStartedRowCol = null;
+            draggingPiece = null;
+        }
+    }
+    function setDraggingPieceTopLeft(topLeft) {
+        var originalSize = getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col);
+        draggingPiece.style.left = (topLeft.left - originalSize.left) + "px";
+        draggingPiece.style.top = (topLeft.top - originalSize.top) + "px";
+    }
+    function getSquareWidthHeight() {
+        return {
+            width: gameArea.clientWidth / colsNum,
+            height: gameArea.clientHeight / rowsNum
+        };
+    }
+    function getSquareTopLeft(row, col) {
+        var size = getSquareWidthHeight();
+        return { top: row * size.height, left: col * size.width };
+    }
+    function getSquareCenterXY(row, col) {
+        var size = getSquareWidthHeight();
+        return {
+            x: col * size.width + size.width / 2,
+            y: row * size.height + size.height / 2
+        };
+    }
+    function dragDone() {
+        $rootScope.$apply(function () {
+            // Update piece in board
+            game.cellPressedUp();
+        });
+    }
     $rootScope['game'] = game;
     game.init();
+    resizeGameAreaService.setWidthToHeight(0.75);
 });
 //# sourceMappingURL=game.js.map
