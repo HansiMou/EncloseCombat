@@ -1,11 +1,25 @@
+.cpanel {transition-duration: 0.8s;background-color: #DD4124;border-radius: 60px;color: #565656;float: left;}
+.cpanel:hover{background-color: black;}
+
+.cpanel1 {transition-duration: 0.8s;background-color: #556B2F;border-radius: 60px;color: #565656;float: left;}
+.cpanel1:hover{background-color: black;}
+
+.cpanel2 {transition-duration: 0.8s;background-color: #20B2AA;border-radius: 60px;color: #565656;float: left;}
+.cpanel2:hover{background-color: black;}
 
 .slowlyAppear {
   animation: slowlyAppear 0.5s linear;
 }
 
+
 @keyframes slowlyAppear {
   from {opacity: 0.1;}
   to {opacity: 1;}
+}
+
+@keyframes bigerSmaller {
+    from，to { transform: none; }
+  50% { transform: scale(1.2); }
 }
 
 td {

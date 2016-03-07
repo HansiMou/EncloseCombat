@@ -98,32 +98,43 @@
   </div>
 
 <div id="gameArea">
-
+    <svg id="draggingLines" width="100%" height="100%"
+        style="display:none; position:absolute; z-index: 30;">
+        <polyline id = "pline" points=""
+            style="fill:none;stroke:black;stroke-width:7; stroke-opacity: 0.8" />
+            <line id="pline2"
+                    y1="0" x1="12.5%"
+                    y2="100%" x2="12.5%"
+                    stroke="black"
+                    stroke-width="1%"
+                    stroke-opacity="0.5"/>
+    </svg>
   <div ng-repeat="row in [0, 1, 2, 3, 4, 5, 6, 7]"
       style="background:#FAF0E6; position:absolute; top:{{row * 12.5}}%; left:0; width:100%; height:12.5%;">
     <div ng-repeat="col in [0, 1, 2, 3, 4, 5]"
         style="position:absolute; top:0; left:{{col * 16.666667}}%; width:16.666667%; height:100%;"
         id="{{'e2e_test_div_' + row + 'x' + col}}">
-      <div style="width:100%; height: 100%"
+      <div style="width:100%; height: 100%; "
+          id="{{'e2e_test_pieceGG_' + row + 'x' + col}}"
           ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col)}"
           ng-if="game.shouldShowImage(row, col)">
+          
         <svg ng-if="game.isPieceR(row, col)"
-            id="{{'e2e_test_pieceO_' + row + 'x' + col}}"
             width="100%" height="100%">
-          <circle cx="50%" cy="50%" r="38%"
-            stroke="#DD4124" stroke-width="5%" fill="#DD4124" />
+          <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceR_' + row + 'x' + col}}"
+            stroke="#DD4124" stroke-width="5%" fill="#DD4124" style="transition: r 0.1s"/>
         </svg>
+        
         <svg ng-if="game.isPieceG(row, col)"
-            id="{{'e2e_test_pieceX_' + row + 'x' + col}}"
             width="100%" height="100%">
-         <circle cx="50%" cy="50%" r="38%"
-            stroke="#556B2F" stroke-width="5%" fill="#556B2F" />
+         <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceG_' + row + 'x' + col}}"
+            stroke="#556B2F" stroke-width="5%" fill="#556B2F" style="transition: r 0.1s"/>
         </svg>
+        
         <svg ng-if="game.isPieceB(row, col)"
-            id="{{'e2e_test_pieceX_' + row + 'x' + col}}"
             width="100%" height="100%">
-          <circle cx="50%" cy="50%" r="38%"
-            stroke="#20B2AA" stroke-width="5%" fill="#20B2AA" />
+          <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceB_' + row + 'x' + col}}"
+            stroke="#20B2AA" stroke-width="5%" fill="#20B2AA" style="transition: r 0.1s"/>
         </svg>
       </div>
     </div>

@@ -2,7 +2,7 @@ interface SupportedLanguages { en: string, cn: string};
 interface Translations {
   [index: string]: SupportedLanguages;
 }
-
+    
 module game {
   // I export all letiables to make it easy to debug in the browser by
   // simply typing in the console:
@@ -159,7 +159,7 @@ module game {
     let b: boolean = false;
     if (state.delta !== null){
         for (let i = 0; i < state.delta.length; i++) {
-            if (state.delta[i].row === row && state.delta[i].col === col) {
+            if (state.delta[i].row >= row && state.delta[i].col === col) {
                 b = true;
             }
         }
@@ -182,11 +182,15 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
   .run(function () {
     'use strict';
     let gameArea = document.getElementById("gameArea");
+    let draggingLines = document.getElementById("draggingLines");
+    let pline = document.getElementById("pline");
+    let pline2 = document.getElementById("pline2");
+    let nextZIndex = 61;
+     
     dragAndDropService.addDragListener("gameArea", handleDragEvent);
     let rowsNum = gameLogic.ROWS;
     let colsNum = gameLogic.COLS;
     let draggingPiece:any = null;
-    let nextZIndex = 0;
     let draggingStartedRowCol: any = null; // The {row: YY, col: XX} where dragging started.
     
     function handleDragEvent(type:string, clientX:number, clientY:number) {
@@ -197,6 +201,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
         
         // Is outside gameArea?
         if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= gameArea.clientHeight) {
+          draggingLines.style.display = "none";
           if (draggingPiece) {
             // Drag the piece where the touch is (without snapping to a square).
             let size = getSquareWidthHeight();
@@ -206,36 +211,69 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
           }
         } else {
           // Inside gameArea. Let's find the containing square's row and col
+          
           col = Math.floor(colsNum * x / gameArea.clientWidth);
           row = Math.floor(rowsNum * y / gameArea.clientHeight);
+          
           let cy = gameArea.clientHeight/2/rowsNum*(row*2+1);
           let cx = gameArea.clientWidth/2/colsNum*(col*2+1);
           let percent = Math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy))/(gameArea.clientHeight/2/rowsNum);
-          if (percent > 0.5)
+          if (game.moves.length !== 0){
+              let XY = getSquareCenterXY(game.moves[game.moves.length-1].row, game.moves[game.moves.length-1].col);
+              pline2.setAttribute("x1",XY.x+"");
+              pline2.setAttribute("y1",XY.y+"");
+              pline2.setAttribute("x2",x+"");
+              pline2.setAttribute("y2",y+"");
+          }
+          if (percent > 0.5){
+            if (type === "touchend" || type === "touchcancel" || type === "touchleave") {
+                game.moves = new Array();
+                pline.setAttribute("points", "");
+                draggingLines.style.display = "none";
+            }
             return ;
+          }
           if (type === "touchstart" && !draggingStartedRowCol) {
             // drag started
             draggingStartedRowCol = {row: row, col: col};
-            game.moves.push(draggingStartedRowCol);
             draggingPiece = document.getElementById("e2e_test_div_" + draggingStartedRowCol.row + "x" + draggingStartedRowCol.col);
-            draggingPiece.style['z-index'] = ++nextZIndex;
-            game.moves = new Array();
-            game.moves.push( {row: row, col: col});
-            
           }
           if (!draggingPiece) {
             return;
           }
           if (type === "touchend") {
             if (!(game.moves[game.moves.length-1].row === row && game.moves[game.moves.length-1].col === col)){
+                let tt = game.isPieceR(row, col)?document.getElementById("e2e_test_pieceR_" + row + "x" + col):game.isPieceG(row, col)?document.getElementById("e2e_test_pieceG_" + row + "x" + col):document.getElementById("e2e_test_pieceB_" + row + "x" + col);
+                tt.setAttribute("r", "55%");
+                setTimeout(function(){tt.setAttribute("r", "40%");},100);
+                draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                 game.moves.push({row: row, col: col});
             }
             log.info(angular.toJson(game.moves));
             dragDone();
           } else {
             // Drag continue
-            if (!(game.moves[game.moves.length-1].row === row && game.moves[game.moves.length-1].col === col)){
+            if ((game.moves.length == 0)||!(game.moves[game.moves.length-1].row === row && game.moves[game.moves.length-1].col === col)){
+                let tt = game.isPieceR(row, col)?document.getElementById("e2e_test_pieceR_" + row + "x" + col):game.isPieceG(row, col)?document.getElementById("e2e_test_pieceG_" + row + "x" + col):document.getElementById("e2e_test_pieceB_" + row + "x" + col);
+                tt.setAttribute("r", "45%");
+                setTimeout(function(){tt.setAttribute("r", "40%");},100);
+                draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                 game.moves.push({row: row, col: col});
+                draggingLines.style.display = "inline";
+                if (type === "touchstart"){
+                    pline2.setAttribute("x1","0");
+                    pline2.setAttribute("y1","0");
+                    pline2.setAttribute("x2","0");
+                    pline2.setAttribute("y2","0");
+                }
+                let centerXY = getSquareCenterXY(row, col);
+                if (game.moves.length == 1){
+                    pline.setAttribute("points", centerXY.x+","+centerXY.y+" ");
+                }
+                else{
+                    let tmp = pline.getAttribute("points");
+                    pline.setAttribute("points", tmp+centerXY.x+","+centerXY.y+" ");
+                }
             }
           }
         }
@@ -244,11 +282,12 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
           // return the piece to it's original style (then angular will take care to hide it).
           draggingStartedRowCol = null;
           draggingPiece = null;
-          
+          draggingLines.style.display = "none";
+          game.moves = new Array();
         }
       }
        function setDraggingPieceTopLeft(topLeft:any) {
-        var originalSize = getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col);
+        let originalSize = getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col);
         draggingPiece.style.left = (topLeft.left - originalSize.left) + "px";
         draggingPiece.style.top = (topLeft.top - originalSize.top) + "px";
       }
@@ -259,16 +298,17 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
         };
       }
       function getSquareTopLeft(row:number, col:number) {
-        var size = getSquareWidthHeight();
+        let size = getSquareWidthHeight();
         return {top: row * size.height, left: col * size.width}
       }
       function getSquareCenterXY(row:number, col:number) {
-        var size = getSquareWidthHeight();
+        let size = getSquareWidthHeight();
         return {
           x: col * size.width + size.width / 2,
           y: row * size.height + size.height / 2
         };
       }
+
 
       function dragDone() {
         $rootScope.$apply(function () {
