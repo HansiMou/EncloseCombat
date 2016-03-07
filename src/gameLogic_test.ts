@@ -9,119 +9,119 @@ describe("In EncloseCombat", function() {
 //   let O_WIN_SCORES = [0, 1];
 //   let TIE_SCORES = [0, 0];
 
-  function expectMove(
-      isOk: boolean,
-      turnIndexBeforeMove: number,
-      boardBeforeMove: Board,
-      scoresBeforeMove: number[],
-      current_turnBeforeMove: number,
-      moves: BoardDelta[],
-      boardAfterMove: Board,
-      turnIndexAfterMove: number,
-      scoresAfterMove: number[],
-      current_turnAfterMove: number,
-      endMatchScores: number[]): void {
-    let stateTransition: IStateTransition = {
-      turnIndexBeforeMove: turnIndexBeforeMove,
-      stateBeforeMove: boardBeforeMove ? {board: boardBeforeMove, delta: null, 
-          current_turn: current_turnBeforeMove, scores: scoresBeforeMove} : null,
-      move: {
-          endMatchScores: endMatchScores,
-        turnIndexAfterMove: turnIndexAfterMove,
-        stateAfterMove: {board: boardAfterMove, delta: moves,
-            current_turn: current_turnAfterMove, scores: scoresAfterMove}
-      },
-      numberOfPlayers: null
-    };
-    if (isOk) {
-      gameLogic.checkMoveOk(stateTransition);
-    } else {
-      // We expect an exception to be thrown :)
-      let didThrowException = false;
-      try {
-        gameLogic.checkMoveOk(stateTransition);
-      } catch (e) {
-        didThrowException = true;
-      }
-      if (!didThrowException) {
-        throw new Error("We expect an illegal move, but checkMoveOk didn't throw any exception!")
-      }
-    }
-  }
-it("drawing one small chip from initial state at upper left is illegal", function() {
-    expectMove(ILLEGAL, ONE_TURN, null, null, 1,
-    [{row:0, col:0}],
-      [['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [0, 0], 2, null);
-});
+//   function expectMove(
+//       isOk: boolean,
+//       turnIndexBeforeMove: number,
+//       boardBeforeMove: Board,
+//       scoresBeforeMove: number[],
+//       current_turnBeforeMove: number,
+//       moves: BoardDelta[],
+//       boardAfterMove: Board,
+//       turnIndexAfterMove: number,
+//       scoresAfterMove: number[],
+//       current_turnAfterMove: number,
+//       endMatchScores: number[]): void {
+//     let stateTransition: IStateTransition = {
+//       turnIndexBeforeMove: turnIndexBeforeMove,
+//       stateBeforeMove: boardBeforeMove ? {board: boardBeforeMove, delta: null, 
+//           current_turn: current_turnBeforeMove, scores: scoresBeforeMove} : null,
+//       move: {
+//           endMatchScores: endMatchScores,
+//         turnIndexAfterMove: turnIndexAfterMove,
+//         stateAfterMove: {board: boardAfterMove, delta: moves,
+//             current_turn: current_turnAfterMove, scores: scoresAfterMove}
+//       },
+//       numberOfPlayers: null
+//     };
+//     if (isOk) {
+//       gameLogic.checkMoveOk(stateTransition);
+//     } else {
+//       // We expect an exception to be thrown :)
+//       let didThrowException = false;
+//       try {
+//         gameLogic.checkMoveOk(stateTransition);
+//       } catch (e) {
+//         didThrowException = true;
+//       }
+//       if (!didThrowException) {
+//         throw new Error("We expect an illegal move, but checkMoveOk didn't throw any exception!")
+//       }
+//     }
+//   }
+// it("drawing one small chip from initial state at upper left is illegal", function() {
+//     expectMove(ILLEGAL, ONE_TURN, null, null, 1,
+//     [{row:0, col:0}],
+//       [['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [0, 0], 2, null);
+// });
 
-it("drawing a small rectangle (four chips) from initial state at upper left is legal", function() {
-    expectMove(OK, ONE_TURN, null, null, 1,
-    [{row:0,col:0}, {row:0,col:1}, {row:1,col:1}, {row:1,col:0},{row:0,col:0}],
-      [['R', 'R', 'C', 'C', 'C', 'C'],
-        ['R', 'R', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2, null);
-});
+// it("drawing a small rectangle (four chips) from initial state at upper left is legal", function() {
+//     expectMove(OK, ONE_TURN, null, null, 1,
+//     [{row:0,col:0}, {row:0,col:1}, {row:1,col:1}, {row:1,col:0},{row:0,col:0}],
+//       [['R', 'R', 'C', 'C', 'C', 'C'],
+//         ['R', 'R', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2, null);
+// });
 
-it("drawing a small rectangle (four chips) from initial state at right bottom is legal", function() {
-    expectMove(OK, ONE_TURN, null, null, 1,
-    [{row:6,col:4}, {row:6,col:5}, {row:7,col:5}, {row:7,col:4},{row:6,col:4}],
-      [['C', 'C', 'C', 'C', 'R', 'R'],
-        ['C', 'C', 'C', 'C', 'R', 'R'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2, null);
-});
+// it("drawing a small rectangle (four chips) from initial state at right bottom is legal", function() {
+//     expectMove(OK, ONE_TURN, null, null, 1,
+//     [{row:6,col:4}, {row:6,col:5}, {row:7,col:5}, {row:7,col:4},{row:6,col:4}],
+//       [['C', 'C', 'C', 'C', 'R', 'R'],
+//         ['C', 'C', 'C', 'C', 'R', 'R'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [4, 0], 2, null);
+// });
 
 
-it("drawing a complex shape (9 chips) from initial state at right bottom is legal", function() {
-    expectMove(OK, ONE_TURN, null, null, 1,
-    [{row:3,col:1},{row:3,col:2},{row:3,col:3},{row:3,col:4},{row:3,col:5},
-    {row:4,col:5},{row:4,col:4},{row:4,col:3},{row:4,col:2},
-    {row:5,col:2},{row:6,col:2},{row:6,col:3},{row:6,col:4},{row:6,col:5},
-    {row:7,col:5},{row:7,col:4},{row:7,col:3},{row:7,col:2},{row:7,col:1},
-    {row:6,col:1},{row:5,col:1},{row:4,col:1},{row:3,col:1}],
-      [['C', 'R', 'R', 'R', 'R', 'R'],
-        ['C', 'R', 'R', 'R', 'R', 'R'],
-        ['C', 'R', 'R', 'R', 'R', 'R'],
-        ['C', 'R', 'R', 'R', 'R', 'R'],
-        ['C', 'R', 'R', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [22, 0], 2, null);
-});
+// it("drawing a complex shape (9 chips) from initial state at right bottom is legal", function() {
+//     expectMove(OK, ONE_TURN, null, null, 1,
+//     [{row:3,col:1},{row:3,col:2},{row:3,col:3},{row:3,col:4},{row:3,col:5},
+//     {row:4,col:5},{row:4,col:4},{row:4,col:3},{row:4,col:2},
+//     {row:5,col:2},{row:6,col:2},{row:6,col:3},{row:6,col:4},{row:6,col:5},
+//     {row:7,col:5},{row:7,col:4},{row:7,col:3},{row:7,col:2},{row:7,col:1},
+//     {row:6,col:1},{row:5,col:1},{row:4,col:1},{row:3,col:1}],
+//       [['C', 'R', 'R', 'R', 'R', 'R'],
+//         ['C', 'R', 'R', 'R', 'R', 'R'],
+//         ['C', 'R', 'R', 'R', 'R', 'R'],
+//         ['C', 'R', 'R', 'R', 'R', 'R'],
+//         ['C', 'R', 'R', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [22, 0], 2, null);
+// });
 
-it("drawing a complex shape (25 chips) from initial state", function() {
-    expectMove(OK, ONE_TURN, null, null, 1,
-    [{row:7,col:0},{row:6,col:1},{row:5,col:2},{row:4,col:3},
-    {row:4,col:2},{row:3,col:2},{row:2,col:2},
-    {row:2,col:3},{row:2,col:4},{row:2,col:5},
-    {row:3,col:5},{row:4,col:5},{row:5,col:5},
-    {row:5,col:4},{row:6,col:4},{row:7,col:4},
-    {row:7,col:3},{row:7,col:2},{row:7,col:1},{row:7,col:0}],
-      [['R', 'R', 'R', 'R', 'R', 'R'],
-        ['C', 'R', 'R', 'R', 'R', 'R'],
-        ['C', 'C', 'R', 'R', 'R', 'R'],
-        ['C', 'C', 'R', 'R', 'R', 'R'],
-        ['C', 'C', 'R', 'R', 'R', 'C'],
-        ['C', 'C', 'R', 'R', 'R', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [25, 0], 2, null);
-});
+// it("drawing a complex shape (25 chips) from initial state", function() {
+//     expectMove(OK, ONE_TURN, null, null, 1,
+//     [{row:7,col:0},{row:6,col:1},{row:5,col:2},{row:4,col:3},
+//     {row:4,col:2},{row:3,col:2},{row:2,col:2},
+//     {row:2,col:3},{row:2,col:4},{row:2,col:5},
+//     {row:3,col:5},{row:4,col:5},{row:5,col:5},
+//     {row:5,col:4},{row:6,col:4},{row:7,col:4},
+//     {row:7,col:3},{row:7,col:2},{row:7,col:1},{row:7,col:0}],
+//       [['R', 'R', 'R', 'R', 'R', 'R'],
+//         ['C', 'R', 'R', 'R', 'R', 'R'],
+//         ['C', 'C', 'R', 'R', 'R', 'R'],
+//         ['C', 'C', 'R', 'R', 'R', 'R'],
+//         ['C', 'C', 'R', 'R', 'R', 'C'],
+//         ['C', 'C', 'R', 'R', 'R', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C'],
+//         ['C', 'C', 'C', 'C', 'C', 'C']], TWO_TURN, [25, 0], 2, null);
+// });
 
 // it("drawing a complex shape (19 chips) from initial state", function() {
 //     expectMove(OK, ONE_TURN, null, null, 1,

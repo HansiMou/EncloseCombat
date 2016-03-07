@@ -232,9 +232,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             if (type === "touchend") {
                 if (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col)) {
-                    var tt_1 = game.isPieceR(row, col) ? document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ? document.getElementById("e2e_test_pieceG_" + row + "x" + col) : document.getElementById("e2e_test_pieceB_" + row + "x" + col);
-                    tt_1.setAttribute("r", "55%");
-                    setTimeout(function () { tt_1.setAttribute("r", "40%"); }, 100);
+                    var tt = game.isPieceR(row, col) ? document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ? document.getElementById("e2e_test_pieceG_" + row + "x" + col) : document.getElementById("e2e_test_pieceB_" + row + "x" + col);
+                    tt.setAttribute("r", "55%");
+                    setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
                     draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                     game.moves.push({ row: row, col: col });
                 }
@@ -244,9 +244,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             else {
                 // Drag continue
                 if ((game.moves.length == 0) || !(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col)) {
-                    var tt_2 = game.isPieceR(row, col) ? document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ? document.getElementById("e2e_test_pieceG_" + row + "x" + col) : document.getElementById("e2e_test_pieceB_" + row + "x" + col);
-                    tt_2.setAttribute("r", "45%");
-                    setTimeout(function () { tt_2.setAttribute("r", "40%"); }, 100);
+                    var tt = game.isPieceR(row, col) ? document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ? document.getElementById("e2e_test_pieceG_" + row + "x" + col) : document.getElementById("e2e_test_pieceB_" + row + "x" + col);
+                    tt.setAttribute("r", "45%");
+                    setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
                     draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                     game.moves.push({ row: row, col: col });
                     draggingLines.style.display = "inline";
