@@ -269,9 +269,10 @@ var gameLogic;
         for (var i = 0; i < moves.length - 1; i++) {
             tmp[i] = moves[i].row * gameLogic.COLS + moves[i].col;
         }
-        var s = tmp.join(",") + ",";
-        for (var i = 0; i < tmp.length; i++) {
-            if (s.replace(tmp[i] + ",", "").indexOf(tmp[i] + ",") > -1) {
+        var ntmp = tmp.sort();
+        log.info(ntmp);
+        for (var i = 0; i < ntmp.length - 1; i++) {
+            if (ntmp[i] === ntmp[i + 1]) {
                 return true;
             }
         }

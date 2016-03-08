@@ -316,10 +316,10 @@ module gameLogic {
       for (let i = 0; i < moves.length-1; i++){
           tmp[i] = moves[i].row * COLS + moves[i].col;
       }
-      
-      let s = tmp.join(",")+",";
-      for(let i = 0; i < tmp.length; i++) {  
-          if(s.replace(tmp[i]+",","").indexOf(tmp[i]+",")>-1) {  
+      let ntmp = tmp.sort();
+      log.info(ntmp);
+      for(let i = 0; i < ntmp.length-1; i++) {
+          if (ntmp[i] === ntmp[i+1]){  
             return true;
           }
       }  
