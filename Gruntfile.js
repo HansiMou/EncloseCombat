@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+  
   // Auto resize (and pad with white color) an image
   // into multiple sizes for Google&Apple app submission.
   // I use 'sips' command line to resize and pad images,
