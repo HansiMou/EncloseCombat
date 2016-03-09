@@ -206,7 +206,7 @@ module.exports = function(grunt) {
             // server default file extension
             ext: "html",
             // run in parallel with other tasks
-            runInBackground: true
+            runInBackground: false
         }
     },
     protractor: {
