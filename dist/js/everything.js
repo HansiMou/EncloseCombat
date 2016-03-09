@@ -269,9 +269,10 @@ var gameLogic;
         for (var i = 0; i < moves.length - 1; i++) {
             tmp[i] = moves[i].row * gameLogic.COLS + moves[i].col;
         }
-        var s = tmp.join(",") + ",";
-        for (var i = 0; i < tmp.length; i++) {
-            if (s.replace(tmp[i] + ",", "").indexOf(tmp[i] + ",") > -1) {
+        var ntmp = tmp.sort();
+        log.info(ntmp);
+        for (var i = 0; i < ntmp.length - 1; i++) {
+            if (ntmp[i] === ntmp[i + 1]) {
                 return true;
             }
         }
@@ -500,13 +501,10 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
         var row, col;
         // Is outside gameArea?
         if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= gameArea.clientHeight) {
-            draggingLines.style.display = "none";
             if (draggingPiece) {
-                // Drag the piece where the touch is (without snapping to a square).
-                var size = getSquareWidthHeight();
-                setDraggingPieceTopLeft({ top: y - size.height / 2, left: x - size.width / 2 });
             }
             else {
+                draggingLines.style.display = "none";
                 return;
             }
         }
