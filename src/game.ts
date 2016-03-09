@@ -201,12 +201,12 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
         
         // Is outside gameArea?
         if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= gameArea.clientHeight) {
-          draggingLines.style.display = "none";
           if (draggingPiece) {
             // Drag the piece where the touch is (without snapping to a square).
-            let size = getSquareWidthHeight();
-            setDraggingPieceTopLeft({top: y - size.height / 2, left: x - size.width / 2});
+            // let size = getSquareWidthHeight();
+            // setDraggingPieceTopLeft({top: y - size.height / 2, left: x - size.width / 2});
           } else {
+            draggingLines.style.display = "none";
             return;
           }
         } else {
