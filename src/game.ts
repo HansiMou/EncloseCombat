@@ -2,7 +2,7 @@ interface SupportedLanguages { en: string, cn: string};
 interface Translations {
   [index: string]: SupportedLanguages;
 }
-    
+
 module game {
   // I export all letiables to make it easy to debug in the browser by
   // simply typing in the console:
@@ -14,6 +14,7 @@ module game {
   export let state: IState = null;
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
+  export let msg = "try";
 
   export function init() {
     translate.setTranslations(getTranslations());
@@ -150,7 +151,7 @@ module game {
   export function isPieceG(row: number, col: number): boolean {
     return state.board[row][col] === 'G';
   }
-  
+
   export function isPieceB(row: number, col: number): boolean {
     return state.board[row][col] === 'B';
   }
@@ -186,19 +187,19 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
     let pline = document.getElementById("pline");
     let pline2 = document.getElementById("pline2");
     let nextZIndex = 61;
-     
+
     dragAndDropService.addDragListener("gameArea", handleDragEvent);
     let rowsNum = gameLogic.ROWS;
     let colsNum = gameLogic.COLS;
     let draggingPiece:any = null;
     let draggingStartedRowCol: any = null; // The {row: YY, col: XX} where dragging started.
-    
+
     function handleDragEvent(type:string, clientX:number, clientY:number) {
         // Center point in gameArea
         let x = clientX - gameArea.offsetLeft;
         let y = clientY - gameArea.offsetTop;
         let row: number, col:number;
-        
+
         // Is outside gameArea?
         if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= gameArea.clientHeight) {
           if (draggingPiece) {
@@ -211,10 +212,10 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
           }
         } else {
           // Inside gameArea. Let's find the containing square's row and col
-          
+
           col = Math.floor(colsNum * x / gameArea.clientWidth);
           row = Math.floor(rowsNum * y / gameArea.clientHeight);
-          
+
           let cy = gameArea.clientHeight/2/rowsNum*(row*2+1);
           let cx = gameArea.clientWidth/2/colsNum*(col*2+1);
           let percent = Math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy))/(gameArea.clientHeight/2/rowsNum);
@@ -313,6 +314,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
       function dragDone() {
         $rootScope.$apply(function () {
           // Update piece in board
+          
           game.cellPressedUp();
         });
       }

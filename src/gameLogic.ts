@@ -54,13 +54,10 @@ module gameLogic {
       switch (res) {
           case 1:
               return 'R'; // short for red
-              break;
           case 2:
               return 'G'; // short for green
-              break;
           case 3:
               return 'B'; // short for blue
-              break;
           default:
               break;
       }
@@ -281,31 +278,26 @@ module gameLogic {
       // it should have at least three points
       if (moves.length <= 3){
           throw new Error("You should draw a circle with at least three points");
-          return false;
       }
       
       // last point should be the first point 
       if (!(moves[0].row === moves[moves.length-1].row && moves[0].col === moves[moves.length-1].col)){
           throw new Error("You should draw a enclosed circle");
-          return false;
       }
       // there should not be duplicate points except for the last point
       if (checkDuplicate(moves)){
           throw new Error("You should a draw enclosed circle without duplicates");
-          return false;
       }
       for (let i = 1; i < moves.length; i++){
           // points should be next the previous one
           if (!(Math.abs(moves[i].row-moves[i-1].row) <= 1 && Math.abs(moves[i].col-moves[i-1].col) <= 1)){
               throw new Error("Point selected should be closed to the previous one");
-              return false;
           }
           
           // Points should all be the same color
           if (board[moves[i].row][moves[i].col] !== board[moves[i-1].row][moves[i-1].col]){
               log.info("after", angular.toJson(board));
               throw new Error("Points should all be the same color");
-              return false;
           }
       }
       return true;
