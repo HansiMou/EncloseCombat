@@ -14,7 +14,7 @@ module game {
   export let state: IState = null;
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
-  export let msg = "try";
+  export let msg = "";
 
   export function init() {
     translate.setTranslations(getTranslations());

@@ -28,7 +28,10 @@ interface ColorsAndFlag {
     color: string;
     flag: number;
 }
-
+interface LenAndMoves {
+    len: number;
+    moves: BoardDelta[];
+}
 module gameLogic {
   export const ROWS = 8;
   export const COLS = 6;

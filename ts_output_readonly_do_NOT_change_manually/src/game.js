@@ -11,7 +11,7 @@ var game;
     game.state = null;
     game.isHelpModalShown = false;
     game.moves = new Array();
-    game.msg = "try";
+    game.msg = "";
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
