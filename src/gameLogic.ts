@@ -134,6 +134,10 @@ module gameLogic {
       
       let helper: boolean[][] = [];
       
+      let cleanR = false;
+      let cleanG = false;
+      let cleanB = false;
+      
       // initialize the auxiliary boolean[][] array. 
       for (let i = 0; i < ROWS; i++){
           helper[i] = [];
@@ -157,10 +161,40 @@ module gameLogic {
           let range = foundRangeOfCertainCol(moves, i);
           for (let j = 0; j < ROWS; j++){
               if (j >= range.left && j <= range.right && helper[j][i] == true){
-                score++;
+                if (!contains(moves, j, i)){
+                    switch(board[j][i])
+                    {
+                    case 'R':
+                    cleanR = true;
+                    break;
+                    case 'G':
+                    cleanG = true;
+                    break;
+                    case 'B':
+                    cleanB = true;
+                    break;
+                    }
+                }
               }
               else{
                   helper[j][i] = false;
+              }
+          }
+      }
+      
+      for (let i = 0; i < ROWS; i++){
+          for (let j = 0; j < COLS; j++){
+              if (cleanR === true && board[i][j] === 'R'){
+                  helper[i][j] = true;
+              }
+              else if (cleanG === true && board[i][j] === 'G'){
+                  helper[i][j] = true;
+              }
+              else if (cleanB === true && board[i][j] === 'B'){
+                  helper[i][j] = true;
+              }
+              if (helper[i][j] === true){
+                  score++;
               }
           }
       }

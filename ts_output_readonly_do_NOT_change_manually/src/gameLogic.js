@@ -98,6 +98,9 @@ var gameLogic;
         var score = 0;
         var boardAfterMove = board;
         var helper = [];
+        var cleanR = false;
+        var cleanG = false;
+        var cleanB = false;
         // initialize the auxiliary boolean[][] array. 
         for (var i = 0; i < gameLogic.ROWS; i++) {
             helper[i] = [];
@@ -121,10 +124,38 @@ var gameLogic;
             var range = foundRangeOfCertainCol(moves, i);
             for (var j = 0; j < gameLogic.ROWS; j++) {
                 if (j >= range.left && j <= range.right && helper[j][i] == true) {
-                    score++;
+                    if (!contains(moves, j, i)) {
+                        switch (board[j][i]) {
+                            case 'R':
+                                cleanR = true;
+                                break;
+                            case 'G':
+                                cleanG = true;
+                                break;
+                            case 'B':
+                                cleanB = true;
+                                break;
+                        }
+                    }
                 }
                 else {
                     helper[j][i] = false;
+                }
+            }
+        }
+        for (var i = 0; i < gameLogic.ROWS; i++) {
+            for (var j = 0; j < gameLogic.COLS; j++) {
+                if (cleanR === true && board[i][j] === 'R') {
+                    helper[i][j] = true;
+                }
+                else if (cleanG === true && board[i][j] === 'G') {
+                    helper[i][j] = true;
+                }
+                else if (cleanB === true && board[i][j] === 'B') {
+                    helper[i][j] = true;
+                }
+                if (helper[i][j] === true) {
+                    score++;
                 }
             }
         }
