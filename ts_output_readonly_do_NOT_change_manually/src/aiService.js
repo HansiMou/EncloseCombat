@@ -3,6 +3,23 @@ var aiService;
     /** Returns a simply random move that the computer player should do for the given state in move. */
     function findSimplyComputerMove(move) {
         var possibleMove = null;
+        // find a better move
+        for (var i = 1; i < gameLogic.ROWS - 1; i++) {
+            for (var j = 1; j < gameLogic.COLS - 1; j++) {
+                var moves = new Array();
+                try {
+                    moves.push({ row: i - 1, col: j });
+                    moves.push({ row: i, col: j + 1 });
+                    moves.push({ row: i + 1, col: j });
+                    moves.push({ row: i, col: j - 1 });
+                    moves.push({ row: i - 1, col: j });
+                    possibleMove = gameLogic.createMove(move.stateAfterMove, moves, move.turnIndexAfterMove);
+                    return possibleMove;
+                }
+                catch (e) {
+                }
+            }
+        }
         for (var i = 0; i < gameLogic.ROWS; i++) {
             for (var j = 1; j < gameLogic.COLS; j++) {
                 for (var k = 0; k <= 3; k++) {

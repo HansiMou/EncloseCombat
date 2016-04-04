@@ -4,7 +4,7 @@ var gameLogic;
     gameLogic.ROWS = 8;
     gameLogic.COLS = 6;
     gameLogic.num_of_players = 2;
-    gameLogic.total_turns = 10;
+    gameLogic.total_turns = 20;
     gameLogic.num_of_colors = 3;
     /** Returns the initial EncloseCombat board, which is a ROWSxCOLS matrix containing the initial of a certain color. */
     function getInitialBoard() {
@@ -23,13 +23,10 @@ var gameLogic;
         switch (res) {
             case 1:
                 return 'R'; // short for red
-                break;
             case 2:
                 return 'G'; // short for green
-                break;
             case 3:
                 return 'B'; // short for blue
-                break;
             default:
                 break;
         }
@@ -43,7 +40,7 @@ var gameLogic;
     }
     /** Set the first turn to be 1, and the intial score for all players to be 0 */
     function getInitialState() {
-        return { board: getInitialBoard(), delta: null, current_turn: 1, scores: getIntialScores() };
+        return { board: getInitialBoard(), delta: null, current_turn: 0, scores: getIntialScores() };
     }
     gameLogic.getInitialState = getInitialState;
     /**
@@ -101,6 +98,9 @@ var gameLogic;
         var score = 0;
         var boardAfterMove = board;
         var helper = [];
+        var cleanR = false;
+        var cleanG = false;
+        var cleanB = false;
         // initialize the auxiliary boolean[][] array. 
         for (var i = 0; i < gameLogic.ROWS; i++) {
             helper[i] = [];
@@ -124,10 +124,38 @@ var gameLogic;
             var range = foundRangeOfCertainCol(moves, i);
             for (var j = 0; j < gameLogic.ROWS; j++) {
                 if (j >= range.left && j <= range.right && helper[j][i] == true) {
-                    score++;
+                    if (!contains(moves, j, i)) {
+                        switch (board[j][i]) {
+                            case 'R':
+                                cleanR = true;
+                                break;
+                            case 'G':
+                                cleanG = true;
+                                break;
+                            case 'B':
+                                cleanB = true;
+                                break;
+                        }
+                    }
                 }
                 else {
                     helper[j][i] = false;
+                }
+            }
+        }
+        for (var i = 0; i < gameLogic.ROWS; i++) {
+            for (var j = 0; j < gameLogic.COLS; j++) {
+                if (cleanR === true && board[i][j] === 'R') {
+                    helper[i][j] = true;
+                }
+                else if (cleanG === true && board[i][j] === 'G') {
+                    helper[i][j] = true;
+                }
+                else if (cleanB === true && board[i][j] === 'B') {
+                    helper[i][j] = true;
+                }
+                if (helper[i][j] === true) {
+                    score++;
                 }
             }
         }
@@ -236,29 +264,24 @@ var gameLogic;
         // it should have at least three points
         if (moves.length <= 3) {
             throw new Error("You should draw a circle with at least three points");
-            return false;
         }
         // last point should be the first point 
         if (!(moves[0].row === moves[moves.length - 1].row && moves[0].col === moves[moves.length - 1].col)) {
             throw new Error("You should draw a enclosed circle");
-            return false;
         }
         // there should not be duplicate points except for the last point
         if (checkDuplicate(moves)) {
             throw new Error("You should a draw enclosed circle without duplicates");
-            return false;
         }
         for (var i = 1; i < moves.length; i++) {
             // points should be next the previous one
             if (!(Math.abs(moves[i].row - moves[i - 1].row) <= 1 && Math.abs(moves[i].col - moves[i - 1].col) <= 1)) {
                 throw new Error("Point selected should be closed to the previous one");
-                return false;
             }
             // Points should all be the same color
             if (board[moves[i].row][moves[i].col] !== board[moves[i - 1].row][moves[i - 1].col]) {
                 log.info("after", angular.toJson(board));
                 throw new Error("Points should all be the same color");
-                return false;
             }
         }
         return true;
@@ -322,6 +345,7 @@ var game;
     game.state = null;
     game.isHelpModalShown = false;
     game.moves = new Array();
+    game.msg = "";
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -522,7 +546,8 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 pline2.setAttribute("x2", x + "");
                 pline2.setAttribute("y2", y + "");
             }
-            if (percent > 0.5) {
+            // set up of the threshold
+            if (percent > 0.7) {
                 if (type === "touchend" || type === "touchcancel" || type === "touchleave") {
                     game.moves = new Array();
                     pline.setAttribute("points", "");
@@ -551,26 +576,30 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             else {
                 // Drag continue
-                if ((game.moves.length == 0) || !(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col)) {
-                    var tt = game.isPieceR(row, col) ? document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ? document.getElementById("e2e_test_pieceG_" + row + "x" + col) : document.getElementById("e2e_test_pieceB_" + row + "x" + col);
-                    tt.setAttribute("r", "45%");
-                    setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
-                    draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
-                    game.moves.push({ row: row, col: col });
-                    draggingLines.style.display = "inline";
-                    if (type === "touchstart") {
-                        pline2.setAttribute("x1", "0");
-                        pline2.setAttribute("y1", "0");
-                        pline2.setAttribute("x2", "0");
-                        pline2.setAttribute("y2", "0");
-                    }
-                    var centerXY = getSquareCenterXY(row, col);
-                    if (game.moves.length == 1) {
-                        pline.setAttribute("points", centerXY.x + "," + centerXY.y + " ");
-                    }
-                    else {
-                        var tmp = pline.getAttribute("points");
-                        pline.setAttribute("points", tmp + centerXY.x + "," + centerXY.y + " ");
+                // the first point or points around the last one
+                if ((game.moves.length === 0) || (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col) && ((Math.abs(game.moves[game.moves.length - 1].row - row) <= 1) && (Math.abs(game.moves[game.moves.length - 1].col - col) <= 1)))) {
+                    // if only two points, it cannot go back and select the points in the moves. if more than two points, it cannot go back and select the points other than the first one.
+                    if (game.moves.length < 2 || (game.moves.length === 2 && !(game.moves[0].row === row && game.moves[0].col === col)) || (game.moves.length > 2 && !containsDupOthanThanFirst(game.moves, row, col))) {
+                        var tt = game.isPieceR(row, col) ? document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ? document.getElementById("e2e_test_pieceG_" + row + "x" + col) : document.getElementById("e2e_test_pieceB_" + row + "x" + col);
+                        tt.setAttribute("r", "45%");
+                        setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
+                        draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
+                        game.moves.push({ row: row, col: col });
+                        draggingLines.style.display = "inline";
+                        if (type === "touchstart") {
+                            pline2.setAttribute("x1", "0");
+                            pline2.setAttribute("y1", "0");
+                            pline2.setAttribute("x2", "0");
+                            pline2.setAttribute("y2", "0");
+                        }
+                        var centerXY = getSquareCenterXY(row, col);
+                        if (game.moves.length == 1) {
+                            pline.setAttribute("points", centerXY.x + "," + centerXY.y + " ");
+                        }
+                        else {
+                            var tmp = pline.getAttribute("points");
+                            pline.setAttribute("points", tmp + centerXY.x + "," + centerXY.y + " ");
+                        }
                     }
                 }
             }
@@ -583,6 +612,14 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             draggingLines.style.display = "none";
             game.moves = new Array();
         }
+    }
+    function containsDupOthanThanFirst(moves, row, col) {
+        for (var i = 1; i < moves.length; i++) {
+            if (moves[i].row === row && moves[i].col === col) {
+                return true;
+            }
+        }
+        return false;
     }
     function setDraggingPieceTopLeft(topLeft) {
         var originalSize = getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col);
@@ -623,6 +660,23 @@ var aiService;
     /** Returns a simply random move that the computer player should do for the given state in move. */
     function findSimplyComputerMove(move) {
         var possibleMove = null;
+        // find a better move
+        for (var i = 1; i < gameLogic.ROWS - 1; i++) {
+            for (var j = 1; j < gameLogic.COLS - 1; j++) {
+                var moves = new Array();
+                try {
+                    moves.push({ row: i - 1, col: j });
+                    moves.push({ row: i, col: j + 1 });
+                    moves.push({ row: i + 1, col: j });
+                    moves.push({ row: i, col: j - 1 });
+                    moves.push({ row: i - 1, col: j });
+                    possibleMove = gameLogic.createMove(move.stateAfterMove, moves, move.turnIndexAfterMove);
+                    return possibleMove;
+                }
+                catch (e) {
+                }
+            }
+        }
         for (var i = 0; i < gameLogic.ROWS; i++) {
             for (var j = 1; j < gameLogic.COLS; j++) {
                 for (var k = 0; k <= 3; k++) {
@@ -647,7 +701,6 @@ var aiService;
                         moves.push({ row: i, col: j - 1 });
                         possibleMove = gameLogic.createMove(move.stateAfterMove, moves, move.turnIndexAfterMove);
                         return possibleMove;
-                        break;
                     }
                     catch (e) {
                     }
@@ -657,6 +710,88 @@ var aiService;
         return possibleMove;
     }
     aiService.findSimplyComputerMove = findSimplyComputerMove;
+    /** Returns a more intelligent move that the computer player should do for the given state in move. */
+    function findCleverComputerMove(move) {
+        var res = null;
+        var maxlen = 0;
+        var maxmoves = new Array();
+        var used = new Array();
+        var moves = new Array();
+        for (var i = 0; i < gameLogic.ROWS; i++) {
+            used[i] = new Array();
+            for (var j = 0; j < gameLogic.COLS; j++) {
+                used[i][j] = false;
+            }
+        }
+        log.info("rrr");
+        try {
+            for (var i = 0; i < gameLogic.ROWS; i++) {
+                for (var j = 0; j < gameLogic.COLS; j++) {
+                    var tmpres = search(move.stateAfterMove.board, i, j, '', moves, used);
+                    if (tmpres.len > maxlen) {
+                        maxmoves = tmpres.moves;
+                    }
+                }
+            }
+            res = gameLogic.createMove(move.stateAfterMove, maxmoves, move.turnIndexAfterMove);
+        }
+        catch (e) {
+            log.info(e);
+        }
+        return res;
+    }
+    aiService.findCleverComputerMove = findCleverComputerMove;
+    function search(board, row, col, color, moves, used) {
+        if (row < 0 || row > gameLogic.ROWS || col < 0 || col > gameLogic.COLS || (color !== '' && board[row][col] !== color)) {
+            return { len: 0, moves: null };
+        }
+        if (color !== '' && moves !== null && moves.length >= 3 && used[row][col] === true
+            && row === moves[0].row && col === moves[0].col) {
+            moves.push({ row: row, col: col });
+            return { len: moves.length - 1, moves: moves };
+        }
+        if (color === '') {
+            color = board[row][col];
+        }
+        used[row][col] = true;
+        moves.push({ row: row, col: col });
+        var r = new Array();
+        if (row + 1 < gameLogic.ROWS && board[row + 1][col] === color) {
+            r.push(search(board, row + 1, col, color, moves, used));
+        }
+        if (row + 1 < gameLogic.ROWS && col + 1 < gameLogic.COLS && board[row + 1][col + 1] === color) {
+            r.push(search(board, row + 1, col + 1, color, moves, used));
+        }
+        if (row + 1 < gameLogic.ROWS && col - 1 > 0 && board[row + 1][col - 1] === color) {
+            r.push(search(board, row + 1, col - 1, color, moves, used));
+        }
+        if (col + 1 < gameLogic.COLS && board[row][col + 1] === color) {
+            r.push(search(board, row, col + 1, color, moves, used));
+        }
+        if (col - 1 > 0 && board[row][col - 1] === color) {
+            r.push(search(board, row, col - 1, color, moves, used));
+        }
+        if (row - 1 > 0 && col - 1 > 0 && board[row - 1][col - 1] === color) {
+            r.push(search(board, row - 1, col - 1, color, moves, used));
+        }
+        if (row - 1 > 0 && board[row - 1][col] === color) {
+            r.push(search(board, row - 1, col, color, moves, used));
+        }
+        if (row - 1 > 0 && col + 1 < gameLogic.COLS && board[row - 1][col + 1] === color) {
+            r.push(search(board, row - 1, col + 1, color, moves, used));
+        }
+        moves.pop();
+        used[row][col] = false;
+        var maxlen = 0;
+        var maxmoves = new Array();
+        for (var i = 0; i < r.length; i++) {
+            if (r[i].len > maxlen) {
+                maxlen = r[i].len;
+                maxmoves = r[i].moves;
+            }
+        }
+        return { len: maxlen, moves: maxmoves };
+    }
     /** Returns the move that the computer player should do for the given state in move. */
     function findComputerMove(move) {
         return createComputerMove(move, 

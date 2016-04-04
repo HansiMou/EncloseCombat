@@ -2,6 +2,25 @@ module aiService {
   /** Returns a simply random move that the computer player should do for the given state in move. */
   export function findSimplyComputerMove(move: IMove): IMove{
     let possibleMove: IMove = null;
+    
+    // find a better move
+    for (let i = 1; i < gameLogic.ROWS-1; i++){
+        for (let j = 1; j < gameLogic.COLS-1; j++){
+            let moves = new Array();
+            try {
+                moves.push({row: i-1, col: j});
+                moves.push({row: i, col: j+1});
+                moves.push({row: i+1, col: j});
+                moves.push({row: i, col: j-1});
+                moves.push({row: i-1, col: j});
+                possibleMove = gameLogic.createMove(move.stateAfterMove, moves, move.turnIndexAfterMove);
+                return possibleMove;
+            } catch (e) {
+            // Move is illegal
+            }
+        }
+    }
+    
     for (let i = 0; i < gameLogic.ROWS; i++) {
       for (let j = 1; j < gameLogic.COLS; j++) {
           for (let k = 0; k <= 3; k++){

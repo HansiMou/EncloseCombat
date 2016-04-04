@@ -4,7 +4,7 @@ var gameLogic;
     gameLogic.ROWS = 8;
     gameLogic.COLS = 6;
     gameLogic.num_of_players = 2;
-    gameLogic.total_turns = 10;
+    gameLogic.total_turns = 20;
     gameLogic.num_of_colors = 3;
     /** Returns the initial EncloseCombat board, which is a ROWSxCOLS matrix containing the initial of a certain color. */
     function getInitialBoard() {
@@ -40,7 +40,7 @@ var gameLogic;
     }
     /** Set the first turn to be 1, and the intial score for all players to be 0 */
     function getInitialState() {
-        return { board: getInitialBoard(), delta: null, current_turn: 1, scores: getIntialScores() };
+        return { board: getInitialBoard(), delta: null, current_turn: 0, scores: getIntialScores() };
     }
     gameLogic.getInitialState = getInitialState;
     /**
