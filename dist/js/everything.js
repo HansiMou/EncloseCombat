@@ -520,11 +520,13 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
     var draggingStartedRowCol = null; // The {row: YY, col: XX} where dragging started.
     function handleDragEvent(type, clientX, clientY) {
         // Center point in gameArea
+        var realTop = gameArea.offsetTop + 0.1 * gameArea.clientHeight;
+        var realHeight = gameArea.clientHeight * 0.9;
         var x = clientX - gameArea.offsetLeft;
-        var y = clientY - gameArea.offsetTop;
+        var y = clientY - realTop;
         var row, col;
         // Is outside gameArea?
-        if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= gameArea.clientHeight) {
+        if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= realHeight) {
             if (draggingPiece) {
             }
             else {
@@ -535,10 +537,10 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
         else {
             // Inside gameArea. Let's find the containing square's row and col
             col = Math.floor(colsNum * x / gameArea.clientWidth);
-            row = Math.floor(rowsNum * y / gameArea.clientHeight);
-            var cy = gameArea.clientHeight / 2 / rowsNum * (row * 2 + 1);
+            row = Math.floor(rowsNum * y / realHeight);
+            var cy = realHeight / 2 / rowsNum * (row * 2 + 1);
             var cx = gameArea.clientWidth / 2 / colsNum * (col * 2 + 1);
-            var percent = Math.sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy)) / (gameArea.clientHeight / 2 / rowsNum);
+            var percent = Math.sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy)) / (realHeight / 2 / rowsNum);
             if (game.moves.length !== 0) {
                 var XY = getSquareCenterXY(game.moves[game.moves.length - 1].row, game.moves[game.moves.length - 1].col);
                 pline2.setAttribute("x1", XY.x + "");
@@ -629,7 +631,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
     function getSquareWidthHeight() {
         return {
             width: gameArea.clientWidth / colsNum,
-            height: gameArea.clientHeight / rowsNum
+            height: gameArea.clientHeight * 0.9 / rowsNum
         };
     }
     function getSquareTopLeft(row, col) {

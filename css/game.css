@@ -46,10 +46,16 @@ td {
 	color:#fff;
 }
 .div-inline1{ display:inline;
-color: lawngreen; font-size:large;margin-left: 20%; } 
+color: lawngreen; font-size:large;} 
 
 .div-inline2{ display:inline;
 color: white; font-size:large; } 
 
 .div-inline3{ display:inline;
 color: deeppink; font-size:large;} 
+
+
+.container{width:500px;height:80px;margin-left:50px;padding-top:10px;text-align:center;}
+     .center{display:inline-block;}
+     .center{_display:inline;} /*针对ie6 hack*/
+     .center a{float:left;padding:5px 10px;margin:10px;text-decoration:none;}
