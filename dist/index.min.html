@@ -24,7 +24,7 @@
 
   <script src="js/everything.min.js"></script>
 </head>
-<body ng-cloak style="background:#292421;">
+<body ng-cloak style="background:#FAF0E6;">
   <div id="e2e_test_open_rules_modal" class="help-tip" ng-click="game.isHelpModalShown = true" aria-hidden="true"></div>
 
   <div class="overlayModal" ng-click="game.clickedOnModal($event)"
@@ -77,7 +77,7 @@
   <div class="container" style="position:absolute; height: 10%; width: 100%; top: 0; left: 0;">
      <div class="center">
         <div class="div-inline1">&#9827 {{game.state.scores[0]}} &#9827</div> 
-        <div class="div-inline2"> &#8727{{20-game.state.current_turn}}&#8727 </div> 
+        <div class="div-inline2">&nbsp;&nbsp;&nbsp;&#8727{{20-game.state.current_turn}}&#8727&nbsp;&nbsp;&nbsp;</div> 
         <div class="div-inline3">&#9829 {{game.state.scores[1]}} &#9829</div> 
      <div style="clear:both"></div></div>  
     
@@ -86,16 +86,16 @@
     <svg id="draggingLines" width="100%" height="100%"
         style="display:none; position:absolute; z-index: 30;">
         <polyline id = "pline" points=""
-            style="fill:none;stroke:white;stroke-width:1.5%; stroke-opacity: 0.8" />
+            style="fill:none;stroke:indigo;stroke-width:1.5%; stroke-opacity: 0.7" />
             <line id="pline2"
                     y1="0" x1="12.5%"
                     y2="100%" x2="12.5%"
-                    stroke="white"
+                    stroke="purple"
                     stroke-width="1.5%"
-                    stroke-opacity="0.5"/>
+                    stroke-opacity="0.4"/>
     </svg>
   <div ng-repeat="row in [0, 1, 2, 3, 4, 5, 6, 7]"
-      style="background:#292421; position:absolute; top:{{row * 12.5}}%; left:0; width:100%; height:12.5%;">
+      style="background:#FAF0E6; position:absolute; top:{{row * 12.5}}%; left:0; width:100%; height:12.5%;">
     <div ng-repeat="col in [0, 1, 2, 3, 4, 5]"
         style="position:absolute; top:0; left:{{col * 16.666667}}%; width:16.666667%; height:100%;"
         id="{{'e2e_test_div_' + row + 'x' + col}}">
@@ -107,19 +107,19 @@
         <svg ng-if="game.isPieceR(row, col)"
             width="100%" height="100%">
           <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceR_' + row + 'x' + col}}"
-            stroke="#FF6347" stroke-width="5%" fill="#FF6347" style="transition: r 0.1s"/>
+            stroke="#DD4124" stroke-width="5%" fill="#DD4124" style="transition: r 0.1s"/>
         </svg>
         
         <svg ng-if="game.isPieceG(row, col)"
             width="100%" height="100%">
          <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceG_' + row + 'x' + col}}"
-            stroke="#228B22" stroke-width="5%" fill="#228B22" style="transition: r 0.1s"/>
+            stroke="#556B2F" stroke-width="5%" fill="#556B2F" style="transition: r 0.1s"/>
         </svg>
         
         <svg ng-if="game.isPieceB(row, col)"
             width="100%" height="100%">
           <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceB_' + row + 'x' + col}}"
-            stroke="#4169E1" stroke-width="5%" fill="#4169E1" style="transition: r 0.1s"/>
+            stroke="#20B2AA" stroke-width="5%" fill="#20B2AA" style="transition: r 0.1s"/>
         </svg>
       </div>
     </div>
