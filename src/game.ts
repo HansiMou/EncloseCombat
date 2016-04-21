@@ -15,6 +15,7 @@ module game {
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
   export let msg = "";
+  export let shouldshowline = false;
 
   export function init() {
     translate.setTranslations(getTranslations());
@@ -143,7 +144,7 @@ module game {
   export function shouldShowImage(row: number, col: number): boolean {
     return true;
   }
-
+  
   export function isPieceR(row: number, col: number): boolean {
     return state.board[row][col] === 'R';
   }
@@ -210,6 +211,10 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             // setDraggingPieceTopLeft({top: y - size.height / 2, left: x - size.width / 2});
           } else {
             draggingLines.style.display = "none";
+            pline.style.display = "none";
+                // $rootScope.$apply(function () {
+                //   game.shouldshowline = false;
+                // });            
             return;
           }
         } else {
@@ -234,6 +239,10 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 game.moves = new Array();
                 pline.setAttribute("points", "");
                 draggingLines.style.display = "none";
+                pline.style.display = "none";
+                // $rootScope.$apply(function () {
+                //   game.shouldshowline = false;
+                // });
             }
             return ;
           }
@@ -267,6 +276,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                     game.moves.push({row: row, col: col});
                     draggingLines.style.display = "inline";
+                    // $rootScope.$apply(function () {
+                    //   game.shouldshowline = true;
+                    // });                    
                     if (type === "touchstart"){
                         pline2.setAttribute("x1","0");
                         pline2.setAttribute("y1","0");

@@ -346,6 +346,7 @@ var game;
     game.isHelpModalShown = false;
     game.moves = new Array();
     game.msg = "";
+    game.shouldshowline = false;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -531,6 +532,10 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             else {
                 draggingLines.style.display = "none";
+                pline.style.display = "none";
+                // $rootScope.$apply(function () {
+                //   game.shouldshowline = false;
+                // });            
                 return;
             }
         }
@@ -554,6 +559,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     game.moves = new Array();
                     pline.setAttribute("points", "");
                     draggingLines.style.display = "none";
+                    pline.style.display = "none";
                 }
                 return;
             }
@@ -588,6 +594,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                         draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                         game.moves.push({ row: row, col: col });
                         draggingLines.style.display = "inline";
+                        // $rootScope.$apply(function () {
+                        //   game.shouldshowline = true;
+                        // });                    
                         if (type === "touchstart") {
                             pline2.setAttribute("x1", "0");
                             pline2.setAttribute("y1", "0");
