@@ -578,9 +578,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     game.moves.push({ row: row, col: col });
                 }
                 log.info(angular.toJson(game.moves));
-                draggingLines.style.display = 'none';
+                // draggingLines.style.display = 'none';
+                // forceRedraw(draggingLines);
                 dragDone();
-                $timeout(function () { log.info("Just doing a timeout to cause the screen to refresh"); }, 0);
             }
             else {
                 // Drag continue
@@ -593,7 +593,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                         setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
                         draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                         game.moves.push({ row: row, col: col });
-                        draggingLines.style.display = "inline";
+                        draggingLines.style.display = "block";
                         // $rootScope.$apply(function () {
                         //   game.shouldshowline = true;
                         // });                    
@@ -657,7 +657,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             y: row * size.height + size.height / 2
         };
     }
-    function forceredraw(element) {
+    function forceRedraw(element) {
         if (!element) {
             return;
         }
