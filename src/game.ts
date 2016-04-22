@@ -211,7 +211,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             // setDraggingPieceTopLeft({top: y - size.height / 2, left: x - size.width / 2});
           } else {
             draggingLines.style.display = "none";
-            pline.style.display = "none";
+            // pline.style.display = "none";
                 // $rootScope.$apply(function () {
                 //   game.shouldshowline = false;
                 // });            
@@ -239,7 +239,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 game.moves = new Array();
                 pline.setAttribute("points", "");
                 draggingLines.style.display = "none";
-                pline.style.display = "none";
+                // pline.style.display = "none";
                 // $rootScope.$apply(function () {
                 //   game.shouldshowline = false;
                 // });
