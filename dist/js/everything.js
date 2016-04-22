@@ -578,6 +578,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     game.moves.push({ row: row, col: col });
                 }
                 log.info(angular.toJson(game.moves));
+                draggingLines.style.display = 'none';
                 dragDone();
                 $timeout(function () { log.info("Just doing a timeout to cause the screen to refresh"); }, 0);
             }
@@ -655,6 +656,19 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             x: col * size.width + size.width / 2,
             y: row * size.height + size.height / 2
         };
+    }
+    function forceredraw(element) {
+        if (!element) {
+            return;
+        }
+        var n = document.createTextNode(' ');
+        var disp = element.style.display; // don't worry about previous display style
+        element.appendChild(n);
+        element.style.display = 'none';
+        setTimeout(function () {
+            element.style.display = disp;
+            n.parentNode.removeChild(n);
+        }, 20); // you can play with this timeout to make it as short as possible
     }
     function dragDone() {
         $rootScope.$apply(function () {
