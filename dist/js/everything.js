@@ -532,6 +532,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             else {
                 draggingLines.style.display = "none";
+                draggingLines.offsetHeight;
                 // $rootScope.$apply(function () {
                 //   game.shouldshowline = false;
                 // });            
@@ -558,6 +559,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     game.moves = new Array();
                     pline.setAttribute("points", "");
                     draggingLines.style.display = "none";
+                    draggingLines.offsetHeight;
                 }
                 return;
             }
@@ -621,6 +623,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             draggingStartedRowCol = null;
             draggingPiece = null;
             draggingLines.style.display = "none";
+            draggingLines.offsetHeight;
             // $rootScope.$apply(function () {
             //   game.shouldshowline = false;
             // });    
