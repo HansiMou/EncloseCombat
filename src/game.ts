@@ -15,7 +15,8 @@ module game {
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
   export let msg = "";
-
+  // export let shouldshowline = false;
+  
   export function init() {
     translate.setTranslations(getTranslations());
     translate.setLanguage('en');
@@ -210,7 +211,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             // setDraggingPieceTopLeft({top: y - size.height / 2, left: x - size.width / 2});
           } else {
             draggingLines.style.display = "none";
-            // pline.style.display = "none";
                 // $rootScope.$apply(function () {
                 //   game.shouldshowline = false;
                 // });            
@@ -238,7 +238,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 game.moves = new Array();
                 pline.setAttribute("points", "");
                 draggingLines.style.display = "none";
-                // pline.style.display = "none";
                 // $rootScope.$apply(function () {
                 //   game.shouldshowline = false;
                 // });
@@ -263,6 +262,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             log.info(angular.toJson(game.moves));
             dragDone();
+            $timeout(function () { log.info("Just doing a timeout to cause the screen to refresh"); }, 0);
           } else {
             // Drag continue
             // the first point or points around the last one
@@ -302,6 +302,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
           draggingStartedRowCol = null;
           draggingPiece = null;
           draggingLines.style.display = "none";
+                    // $rootScope.$apply(function () {
+                    //   game.shouldshowline = false;
+                    // });    
           game.moves = new Array();
         }
       }

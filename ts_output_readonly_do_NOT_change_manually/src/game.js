@@ -12,6 +12,7 @@ var game;
     game.isHelpModalShown = false;
     game.moves = new Array();
     game.msg = "";
+    // export let shouldshowline = false;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -197,7 +198,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             else {
                 draggingLines.style.display = "none";
-                // pline.style.display = "none";
                 // $rootScope.$apply(function () {
                 //   game.shouldshowline = false;
                 // });            
@@ -245,6 +245,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 }
                 log.info(angular.toJson(game.moves));
                 dragDone();
+                $timeout(function () { log.info("Just doing a timeout to cause the screen to refresh"); }, 0);
             }
             else {
                 // Drag continue
@@ -285,6 +286,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             draggingStartedRowCol = null;
             draggingPiece = null;
             draggingLines.style.display = "none";
+            // $rootScope.$apply(function () {
+            //   game.shouldshowline = false;
+            // });    
             game.moves = new Array();
         }
     }
