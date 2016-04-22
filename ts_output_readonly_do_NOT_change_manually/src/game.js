@@ -246,8 +246,8 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     game.moves.push({ row: row, col: col });
                 }
                 log.info(angular.toJson(game.moves));
-                // draggingLines.style.display = 'none';
-                // forceRedraw(draggingLines);
+                draggingLines.style.display = 'none';
+                forceRedraw(draggingLines);
                 dragDone();
             }
             else {
@@ -337,7 +337,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
         setTimeout(function () {
             element.style.display = disp;
             n.parentNode.removeChild(n);
-        }, 20); // you can play with this timeout to make it as short as possible
+        }, 0); // you can play with this timeout to make it as short as possible
     }
     function dragDone() {
         $rootScope.$apply(function () {
