@@ -264,10 +264,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             log.info(angular.toJson(game.moves));
             draggingLines.style.webkitTransform = 'scale(1)';
-            forceRedraw(draggingLines);
             dragDone();
-            forceRedraw(draggingLines);
-            draggingLines.style.webkitTransform = 'scale(1)';
           } else {
             // Drag continue
             // the first point or points around the last one
