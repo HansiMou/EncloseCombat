@@ -246,9 +246,8 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     game.moves.push({ row: row, col: col });
                 }
                 log.info(angular.toJson(game.moves));
-                draggingLines.style.display = 'none';
-                forceRedraw(draggingLines);
                 dragDone();
+                forceRedraw(draggingLines);
             }
             else {
                 // Drag continue
@@ -331,13 +330,12 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             return;
         }
         var n = document.createTextNode(' ');
-        var disp = element.style.display; // don't worry about previous display style
         element.appendChild(n);
         element.style.display = 'none';
         setTimeout(function () {
-            element.style.display = disp;
+            element.style.display = 'none';
             n.parentNode.removeChild(n);
-        }, 0); // you can play with this timeout to make it as short as possible
+        }, 200); // you can play with this timeout to make it as short as possible
     }
     function dragDone() {
         $rootScope.$apply(function () {
