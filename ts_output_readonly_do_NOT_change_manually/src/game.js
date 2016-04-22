@@ -246,8 +246,11 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     game.moves.push({ row: row, col: col });
                 }
                 log.info(angular.toJson(game.moves));
+                draggingLines.style.webkitTransform = 'scale(1)';
+                forceRedraw(draggingLines);
                 dragDone();
                 forceRedraw(draggingLines);
+                draggingLines.style.webkitTransform = 'scale(1)';
             }
             else {
                 // Drag continue
