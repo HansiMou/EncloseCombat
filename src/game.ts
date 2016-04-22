@@ -15,7 +15,6 @@ module game {
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
   export let msg = "";
-  export let shouldshowline = false;
 
   export function init() {
     translate.setTranslations(getTranslations());
@@ -347,5 +346,5 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
       }
     $rootScope['game'] = game;
     game.init();
-    resizeGameAreaService.setWidthToHeight(0.75);
+    resizeGameAreaService.setWidthToHeight(0.6818);
   });

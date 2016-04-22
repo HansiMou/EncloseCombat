@@ -12,7 +12,6 @@ var game;
     game.isHelpModalShown = false;
     game.moves = new Array();
     game.msg = "";
-    game.shouldshowline = false;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -327,6 +326,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
     }
     $rootScope['game'] = game;
     game.init();
-    resizeGameAreaService.setWidthToHeight(0.75);
+    resizeGameAreaService.setWidthToHeight(0.6818);
 });
 //# sourceMappingURL=game.js.map
