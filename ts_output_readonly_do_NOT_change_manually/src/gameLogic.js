@@ -5,7 +5,7 @@ var gameLogic;
     gameLogic.COLS = 6;
     gameLogic.num_of_players = 2;
     gameLogic.total_turns = 20;
-    gameLogic.num_of_colors = 3;
+    gameLogic.num_of_colors = 4;
     /** Returns the initial EncloseCombat board, which is a ROWSxCOLS matrix containing the initial of a certain color. */
     function getInitialBoard() {
         var board = [];
@@ -27,6 +27,8 @@ var gameLogic;
                 return 'G'; // short for green
             case 3:
                 return 'B'; // short for blue
+            case 4:
+                return 'X'; // short for blue
             default:
                 break;
         }
@@ -101,6 +103,7 @@ var gameLogic;
         var cleanR = false;
         var cleanG = false;
         var cleanB = false;
+        var cleanX = false;
         // initialize the auxiliary boolean[][] array. 
         for (var i = 0; i < gameLogic.ROWS; i++) {
             helper[i] = [];

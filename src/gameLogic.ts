@@ -37,7 +37,7 @@ module gameLogic {
   export const COLS = 6;
   export const num_of_players = 2;
   export const total_turns = 20;
-  export const num_of_colors = 3;
+  export const num_of_colors = 4;
 
   /** Returns the initial EncloseCombat board, which is a ROWSxCOLS matrix containing the initial of a certain color. */
   function getInitialBoard(): Board {
@@ -61,6 +61,8 @@ module gameLogic {
               return 'G'; // short for green
           case 3:
               return 'B'; // short for blue
+          case 4:
+              return 'X'; // short for blue
           default:
               break;
       }
@@ -140,6 +142,7 @@ module gameLogic {
       let cleanR = false;
       let cleanG = false;
       let cleanB = false;
+      let cleanX = false;
       
       // initialize the auxiliary boolean[][] array. 
       for (let i = 0; i < ROWS; i++){
