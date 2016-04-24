@@ -149,10 +149,6 @@ var game;
         return game.state.board[row][col] === 'B';
     }
     game.isPieceB = isPieceB;
-    function isPieceX(row, col) {
-        return game.state.board[row][col] === 'X';
-    }
-    game.isPieceX = isPieceX;
     function shouldSlowlyAppear(row, col) {
         var b = false;
         if (game.state.delta !== null) {

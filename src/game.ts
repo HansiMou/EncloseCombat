@@ -156,10 +156,6 @@ module game {
   export function isPieceB(row: number, col: number): boolean {
     return state.board[row][col] === 'B';
   }
-  
-  export function isPieceX(row: number, col: number): boolean {
-    return state.board[row][col] === 'X';
-  }
 
   export function shouldSlowlyAppear(row: number, col: number): boolean {
     let b: boolean = false;
