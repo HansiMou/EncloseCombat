@@ -156,6 +156,10 @@ module game {
   export function isPieceB(row: number, col: number): boolean {
     return state.board[row][col] === 'B';
   }
+  
+  export function isPieceX(row: number, col: number): boolean {
+    return state.board[row][col] === 'X';
+  }
 
   export function shouldSlowlyAppear(row: number, col: number): boolean {
     let b: boolean = false;
@@ -211,6 +215,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             // setDraggingPieceTopLeft({top: y - size.height / 2, left: x - size.width / 2});
           } else {
             draggingLines.style.display = "none";
+            draggingLines.offsetHeight;
                 // $rootScope.$apply(function () {
                 //   game.shouldshowline = false;
                 // });            
@@ -238,6 +243,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 game.moves = new Array();
                 pline.setAttribute("points", "");
                 draggingLines.style.display = "none";
+                draggingLines.offsetHeight;
                 // $rootScope.$apply(function () {
                 //   game.shouldshowline = false;
                 // });
@@ -261,6 +267,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 game.moves.push({row: row, col: col});
             }
             log.info(angular.toJson(game.moves));
+            draggingLines.style.webkitTransform = 'scale(1)';
             dragDone();
             draggingLines.style.webkitTransform = 'scale(1)';
           } else {
@@ -302,6 +309,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
           draggingStartedRowCol = null;
           draggingPiece = null;
           draggingLines.style.display = "none";
+          draggingLines.offsetHeight;
                     // $rootScope.$apply(function () {
                     //   game.shouldshowline = false;
                     // });    
@@ -356,6 +364,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
       function dragDone() {
         $rootScope.$apply(function () {
           // Update piece in board
+          
           game.cellPressedUp();
         });
       }

@@ -149,6 +149,10 @@ var game;
         return game.state.board[row][col] === 'B';
     }
     game.isPieceB = isPieceB;
+    function isPieceX(row, col) {
+        return game.state.board[row][col] === 'X';
+    }
+    game.isPieceX = isPieceX;
     function shouldSlowlyAppear(row, col) {
         var b = false;
         if (game.state.delta !== null) {
@@ -198,6 +202,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             else {
                 draggingLines.style.display = "none";
+                draggingLines.offsetHeight;
                 // $rootScope.$apply(function () {
                 //   game.shouldshowline = false;
                 // });            
@@ -224,6 +229,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     game.moves = new Array();
                     pline.setAttribute("points", "");
                     draggingLines.style.display = "none";
+                    draggingLines.offsetHeight;
                 }
                 return;
             }
@@ -244,6 +250,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     game.moves.push({ row: row, col: col });
                 }
                 log.info(angular.toJson(game.moves));
+                draggingLines.style.webkitTransform = 'scale(1)';
                 dragDone();
                 draggingLines.style.webkitTransform = 'scale(1)';
             }
@@ -286,6 +293,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             draggingStartedRowCol = null;
             draggingPiece = null;
             draggingLines.style.display = "none";
+            draggingLines.offsetHeight;
             // $rootScope.$apply(function () {
             //   game.shouldshowline = false;
             // });    
