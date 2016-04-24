@@ -285,7 +285,7 @@ var gameLogic;
                     if (board[i][j] === board[i + 1][j] && board[i][j] === board[i + 1][j + 1])
                         return true;
                 }
-                else if (i >= 1 && i <= gameLogic.ROWS - 1 && j >= 1 && j <= gameLogic.COLS - 1) {
+                else if (i >= 1 && i < gameLogic.ROWS - 1 && j >= 1 && j < gameLogic.COLS - 1) {
                     if (board[i - 1][j] === board[i][j - 1] && board[i][j - 1] === board[i + 1][j] && board[i + 1][j] === board[i][j + 1])
                         return true;
                 }
@@ -391,7 +391,7 @@ var game;
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
         log.log("Translation of 'RULES_OF_ENCLOSECOMBAT' is " + translate('RULES_OF_ENCLOSECOMBAT'));
-        resizeGameAreaService.setWidthToHeight(1);
+        resizeGameAreaService.setWidthToHeight(0.6818);
         moveService.setGame({
             minNumberOfPlayers: 2,
             maxNumberOfPlayers: 2,
@@ -617,7 +617,10 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             if (type === "touchend") {
                 if (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col)) {
-                    var tt = game.isPieceR(row, col) ? document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ? document.getElementById("e2e_test_pieceG_" + row + "x" + col) : document.getElementById("e2e_test_pieceB_" + row + "x" + col);
+                    var tt = game.isPieceR(row, col) ?
+                        document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
+                        document.getElementById("e2e_test_pieceG_" + row + "x" + col) : game.isPieceB(row, col) ?
+                        document.getElementById("e2e_test_pieceB_" + row + "x" + col) : document.getElementById("e2e_test_pieceX_" + row + "x" + col);
                     tt.setAttribute("r", "55%");
                     setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
                     draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
@@ -634,7 +637,11 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 if ((game.moves.length === 0) || (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col) && ((Math.abs(game.moves[game.moves.length - 1].row - row) <= 1) && (Math.abs(game.moves[game.moves.length - 1].col - col) <= 1)))) {
                     // if only two points, it cannot go back and select the points in the moves. if more than two points, it cannot go back and select the points other than the first one.
                     if (game.moves.length < 2 || (game.moves.length === 2 && !(game.moves[0].row === row && game.moves[0].col === col)) || (game.moves.length > 2 && !containsDupOthanThanFirst(game.moves, row, col))) {
-                        var tt = game.isPieceR(row, col) ? document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ? document.getElementById("e2e_test_pieceG_" + row + "x" + col) : document.getElementById("e2e_test_pieceB_" + row + "x" + col);
+                        var tt = game.isPieceR(row, col) ?
+                            document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
+                            document.getElementById("e2e_test_pieceG_" + row + "x" + col) : game.isPieceB(row, col) ?
+                            document.getElementById("e2e_test_pieceB_" + row + "x" + col) : document.getElementById("e2e_test_pieceX_" + row + "x" + col);
+                        tt.setAttribute("r", "55%");
                         tt.setAttribute("r", "45%");
                         setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
                         draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);

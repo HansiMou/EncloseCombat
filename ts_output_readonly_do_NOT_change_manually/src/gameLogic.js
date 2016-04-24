@@ -285,7 +285,7 @@ var gameLogic;
                     if (board[i][j] === board[i + 1][j] && board[i][j] === board[i + 1][j + 1])
                         return true;
                 }
-                else if (i >= 1 && i <= gameLogic.ROWS - 1 && j >= 1 && j <= gameLogic.COLS - 1) {
+                else if (i >= 1 && i < gameLogic.ROWS - 1 && j >= 1 && j < gameLogic.COLS - 1) {
                     if (board[i - 1][j] === board[i][j - 1] && board[i][j - 1] === board[i + 1][j] && board[i + 1][j] === board[i][j + 1])
                         return true;
                 }
