@@ -138,9 +138,6 @@ var gameLogic;
                             case 'B':
                                 cleanB = true;
                                 break;
-                            case 'X':
-                                cleanX = true;
-                                break;
                         }
                     }
                 }
@@ -158,9 +155,6 @@ var gameLogic;
                     helper[i][j] = true;
                 }
                 else if (cleanB === true && board[i][j] === 'B') {
-                    helper[i][j] = true;
-                }
-                else if (cleanX === true && board[i][j] === 'X') {
                     helper[i][j] = true;
                 }
                 if (helper[i][j] === true) {
@@ -235,9 +229,6 @@ var gameLogic;
         var boardAfterMove = angular.copy(board);
         var tmp = getBoardAndScore(boardAfterMove, moves);
         boardAfterMove = tmp.board;
-        while (!CheckMovesAvaiable(boardAfterMove)) {
-            boardAfterMove = getInitialBoard();
-        }
         // log.info(["after", angular.toJson(boardAfterMove)]);
         /**Get the updated scores */
         var scores = angular.copy(stateBeforeMove.scores);
@@ -265,34 +256,6 @@ var gameLogic;
         return { endMatchScores: endMatchScores, turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove };
     }
     gameLogic.createMove = createMove;
-    /** check if there is more available moves */
-    function CheckMovesAvaiable(board) {
-        for (var i = 0; i < gameLogic.ROWS; i++) {
-            for (var j = 0; j < gameLogic.COLS; j++) {
-                if (j - 1 >= 0 && i + 1 <= gameLogic.ROWS - 1) {
-                    if (board[i][j] === board[i][j - 1] && board[i][j] === board[i + 1][j])
-                        return true;
-                }
-                else if (j + 1 <= gameLogic.COLS - 1 && i + 1 <= gameLogic.ROWS - 1) {
-                    if (board[i][j] === board[i][j + 1] && board[i][j] === board[i + 1][j])
-                        return true;
-                }
-                else if (i + 1 <= gameLogic.ROWS - 1 && j - 1 >= 0) {
-                    if (board[i][j] === board[i + 1][j] && board[i][j] === board[i + 1][j - 1])
-                        return true;
-                }
-                else if (i + 1 <= gameLogic.ROWS - 1 && j + 1 <= gameLogic.COLS - 1) {
-                    if (board[i][j] === board[i + 1][j] && board[i][j] === board[i + 1][j + 1])
-                        return true;
-                }
-                else if (i >= 1 && i <= gameLogic.ROWS - 1 && j >= 1 && j <= gameLogic.COLS - 1) {
-                    if (board[i - 1][j] === board[i][j - 1] && board[i][j - 1] === board[i + 1][j] && board[i + 1][j] === board[i][j + 1])
-                        return true;
-                }
-            }
-        }
-        return false;
-    }
     /** check if this move sticks to the rule and throws responding error */
     function checkMove(board, moves) {
         // all moves should be positive

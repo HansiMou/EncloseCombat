@@ -179,9 +179,6 @@ module gameLogic {
                     case 'B':
                     cleanB = true;
                     break;
-                    case 'X':
-                    cleanX = true;
-                    break;
                     }
                 }
               }
@@ -200,9 +197,6 @@ module gameLogic {
                   helper[i][j] = true;
               }
               else if (cleanB === true && board[i][j] === 'B'){
-                  helper[i][j] = true;
-              }
-              else if (cleanX === true && board[i][j] === 'X'){
                   helper[i][j] = true;
               }
               if (helper[i][j] === true){
@@ -285,11 +279,6 @@ module gameLogic {
     let boardAfterMove = angular.copy(board);
     let tmp = getBoardAndScore(boardAfterMove, moves);
     boardAfterMove = tmp.board;
-    
-    while (!CheckMovesAvaiable(boardAfterMove)){
-        boardAfterMove = getInitialBoard();
-    }
-    
     // log.info(["after", angular.toJson(boardAfterMove)]);
     /**Get the updated scores */
     let scores: number[] = angular.copy(stateBeforeMove.scores);
@@ -317,34 +306,7 @@ module gameLogic {
     }
     return {endMatchScores: endMatchScores, turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove};
   }
-  /** check if there is more available moves */
-  function CheckMovesAvaiable(board: Board): boolean{
-      for (let i = 0; i < ROWS; i++){
-          for (let j = 0; j < COLS; j++){
-              if (j-1 >= 0 && i+1 <= ROWS-1){
-                  if (board[i][j] === board[i][j-1] && board[i][j] === board[i+1][j])
-                    return true;
-              }
-              else if (j+1 <= COLS-1 && i+1 <= ROWS-1){
-                  if (board[i][j] === board[i][j+1] && board[i][j] === board[i+1][j])
-                    return true;
-              }
-              else if (i+1 <= ROWS-1 && j-1 >= 0){
-                  if (board[i][j] === board[i+1][j] && board[i][j] === board[i+1][j-1])
-                    return true;
-              }
-              else if (i+1 <= ROWS-1 && j+1 <= COLS-1){
-                  if (board[i][j] === board[i+1][j] && board[i][j] === board[i+1][j+1])
-                    return true;
-              }
-              else if (i >= 1 && i <= ROWS-1 && j >= 1 && j <= COLS-1){
-                  if (board[i-1][j] === board[i][j-1] && board[i][j-1] === board[i+1][j] && board[i+1][j] === board[i][j+1])
-                    return true;
-              }
-          }
-      }
-      return false;
-  }
+  
   /** check if this move sticks to the rule and throws responding error */
   function checkMove(board: Board, moves: BoardDelta[]): boolean{
       // all moves should be positive
