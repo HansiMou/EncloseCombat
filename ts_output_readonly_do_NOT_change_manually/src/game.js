@@ -43,19 +43,19 @@ var game;
         return {
             RULES_OF_ENCLOSECOMBAT: {
                 en: "Rules of EncloseCombat",
-                cn: "画圈大战的规则",
+                zh: "画圈大战的规则",
             },
             RULES_SLIDE1: {
                 en: "You and your opponent take turns to draw an enclosed circle over the chips of same color.",
-                cn: "你和你的对手轮流操作，在相同颜色的卡片上围成一个闭合的形状。然后这个形状上和其内的卡片会消失，上面的会掉下来，新的卡片也会补充进来。",
+                zh: "你和你的对手轮流操作，在相同颜色的卡片上围成一个闭合的形状。然后这个形状上和其内的卡片会消失，上面的会掉下来，新的卡片也会补充进来。",
             },
             RULES_SLIDE2: {
                 en: "The more chips you include in that circle, the higher score you get.",
-                cn: "形状越大分数越高，十个回合之后分数高的人获胜。",
+                zh: "形状越大分数越高，十个回合之后分数高的人获胜。",
             },
             CLOSE: {
                 en: "Close",
-                cn: "关闭",
+                zh: "关闭",
             },
         };
     }
