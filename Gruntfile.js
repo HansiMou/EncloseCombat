@@ -209,17 +209,17 @@ module.exports = function(grunt) {
             runInBackground: true
         }
     },
-    protractor: {
-      options: {
-        configFile: "protractor.conf.js", // Default config file
-        keepAlive: false, // If false, the grunt process stops when the test fails.
-        noColor: false, // If true, protractor will not use colors in its output.
-        args: {
-          // Arguments passed to the command
-        }
-      },
-      all: {}
-    },
+    // protractor: {
+    //   options: {
+    //     configFile: "protractor.conf.js", // Default config file
+    //     keepAlive: false, // If false, the grunt process stops when the test fails.
+    //     noColor: false, // If true, protractor will not use colors in its output.
+    //     args: {
+    //       // Arguments passed to the command
+    //     }
+    //   },
+    //   all: {}
+    // },
   });
 
   require('load-grunt-tasks')(grunt);
