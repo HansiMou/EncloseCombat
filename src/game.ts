@@ -66,6 +66,10 @@ module game {
       LEFT_TURNS: {
         en: "Left turns",
         zh: "剩余回合",
+      },
+      PLAYER: {
+        en: "Player",
+        zh: "鱼塘选手",
       }
     };
   }
