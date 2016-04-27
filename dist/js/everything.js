@@ -437,7 +437,7 @@ var game;
             },
             PLAYER: {
                 en: "Player",
-                zh: "鱼塘选手",
+                zh: "玩家",
             }
         };
     }
