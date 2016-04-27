@@ -43,7 +43,7 @@
               <table>
                 <tr>
                   <td id="e2e_test_rules_slide1_text">
-                    {{ 'RULES_SLIDE1' | translate }}
+                    {{ 'ENCLOSECOMBAT_RULES_SLIDE1' | translate }}
                   </td>
                   <td>
                     <img src="imgs/HelpSlide1.png" alt="Help slide 1" style="height:150px;">
@@ -55,7 +55,7 @@
               <table>
                 <tr>
                   <td id="e2e_test_rules_slide2_text">
-                  {{ 'RULES_SLIDE2' | translate }}
+                  {{ 'ENCLOSECOMBAT_RULES_SLIDE2' | translate }}
                   </td>
                   <td>
                     <img src="imgs/HelpSlide2.png" alt="Help slide 2" style="height:150px;">
@@ -76,9 +76,9 @@
   <div id="gameArea">
   <div class="container" style="position:absolute; height: 10%; width: 100%; top: 0; left: 0;">
      <div class="center">
-        <div class="div-inline1">&#9827 {{game.state.scores[0]}} &#9827</div> 
-        <div class="div-inline2">&nbsp;&nbsp;&nbsp;&#8727{{20-game.state.current_turn}}&#8727&nbsp;&nbsp;&nbsp;</div> 
-        <div class="div-inline3">&#9829 {{game.state.scores[1]}} &#9829</div> 
+        <div class="div-inline1" ng-class="{currentPlayer: game.isCurrentPlayerIndex(0)}">{{ 'PLAYER' | translate }} 1: {{game.state.scores[0]}}</div> 
+        <div class="div-inline2">&nbsp;&nbsp;&nbsp;&#8727{{'LEFT_TURNS'| translate}} : {{20-game.state.current_turn}}&#8727&nbsp;&nbsp;&nbsp;</div> 
+        <div class="div-inline3" ng-class="{currentPlayer: game.isCurrentPlayerIndex(1)}">{{ 'PLAYER' | translate }} 2: {{game.state.scores[1]}}</div> 
      <div style="clear:both"></div></div>  
     
   </div>

@@ -417,20 +417,24 @@ var game;
         return {
             RULES_OF_ENCLOSECOMBAT: {
                 en: "Rules of EncloseCombat",
-                zh: "画圈大战的规则",
+                zh: "滑块大战的规则",
             },
-            RULES_SLIDE1: {
-                en: "You and your opponent take turns to draw an enclosed circle over the chips of same color.",
+            ENCLOSECOMBAT_RULES_SLIDE1: {
+                en: "You and your opponent take turns to draw an enclosed shape over the chips of same color. The more the area is, the higher the score will be.",
                 zh: "你和你的对手轮流操作，在相同颜色的卡片上围成一个闭合的形状。然后这个形状上和其内的卡片会消失，上面的会掉下来，新的卡片也会补充进来。",
             },
-            RULES_SLIDE2: {
-                en: "The more chips you include in that circle, the higher score you get.",
-                zh: "形状越大分数越高，十个回合之后分数高的人获胜。",
+            ENCLOSECOMBAT_RULES_SLIDE2: {
+                en: "If you have chips INSIDE the shape, all the same color chips will be gone with an extra bonus. After 20 turns, player with higher score win.",
+                zh: "如果内部有色块，所有相同颜色的色块都会消失，你也会得到奖励。面积越大，分数越高，二十个回合之后分数高的人获胜。",
             },
             CLOSE: {
                 en: "Close",
                 zh: "关闭",
             },
+            LEFT_TURNS: {
+                en: "Left turns",
+                zh: "剩余回合",
+            }
         };
     }
     function animationEndedCallback() {
@@ -476,6 +480,10 @@ var game;
             }
         }
     }
+    function isCurrentPlayerIndex(playerIndex) {
+        return game.move.turnIndexAfterMove == playerIndex;
+    }
+    game.isCurrentPlayerIndex = isCurrentPlayerIndex;
     function cellPressedDown(row, col) {
         game.moves.push({ row: row, col: col });
     }

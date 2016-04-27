@@ -59,3 +59,7 @@ color: black; font-size:large;}
      .center{display:inline-block;}
      .center{_display:inline;} /*针对ie6 hack*/
      .center a{float:left;padding:5px 10px;margin:10px;text-decoration:none;}
+     
+.currentPlayer {
+  color: rgba(0, 0, 255, 0.3);  
+}
