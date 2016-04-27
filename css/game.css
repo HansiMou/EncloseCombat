@@ -46,14 +46,13 @@ td {
 	color:#fff;
 }
 .div-inline1{ display:inline;
-color: black; font-size:large;} 
+color: black; font-size: 0.9em;} 
 
 .div-inline2{ display:inline;
-color: black; font-size:large; } 
+color: black; font-size: 0.9em; } 
 
 .div-inline3{ display:inline;
-color: black; font-size:large;} 
-
+color: black; font-size: 0.9em;} 
 
 .container{width:500px;height:80px;margin-left:50px;padding-top:10px;text-align:center;}
      .center{display:inline-block;}
