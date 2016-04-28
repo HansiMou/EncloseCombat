@@ -150,19 +150,7 @@ module game {
     
     let remindlines = document.getElementById("remindlines");
     let rline = document.getElementById("rline");
-    rline.setAttribute("points", "");
-    rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-    game.moves.forEach(function(entry) {
-        let tmp = rline.getAttribute("points");
-        let  x = entry.col * width + width / 2;
-        let  y = entry.row * height + height / 2;
-        rline.setAttribute("points", tmp+x+","+y+" ");
-    });
-    
-    setTimeout(function(){
-      rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-      
-    },1000); 
+
     if (window.location.search === '?throwException') { // to test encoding a stack trace with sourcemap
       throw new Error("Throwing the error because URL has '?throwException'");
     }
@@ -174,9 +162,35 @@ module game {
           state, moves, move.turnIndexAfterMove);
       canMakeMove = false; // to prevent making another move
       moveService.makeMove(nextMove);
+      rline.setAttribute("points", "");
+      rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+      game.moves.forEach(function(entry) {
+          let tmp = rline.getAttribute("points");
+          let  x = entry.col * width + width / 2;
+          let  y = entry.row * height + height / 2;
+          rline.setAttribute("points", tmp+x+","+y+" ");
+      });
+      
+      setTimeout(function(){
+        rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+        
+      },1000); 
       moves = new Array();
     } catch (e) {
       log.info(e);
+      rline.setAttribute("points", "");
+      rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+      game.moves.forEach(function(entry) {
+          let tmp = rline.getAttribute("points");
+          let  x = entry.col * width + width / 2;
+          let  y = entry.row * height + height / 2;
+          rline.setAttribute("points", tmp+x+","+y+" ");
+      });
+      
+      setTimeout(function(){
+        rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+        
+      },1000); 
       moves = new Array();
       return;
     }
