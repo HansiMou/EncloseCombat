@@ -326,11 +326,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             // return the piece to it's original style (then angular will take care to hide it).
             draggingStartedRowCol = null;
             draggingPiece = null;
-            setTimeout(function () {
-                draggingLines.style.display = "none";
-                draggingLines.offsetHeight;
-                draggingLines.style.webkitTransform = 'scale(1)';
-            }, 1000);
+            draggingLines.style.display = "none";
+            draggingLines.offsetHeight;
+            draggingLines.style.webkitTransform = 'scale(1)';
             game.moves = new Array();
         }
     }

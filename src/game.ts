@@ -342,13 +342,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
           draggingStartedRowCol = null;
           draggingPiece = null;
           
-          setTimeout(function () {
-            draggingLines.style.display = "none";
-            draggingLines.offsetHeight;
-            draggingLines.style.webkitTransform = 'scale(1)';
-          }, 1000);
-          
-
+          draggingLines.style.display = "none";
+          draggingLines.offsetHeight;
+          draggingLines.style.webkitTransform = 'scale(1)';
           game.moves = new Array();
         }
       }

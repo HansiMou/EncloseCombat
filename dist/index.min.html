@@ -24,7 +24,7 @@
 
   <script src="js/everything.min.js"></script>
 </head>
-<body ng-cloak class="changingBG" ng-class="{currentPlayerBG: game.state.current_turn === 0 || game.isMyTurn()||game.isComputer(), notcurrentPlayerBG: game.state.current_turn !== 0 && !game.isMyTurn()&&!game.isComputer()}"> 
+<body ng-cloak> 
   <div id="e2e_test_open_rules_modal" class="help-tip" ng-click="game.isHelpModalShown = true" aria-hidden="true"></div>
   <div class="overlayModal" ng-click="game.clickedOnModal($event)"
       ng-class="{zeroOpacity: !game.isHelpModalShown, oneOpacity: game.isHelpModalShown}" aria-hidden="true">
@@ -75,9 +75,9 @@
   <div class="changingBG" id="gameArea" ng-class="{currentPlayerBG: game.state.current_turn === 0 || game.isMyTurn()||game.isComputer(), notcurrentPlayerBG: game.state.current_turn !== 0 && !game.isMyTurn()&&!game.isComputer()}">
   <div class="container" style="position:absolute; height: 10%; width: 100%; top: 0; left: 0;">
      <div class="center">
-        <div class="div-inline1" ng-class="{currentPlayer: game.isCurrentPlayerIndex(0)}">{{ 'PLAYER' | translate }}1: {{game.state.scores[0]}}</div> 
+        <div class="div-inline1" ng-class="{currentPlayer: (game.isCurrentPlayerIndex(0) && game.isMyTurn()) || (game.isCurrentPlayerIndex(1) && !game.isMyTurn())}">{{ 'PLAYER' | translate }}1: {{game.state.scores[0]}}</div> 
         <div class="div-inline2">&nbsp;&nbsp;{{'LEFT_TURNS' | translate}} : {{20-game.state.current_turn}}&nbsp;&nbsp;</div> 
-        <div class="div-inline3" ng-class="{currentPlayer: game.isCurrentPlayerIndex(1)}">{{ 'PLAYER' | translate }}2: {{game.state.scores[1]}}</div> 
+        <div class="div-inline3" ng-class="{currentPlayer: (game.isCurrentPlayerIndex(1) && game.isMyTurn()) || (game.isCurrentPlayerIndex(0) && !game.isMyTurn())}">{{ 'PLAYER' | translate }}2: {{game.state.scores[1]}}</div> 
      <div style="clear:both"></div></div>  
     
   </div>

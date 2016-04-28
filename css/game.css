@@ -8,7 +8,7 @@
 .cpanel2:hover{background-color: black;}
 
 .slowlyAppear {
-  animation: slowlyAppear 2s ease-in;
+  animation: slowlyAppear 1s ease-in;
 }
 
 
