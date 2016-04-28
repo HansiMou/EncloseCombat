@@ -62,3 +62,12 @@ color: black; font-size: 0.9em;}
 .currentPlayer {
   color: #20B2AA;  
 }
+
+.currentPlayerBG {
+  /*background:#FAF0E6;*/
+  background:white;
+}
+
+.notcurrentPlayerBG {
+  background: grey;
+}

@@ -7,8 +7,10 @@ module game {
   // I export all letiables to make it easy to debug in the browser by
   // simply typing in the console:
   // game.state
+  export let currentUpdateUI: IUpdateUI = null;
   export let animationEnded = false;
   export let canMakeMove = false;
+  export let didMakeMove: boolean = false; // You can only make one move per updateUI
   export let isComputerTurn = false;
   export let move: IMove = null;
   export let state: IState = null;
@@ -89,12 +91,15 @@ module game {
     }
     isComputerTurn = false; // to make sure the computer can only move once.
     log.info("computer");
+    didMakeMove = true;
     moveService.makeMove(aiService.findSimplyComputerMove(move));
   }
 
   function updateUI(params: IUpdateUI): void {
     log.info("Game got updateUI:", params);
     animationEnded = false;
+    didMakeMove = false; // Only one move per updateUI
+    currentUpdateUI = params;
     move = params.move;
     state = move.stateAfterMove;
     if (!state) {
@@ -119,6 +124,11 @@ module game {
         sendComputerMove();
       }
     }
+  }
+  export function isMyTurn() {
+    return !didMakeMove && // you can only make one move per updateUI.
+      currentUpdateUI.move.turnIndexAfterMove >= 0 && // game is ongoing
+      currentUpdateUI.yourPlayerIndex === currentUpdateUI.move.turnIndexAfterMove; // it's my turn
   }
   
   export function isCurrentPlayerIndex(playerIndex: number): boolean {
