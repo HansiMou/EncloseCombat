@@ -65,10 +65,10 @@ color: black; font-size: 0.9em;}
 
 .currentPlayerBG {
   background:#FAF0E6;
-  transition: background-color 3000ms linear;
+  transition: background-color 1000ms linear;
 }
 
 .notcurrentPlayerBG {
   background: gray;
-  transition: background-color 3000ms linear;
+  transition: background-color 1000ms linear;
 }
