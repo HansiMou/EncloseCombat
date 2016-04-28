@@ -24,7 +24,7 @@
 
   <script src="js/everything.min.js"></script>
 </head>
-<body ng-cloak ng-class="{currentPlayerBG: game.isMyTurn(), notcurrentPlayerBG: !game.isMyTurn()}">
+<body ng-cloak ng-class="{currentPlayerBG: game.isMyTurn()||game.isComputer(), notcurrentPlayerBG: !game.isMyTurn()&&!game.isComputer()}">
   <div id="e2e_test_open_rules_modal" class="help-tip" ng-click="game.isHelpModalShown = true" aria-hidden="true"></div>
 
   <div class="overlayModal" ng-click="game.clickedOnModal($event)"
@@ -95,7 +95,7 @@
                     stroke-opacity="0.4"/>
     </svg>
   <div ng-repeat="row in [0, 1, 2, 3, 4, 5, 6, 7]"
-      style="position:absolute; top:{{row * 12.5}}%; left:0; width:100%; height:12.5%;" ng-class="{currentPlayerBG: game.isMyTurn(), notcurrentPlayerBG: !game.isMyTurn()}">
+      style="position:absolute; top:{{row * 12.5}}%; left:0; width:100%; height:12.5%;" ng-class="{currentPlayerBG: game.isMyTurn()||game.isComputer(), notcurrentPlayerBG: !game.isMyTurn()&&!game.isComputer()}">
     <div ng-repeat="col in [0, 1, 2, 3, 4, 5]"
         style="position:absolute; top:0; left:{{col * 16.666667}}%; width:16.666667%; height:100%;"
         id="{{'e2e_test_div_' + row + 'x' + col}}">

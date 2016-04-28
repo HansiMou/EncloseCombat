@@ -489,6 +489,10 @@ var game;
             }
         }
     }
+    function isComputer() {
+        return game.currentUpdateUI.playersInfo[game.currentUpdateUI.yourPlayerIndex].playerId === '';
+    }
+    game.isComputer = isComputer;
     function isMyTurn() {
         return !game.didMakeMove &&
             game.currentUpdateUI.move.turnIndexAfterMove >= 0 &&

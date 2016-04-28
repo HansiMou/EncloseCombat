@@ -125,6 +125,9 @@ module game {
       }
     }
   }
+  export function isComputer() {
+    return currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex].playerId === '';
+  }
   export function isMyTurn() {
     return !didMakeMove && // you can only make one move per updateUI.
       currentUpdateUI.move.turnIndexAfterMove >= 0 && // game is ongoing
