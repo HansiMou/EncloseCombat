@@ -126,7 +126,7 @@ module game {
     }
   }
   export function isComputer() {
-    return currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex].playerId === '';
+    return currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex] !== undefined && currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex].playerId === '';
   }
   export function isMyTurn() {
     return !didMakeMove && // you can only make one move per updateUI.
