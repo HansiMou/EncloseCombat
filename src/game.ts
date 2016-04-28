@@ -268,6 +268,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 game.moves = new Array();
                 pline.setAttribute("points", "");
                 draggingLines.style.display = "none";
+                draggingLines.style.webkitTransform = 'scale(1)';
                 draggingLines.offsetHeight;
                 // $rootScope.$apply(function () {
                 //   game.shouldshowline = false;
@@ -295,9 +296,9 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 game.moves.push({row: row, col: col});
             }
             log.info(angular.toJson(game.moves));
-            draggingLines.style.webkitTransform = 'scale(1)';
+            // draggingLines.style.webkitTransform = 'scale(1)';
             dragDone();
-            draggingLines.style.webkitTransform = 'scale(1)';
+            // draggingLines.style.webkitTransform = 'scale(1)';
           } else {
             // Drag continue
             // the first point or points around the last one
@@ -340,11 +341,14 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
           // return the piece to it's original style (then angular will take care to hide it).
           draggingStartedRowCol = null;
           draggingPiece = null;
-          draggingLines.style.display = "none";
-          draggingLines.offsetHeight;
-                    // $rootScope.$apply(function () {
-                    //   game.shouldshowline = false;
-                    // });    
+          
+          setTimeout(function () {
+            draggingLines.style.display = "none";
+            draggingLines.offsetHeight;
+            draggingLines.style.webkitTransform = 'scale(1)';
+          }, 1000);
+          
+
           game.moves = new Array();
         }
       }
