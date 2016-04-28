@@ -95,7 +95,7 @@
       </div>
     </div>
   </div>
-  <div class="changingBG" id="gameArea" ng-class="{currentPlayerBG: game.state.current_turn === 0 || game.isMyTurn()||game.isComputer(), notcurrentPlayerBG: game.state.current_turn !== 0 && !game.isMyTurn()&&!game.isComputer()}">
+  <div id="gameArea">
   <div class="container" style="position:absolute; height: 10%; width: 100%; top: 0; left: 0;">
      <div class="center">
         <div class="div-inline1" ng-class="{currentPlayer: game.isCurrentPlayerIndex(0)}">{{ 'PLAYER' | translate }}1: {{game.state.scores[0]}}</div> 
