@@ -47,7 +47,7 @@
   <script src="http://cdnjs.cloudflare.com/ajax/libs/html-inspector/0.8.2/html-inspector.js"></script>
   <!-- /build -->
 </head>
-<body ng-cloak ng-class="{currentPlayerBG: game.state.current_turn === 0 || game.isMyTurn()||game.isComputer(), notcurrentPlayerBG: game.state.current_turn !== 0 && !game.isMyTurn()&&!game.isComputer()}"> 
+<body ng-cloak > 
   <div id="e2e_test_open_rules_modal" class="help-tip" ng-click="game.isHelpModalShown = true" aria-hidden="true"></div>
   <div class="overlayModal" ng-click="game.clickedOnModal($event)"
       ng-class="{zeroOpacity: !game.isHelpModalShown, oneOpacity: game.isHelpModalShown}" aria-hidden="true">
@@ -95,7 +95,7 @@
       </div>
     </div>
   </div>
-  <div id="gameArea">
+  <div id="gameArea" ng-class="{currentPlayerBG: game.state.current_turn === 0 || game.isMyTurn()||game.isComputer(), notcurrentPlayerBG: game.state.current_turn !== 0 && !game.isMyTurn()&&!game.isComputer()}">
   <div class="container" style="position:absolute; height: 10%; width: 100%; top: 0; left: 0;">
      <div class="center">
         <div class="div-inline1" ng-class="{currentPlayer: game.isCurrentPlayerIndex(0)}">{{ 'PLAYER' | translate }}1: {{game.state.scores[0]}}</div> 
