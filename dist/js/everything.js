@@ -378,17 +378,17 @@ var game;
     // I export all letiables to make it easy to debug in the browser by
     // simply typing in the console:
     // game.state
-    // export let currentUpdateUI: IUpdateUI = null;
+    game.currentUpdateUI = null;
     game.animationEnded = false;
     game.canMakeMove = false;
-    // export let didMakeMove: boolean = false; // You can only make one move per updateUI
+    game.didMakeMove = false; // You can only make one move per updateUI
     game.isComputerTurn = false;
     game.move = null;
     game.state = null;
     game.isHelpModalShown = false;
     game.moves = new Array();
     game.msg = "";
-    // export let shouldshowline = false;
+    game.shouldshowline = false;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -457,14 +457,14 @@ var game;
         }
         game.isComputerTurn = false; // to make sure the computer can only move once.
         log.info("computer");
-        // didMakeMove = true;
+        game.didMakeMove = true;
         moveService.makeMove(aiService.findSimplyComputerMove(game.move));
     }
     function updateUI(params) {
         log.info("Game got updateUI:", params);
         game.animationEnded = false;
-        // didMakeMove = false; // Only one move per updateUI
-        // currentUpdateUI = params;
+        game.didMakeMove = false; // Only one move per updateUI
+        game.currentUpdateUI = params;
         game.move = params.move;
         game.state = game.move.stateAfterMove;
         if (!game.state) {
@@ -489,14 +489,16 @@ var game;
             }
         }
     }
-    // export function isComputer() {
-    //   return currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex] !== undefined && currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex].playerId === '';
-    // }
-    // export function isMyTurn() {
-    //   return !didMakeMove && // you can only make one move per updateUI.
-    //     currentUpdateUI.move.turnIndexAfterMove >= 0 && // game is ongoing
-    //     currentUpdateUI.yourPlayerIndex === currentUpdateUI.move.turnIndexAfterMove; // it's my turn
-    // }
+    function isComputer() {
+        return game.currentUpdateUI.playersInfo[game.currentUpdateUI.yourPlayerIndex] !== undefined && game.currentUpdateUI.playersInfo[game.currentUpdateUI.yourPlayerIndex].playerId === '';
+    }
+    game.isComputer = isComputer;
+    function isMyTurn() {
+        return !game.didMakeMove &&
+            game.currentUpdateUI.move.turnIndexAfterMove >= 0 &&
+            game.currentUpdateUI.yourPlayerIndex === game.currentUpdateUI.move.turnIndexAfterMove; // it's my turn
+    }
+    game.isMyTurn = isMyTurn;
     function isCurrentPlayerIndex(playerIndex) {
         return game.move.turnIndexAfterMove == playerIndex;
     }
