@@ -76,3 +76,15 @@ color: black; font-size: 0.9em;}
   -moz-transition: background-color 1s ease-in-out;
   -webkit-transition: background-color 1s ease-in-out;
 }
+
+.remindLinesTS {
+  transition: stroke-opacity 1s ease-in-out;
+  -moz-transition: stroke-opacity 1s ease-in-out;
+  -webkit-transition: stroke-opacity 1s ease-in-out;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}

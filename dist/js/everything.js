@@ -513,8 +513,21 @@ var game;
         }
     }
     game.cellEnter = cellEnter;
-    function cellPressedUp() {
+    function cellPressedUp(width, height) {
         log.info("Slided on cell:", angular.toJson(game.moves));
+        var remindlines = document.getElementById("remindlines");
+        var rline = document.getElementById("rline");
+        rline.setAttribute("points", "");
+        rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        game.moves.forEach(function (entry) {
+            var tmp = rline.getAttribute("points");
+            var x = entry.col * width + width / 2;
+            var y = entry.row * height + height / 2;
+            rline.setAttribute("points", tmp + x + "," + y + " ");
+        });
+        setTimeout(function () {
+            rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+        }, 1000);
         if (window.location.search === '?throwException') {
             throw new Error("Throwing the error because URL has '?throwException'");
         }
@@ -751,7 +764,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
     function dragDone() {
         $rootScope.$apply(function () {
             // Update piece in board
-            game.cellPressedUp();
+            game.cellPressedUp(getSquareWidthHeight().width, getSquareWidthHeight().height);
         });
     }
     $rootScope['game'] = game;
