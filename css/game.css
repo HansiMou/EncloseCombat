@@ -63,7 +63,7 @@ color: black; font-size: 0.9em;}
   color: #20B2AA;  
 }
 
-.currentPlayerBG {
+/*.currentPlayerBG {
   background:#FAF0E6;
   transition: background-color 1000ms linear;
 }
@@ -71,4 +71,4 @@ color: black; font-size: 0.9em;}
 .notcurrentPlayerBG {
   background: gray;
   transition: background-color 1000ms linear;
-}
+}*/
