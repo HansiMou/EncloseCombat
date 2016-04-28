@@ -4,10 +4,10 @@ var game;
     // I export all letiables to make it easy to debug in the browser by
     // simply typing in the console:
     // game.state
-    game.currentUpdateUI = null;
+    // export let currentUpdateUI: IUpdateUI = null;
     game.animationEnded = false;
     game.canMakeMove = false;
-    game.didMakeMove = false; // You can only make one move per updateUI
+    // export let didMakeMove: boolean = false; // You can only make one move per updateUI
     game.isComputerTurn = false;
     game.move = null;
     game.state = null;
@@ -83,14 +83,14 @@ var game;
         }
         game.isComputerTurn = false; // to make sure the computer can only move once.
         log.info("computer");
-        game.didMakeMove = true;
+        // didMakeMove = true;
         moveService.makeMove(aiService.findSimplyComputerMove(game.move));
     }
     function updateUI(params) {
         log.info("Game got updateUI:", params);
         game.animationEnded = false;
-        game.didMakeMove = false; // Only one move per updateUI
-        game.currentUpdateUI = params;
+        // didMakeMove = false; // Only one move per updateUI
+        // currentUpdateUI = params;
         game.move = params.move;
         game.state = game.move.stateAfterMove;
         if (!game.state) {
@@ -115,16 +115,14 @@ var game;
             }
         }
     }
-    function isComputer() {
-        return game.currentUpdateUI.playersInfo[game.currentUpdateUI.yourPlayerIndex] !== undefined && game.currentUpdateUI.playersInfo[game.currentUpdateUI.yourPlayerIndex].playerId === '';
-    }
-    game.isComputer = isComputer;
-    function isMyTurn() {
-        return !game.didMakeMove &&
-            game.currentUpdateUI.move.turnIndexAfterMove >= 0 &&
-            game.currentUpdateUI.yourPlayerIndex === game.currentUpdateUI.move.turnIndexAfterMove; // it's my turn
-    }
-    game.isMyTurn = isMyTurn;
+    // export function isComputer() {
+    //   return currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex] !== undefined && currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex].playerId === '';
+    // }
+    // export function isMyTurn() {
+    //   return !didMakeMove && // you can only make one move per updateUI.
+    //     currentUpdateUI.move.turnIndexAfterMove >= 0 && // game is ongoing
+    //     currentUpdateUI.yourPlayerIndex === currentUpdateUI.move.turnIndexAfterMove; // it's my turn
+    // }
     function isCurrentPlayerIndex(playerIndex) {
         return game.move.turnIndexAfterMove == playerIndex;
     }
