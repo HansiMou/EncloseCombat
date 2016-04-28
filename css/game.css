@@ -69,7 +69,6 @@ color: black; font-size: 0.9em;}
 
 .notcurrentPlayerBG {
   background: gray;
-  transition: background-color 1s linear;
 }
 
 .changingBG {
