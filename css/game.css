@@ -63,12 +63,17 @@ color: black; font-size: 0.9em;}
   color: #20B2AA;  
 }
 
-/*.currentPlayerBG {
+.currentPlayerBG {
   background:#FAF0E6;
-  transition: background-color 1000ms linear;
 }
 
 .notcurrentPlayerBG {
   background: gray;
-  transition: background-color 1000ms linear;
-}*/
+  transition: background-color 1s linear;
+}
+
+.changingBG {
+  transition: background-color 1s linear;
+  -moz-transition: background-color 1s linear;
+  -webkit-transition: background-color 1s linear;
+}

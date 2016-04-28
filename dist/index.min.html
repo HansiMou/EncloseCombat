@@ -24,11 +24,10 @@
 
   <script src="js/everything.min.js"></script>
 </head>
-<body ng-cloak style="background:#FAF0E6;">
+<body ng-cloak ng-class="{currentPlayerBG: game.state.current_turn === 0 || game.isMyTurn()||game.isComputer(), notcurrentPlayerBG: game.state.current_turn !== 0 && !game.isMyTurn()&&!game.isComputer()}"> 
   <div id="e2e_test_open_rules_modal" class="help-tip" ng-click="game.isHelpModalShown = true" aria-hidden="true"></div>
-
   <div class="overlayModal" ng-click="game.clickedOnModal($event)"
-      ng-class="{zeroOpacity: !game.isHelpModalShown || (game.state.current_turn === 0 || game.isMyTurn()||game.isComputer()), oneOpacity: game.isHelpModalShown || (game.state.current_turn !== 0 && !game.isMyTurn()&&!game.isComputer())}" aria-hidden="true">
+      ng-class="{zeroOpacity: !game.isHelpModalShown, oneOpacity: game.isHelpModalShown}" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -95,9 +94,9 @@
                     stroke-opacity="0.4"/>
     </svg>
   <div ng-repeat="row in [0, 1, 2, 3, 4, 5, 6, 7]"
-      style="background:#FAF0E6;position:absolute; top:{{row * 12.5}}%; left:0; width:100%; height:12.5%;" >
+      style="position:absolute; top:{{row * 12.5}}%; left:0; width:100%; height:12.5%;"> 
     <div ng-repeat="col in [0, 1, 2, 3, 4, 5]"
-        style="background:#FAF0E6;position:absolute; top:0; left:{{col * 16.666667}}%; width:16.666667%; height:100%;"
+        style="position:absolute; top:0; left:{{col * 16.666667}}%; width:16.666667%; height:100%;"
         id="{{'e2e_test_div_' + row + 'x' + col}}">
       <div style="width:100%; height: 100%; "
           id="{{'e2e_test_pieceGG_' + row + 'x' + col}}"
