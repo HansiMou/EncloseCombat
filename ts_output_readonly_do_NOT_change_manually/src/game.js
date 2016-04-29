@@ -12,7 +12,6 @@ var game;
     game.isHelpModalShown = false;
     game.moves = new Array();
     game.msg = "";
-    game.shouldshowline = true;
     game.animationEndedTimeout = null;
     function init() {
         translate.setTranslations(getTranslations());
@@ -86,12 +85,16 @@ var game;
         moveService.makeMove(aiService.findSimplyComputerMove(game.currentUpdateUI.move));
     }
     function updateUI(params) {
-        log.info("Game got updateUI:", params);
+        log.info("Game got updateUI???:", params);
         game.animationEnded = false;
         game.didMakeMove = false; // Only one move per updateUI
         game.currentUpdateUI = params;
-        clearAnimationTimeout();
-        game.state = params.move.stateAfterMove;
+        var rline = document.getElementById("rline");
+        rline.setAttribute("points", "");
+        var gameArea = document.getElementById("gameArea");
+        var width = gameArea.clientWidth / gameLogic.COLS;
+        var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
+        // clearAnimationTimeout();
         if (isFirstMove()) {
             game.state = gameLogic.getInitialState();
             // This is the first move in the match, so
@@ -100,10 +103,28 @@ var game;
             maybeSendComputerMove();
         }
         else {
-            // We calculate the AI move only after the animation finishes,
-            // because if we call aiService now
-            // then the animation will be paused until the javascript finishes.
-            game.animationEndedTimeout = $timeout(animationEndedCallback, 1500);
+            // rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+            var tmp = "";
+            params.move.stateAfterMove.delta.forEach(function (entry) {
+                var x = entry.col * width + width / 2;
+                var y = entry.row * height + height / 2;
+                tmp = tmp + x + "," + y + " ";
+            });
+            if (game.currentUpdateUI.playMode !== "passAndPlay") {
+                rline.setAttribute("points", tmp);
+            }
+            if (game.currentUpdateUI.playMode !== "passAndPlay") {
+                $timeout(function () {
+                    // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+                    rline.setAttribute("points", "");
+                    game.state = game.currentUpdateUI.move.stateAfterMove;
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+                }, 1000);
+            }
+            else {
+                game.state = game.currentUpdateUI.move.stateAfterMove;
+                game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+            }
         }
     }
     function clearAnimationTimeout() {
@@ -139,36 +160,19 @@ var game;
         }
     }
     game.cellEnter = cellEnter;
-    function cellPressedUp(width, height) {
+    function cellPressedUp() {
         log.info("Slided on cell:", angular.toJson(game.moves));
         var remindlines = document.getElementById("remindlines");
         if (window.location.search === '?throwException') {
             throw new Error("Throwing the error because URL has '?throwException'");
         }
         try {
-            game.shouldshowline = true;
-            var rline = document.getElementById("rline");
-            rline.setAttribute("points", "");
-            // rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-            var tmp = "";
-            game.moves.forEach(function (entry) {
-                var x = entry.col * width + width / 2;
-                var y = entry.row * height + height / 2;
-                tmp = tmp + x + "," + y + " ";
-            });
-            rline.setAttribute("points", tmp);
-            log.info("moves 1 ", game.moves);
             var nextMove = gameLogic.createMove(game.state, game.moves, game.currentUpdateUI.move.turnIndexAfterMove);
-            setTimeout(function () {
-                // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-                game.shouldshowline = false;
-                moveService.makeMove(nextMove);
-                game.moves = new Array();
-            }, 500);
+            moveService.makeMove(nextMove);
+            game.moves = new Array();
         }
         catch (e) {
             log.info(e);
-            game.shouldshowline = false;
             game.moves = new Array();
             return;
         }
@@ -391,7 +395,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
     function dragDone() {
         $rootScope.$apply(function () {
             // Update piece in board
-            game.cellPressedUp(getSquareWidthHeight().width, getSquareWidthHeight().height);
+            game.cellPressedUp();
         });
     }
     $rootScope['game'] = game;

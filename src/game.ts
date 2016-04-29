@@ -15,7 +15,6 @@ module game {
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
   export let msg = "";
-  export let shouldshowline = true;
   export let animationEndedTimeout: ng.IPromise<any> = null;
   
   export function init() {
@@ -95,13 +94,17 @@ module game {
   }
 
   function updateUI(params: IUpdateUI): void {
-    log.info("Game got updateUI:", params);
+    log.info("Game got updateUI???:", params);
     animationEnded = false;
     didMakeMove = false; // Only one move per updateUI
     currentUpdateUI = params;
+    let rline = document.getElementById("rline");
+    rline.setAttribute("points", "");
+    let gameArea = document.getElementById("gameArea");
+    let width = gameArea.clientWidth / gameLogic.COLS;
+    let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    clearAnimationTimeout();
-    state = params.move.stateAfterMove;
+    // clearAnimationTimeout();
     if (isFirstMove()) {
       state = gameLogic.getInitialState();
       // This is the first move in the match, so
@@ -109,10 +112,33 @@ module game {
       // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
       maybeSendComputerMove();
     } else {
+      // rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+      let tmp = "";
+      params.move.stateAfterMove.delta.forEach(function(entry) {
+          let  x = entry.col * width + width / 2;
+          let  y = entry.row * height + height / 2;
+          tmp = tmp+x+","+y+" ";
+      });
+      if (currentUpdateUI.playMode !== "passAndPlay"){
+        rline.setAttribute("points", tmp);    
+      }
+      
+      if (currentUpdateUI.playMode !== "passAndPlay"){
+        $timeout(function(){
+          // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+          rline.setAttribute("points", "");
+          state = currentUpdateUI.move.stateAfterMove;
+          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+        },1000);
+      }
+      else{
+          state = currentUpdateUI.move.stateAfterMove;
+          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+      }
+      
       // We calculate the AI move only after the animation finishes,
       // because if we call aiService now
       // then the animation will be paused until the javascript finishes.
-      animationEndedTimeout = $timeout(animationEndedCallback, 1500);
     }
   }
   function clearAnimationTimeout() {
@@ -144,7 +170,7 @@ module game {
           moves.push({row: row, col: col});
       }
   }
-  export function cellPressedUp(width: number, height:number): void {
+  export function cellPressedUp(): void {
     log.info("Slided on cell:", angular.toJson(moves));
     
     let remindlines = document.getElementById("remindlines");
@@ -153,32 +179,14 @@ module game {
       throw new Error("Throwing the error because URL has '?throwException'");
     }
     try {
-
-      shouldshowline = true;
-      let rline = document.getElementById("rline");
-      rline.setAttribute("points", "");
-      
-      // rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-      let tmp = "";
-      moves.forEach(function(entry) {
-          let  x = entry.col * width + width / 2;
-          let  y = entry.row * height + height / 2;
-          tmp = tmp+x+","+y+" ";
-      });
-      rline.setAttribute("points", tmp);
-      log.info("moves 1 ", moves);
       let nextMove = gameLogic.createMove(
           state, moves, currentUpdateUI.move.turnIndexAfterMove);
-      setTimeout(function(){
-        // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-          shouldshowline = false;
-          moveService.makeMove(nextMove);
-          moves = new Array();
-      },500);
+
+      moveService.makeMove(nextMove);
+      moves = new Array();
       
     } catch (e) {
       log.info(e);
-      shouldshowline = false;
       moves = new Array();
       return;
     }
@@ -416,7 +424,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
         $rootScope.$apply(function () {
           // Update piece in board
           
-          game.cellPressedUp(getSquareWidthHeight().width, getSquareWidthHeight().height);
+          game.cellPressedUp();
         });
       }
     $rootScope['game'] = game;
