@@ -178,6 +178,7 @@ module game {
       
     } catch (e) {
       log.info(e);
+      shouldshowline = false;
       moves = new Array();
       return;
     }

@@ -168,6 +168,7 @@ var game;
         }
         catch (e) {
             log.info(e);
+            game.shouldshowline = false;
             game.moves = new Array();
             return;
         }
