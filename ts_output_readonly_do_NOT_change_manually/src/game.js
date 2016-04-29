@@ -6,15 +6,14 @@ var game;
     // game.state
     game.currentUpdateUI = null;
     game.animationEnded = false;
-    game.canMakeMove = false;
     game.didMakeMove = false; // You can only make one move per updateUI
     game.isComputerTurn = false;
-    game.move = null;
     game.state = null;
     game.isHelpModalShown = false;
     game.moves = new Array();
     game.msg = "";
-    game.shouldshowline = false;
+    game.shouldshowline = true;
+    game.animationEndedTimeout = null;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -74,46 +73,47 @@ var game;
         $rootScope.$apply(function () {
             log.info("Animation ended");
             game.animationEnded = true;
-            sendComputerMove();
+            maybeSendComputerMove();
         });
     }
-    function sendComputerMove() {
+    function maybeSendComputerMove() {
         if (!game.isComputerTurn) {
             return;
         }
         game.isComputerTurn = false; // to make sure the computer can only move once.
         log.info("computer");
         game.didMakeMove = true;
-        moveService.makeMove(aiService.findSimplyComputerMove(game.move));
+        moveService.makeMove(aiService.findSimplyComputerMove(game.currentUpdateUI.move));
     }
     function updateUI(params) {
         log.info("Game got updateUI:", params);
         game.animationEnded = false;
         game.didMakeMove = false; // Only one move per updateUI
         game.currentUpdateUI = params;
-        game.move = params.move;
-        game.state = game.move.stateAfterMove;
-        if (!game.state) {
+        clearAnimationTimeout();
+        game.state = params.move.stateAfterMove;
+        if (isFirstMove()) {
             game.state = gameLogic.getInitialState();
+            // This is the first move in the match, so
+            // there is not going to be an animation, so
+            // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
+            maybeSendComputerMove();
         }
-        game.canMakeMove = game.move.turnIndexAfterMove >= 0 &&
-            params.yourPlayerIndex === game.move.turnIndexAfterMove; // it's my turn
-        // Is it the computer's turn?
-        game.isComputerTurn = game.canMakeMove &&
-            params.playersInfo[params.yourPlayerIndex].playerId === '';
-        if (game.isComputerTurn) {
-            // To make sure the player won't click something and send a move instead of the computer sending a move.
-            game.canMakeMove = false;
+        else {
             // We calculate the AI move only after the animation finishes,
             // because if we call aiService now
             // then the animation will be paused until the javascript finishes.
-            if (!game.state.delta) {
-                // This is the first move in the match, so
-                // there is not going to be an animation, so
-                // call sendComputerMove() now (can happen in ?onlyAIs mode)
-                sendComputerMove();
-            }
+            game.animationEndedTimeout = $timeout(animationEndedCallback, 1500);
         }
+    }
+    function clearAnimationTimeout() {
+        if (game.animationEndedTimeout) {
+            $timeout.cancel(game.animationEndedTimeout);
+            game.animationEndedTimeout = null;
+        }
+    }
+    function isFirstMove() {
+        return !game.currentUpdateUI.move.stateAfterMove;
     }
     function isComputer() {
         return game.currentUpdateUI.playersInfo[game.currentUpdateUI.yourPlayerIndex] !== undefined && game.currentUpdateUI.playersInfo[game.currentUpdateUI.yourPlayerIndex].playerId === '';
@@ -126,7 +126,7 @@ var game;
     }
     game.isMyTurn = isMyTurn;
     function isCurrentPlayerIndex(playerIndex) {
-        return game.move.turnIndexAfterMove == playerIndex;
+        return game.currentUpdateUI.move.turnIndexAfterMove == playerIndex;
     }
     game.isCurrentPlayerIndex = isCurrentPlayerIndex;
     function cellPressedDown(row, col) {
@@ -142,43 +142,32 @@ var game;
     function cellPressedUp(width, height) {
         log.info("Slided on cell:", angular.toJson(game.moves));
         var remindlines = document.getElementById("remindlines");
-        var rline = document.getElementById("rline");
         if (window.location.search === '?throwException') {
             throw new Error("Throwing the error because URL has '?throwException'");
         }
-        if (!game.canMakeMove) {
-            return;
-        }
         try {
-            var nextMove = gameLogic.createMove(game.state, game.moves, game.move.turnIndexAfterMove);
-            game.canMakeMove = false; // to prevent making another move
-            moveService.makeMove(nextMove);
+            game.shouldshowline = true;
+            var rline = document.getElementById("rline");
             rline.setAttribute("points", "");
-            rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+            // rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+            var tmp = "";
             game.moves.forEach(function (entry) {
-                var tmp = rline.getAttribute("points");
                 var x = entry.col * width + width / 2;
                 var y = entry.row * height + height / 2;
-                rline.setAttribute("points", tmp + x + "," + y + " ");
+                tmp = tmp + x + "," + y + " ";
             });
+            rline.setAttribute("points", tmp);
+            log.info("moves 1 ", game.moves);
+            var nextMove = gameLogic.createMove(game.state, game.moves, game.currentUpdateUI.move.turnIndexAfterMove);
             setTimeout(function () {
-                rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-            }, 1000);
-            game.moves = new Array();
+                // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+                game.shouldshowline = false;
+                moveService.makeMove(nextMove);
+                game.moves = new Array();
+            }, 500);
         }
         catch (e) {
             log.info(e);
-            rline.setAttribute("points", "");
-            rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-            game.moves.forEach(function (entry) {
-                var tmp = rline.getAttribute("points");
-                var x = entry.col * width + width / 2;
-                var y = entry.row * height + height / 2;
-                rline.setAttribute("points", tmp + x + "," + y + " ");
-            });
-            setTimeout(function () {
-                rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-            }, 1000);
             game.moves = new Array();
             return;
         }

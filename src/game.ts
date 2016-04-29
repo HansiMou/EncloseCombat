@@ -9,15 +9,14 @@ module game {
   // game.state
   export let currentUpdateUI: IUpdateUI = null;
   export let animationEnded = false;
-  export let canMakeMove = false;
   export let didMakeMove: boolean = false; // You can only make one move per updateUI
   export let isComputerTurn = false;
-  export let move: IMove = null;
   export let state: IState = null;
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
   export let msg = "";
-  export let shouldshowline = false;
+  export let shouldshowline = true;
+  export let animationEndedTimeout: ng.IPromise<any> = null;
   
   export function init() {
     translate.setTranslations(getTranslations());
@@ -81,18 +80,18 @@ module game {
     $rootScope.$apply(function () {
       log.info("Animation ended");
       animationEnded = true;
-      sendComputerMove();
+      maybeSendComputerMove();
     });
   }
 
-  function sendComputerMove() {
+  function maybeSendComputerMove() {
     if (!isComputerTurn) {
       return;
     }
     isComputerTurn = false; // to make sure the computer can only move once.
     log.info("computer");
     didMakeMove = true;
-    moveService.makeMove(aiService.findSimplyComputerMove(move));
+    moveService.makeMove(aiService.findSimplyComputerMove(currentUpdateUI.move));
   }
 
   function updateUI(params: IUpdateUI): void {
@@ -100,31 +99,31 @@ module game {
     animationEnded = false;
     didMakeMove = false; // Only one move per updateUI
     currentUpdateUI = params;
-    move = params.move;
-    state = move.stateAfterMove;
-    if (!state) {
+    
+    clearAnimationTimeout();
+    state = params.move.stateAfterMove;
+    if (isFirstMove()) {
       state = gameLogic.getInitialState();
-    }
-    canMakeMove = move.turnIndexAfterMove >= 0 && // game is ongoing
-      params.yourPlayerIndex === move.turnIndexAfterMove; // it's my turn
-
-    // Is it the computer's turn?
-    isComputerTurn = canMakeMove &&
-        params.playersInfo[params.yourPlayerIndex].playerId === '';
-    if (isComputerTurn) {
-      // To make sure the player won't click something and send a move instead of the computer sending a move.
-      canMakeMove = false;
+      // This is the first move in the match, so
+      // there is not going to be an animation, so
+      // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
+      maybeSendComputerMove();
+    } else {
       // We calculate the AI move only after the animation finishes,
       // because if we call aiService now
       // then the animation will be paused until the javascript finishes.
-      if (!state.delta) {
-        // This is the first move in the match, so
-        // there is not going to be an animation, so
-        // call sendComputerMove() now (can happen in ?onlyAIs mode)
-        sendComputerMove();
-      }
+      animationEndedTimeout = $timeout(animationEndedCallback, 1500);
     }
   }
+  function clearAnimationTimeout() {
+    if (animationEndedTimeout) {
+      $timeout.cancel(animationEndedTimeout);
+      animationEndedTimeout = null;
+    }
+  }
+  function isFirstMove() {
+    return !currentUpdateUI.move.stateAfterMove;
+  }    
   export function isComputer() {
     return currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex] !== undefined && currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex].playerId === '';
   }
@@ -135,7 +134,7 @@ module game {
   }
   
   export function isCurrentPlayerIndex(playerIndex: number): boolean {
-    return move.turnIndexAfterMove == playerIndex;
+    return currentUpdateUI.move.turnIndexAfterMove == playerIndex;
   }
   export function cellPressedDown(row: number, col: number): void{
       moves.push({row: row, col: col});
@@ -149,48 +148,36 @@ module game {
     log.info("Slided on cell:", angular.toJson(moves));
     
     let remindlines = document.getElementById("remindlines");
-    let rline = document.getElementById("rline");
 
     if (window.location.search === '?throwException') { // to test encoding a stack trace with sourcemap
       throw new Error("Throwing the error because URL has '?throwException'");
     }
-    if (!canMakeMove) {
-      return;
-    }
     try {
-      let nextMove = gameLogic.createMove(
-          state, moves, move.turnIndexAfterMove);
-      canMakeMove = false; // to prevent making another move
-      moveService.makeMove(nextMove);
+
+      shouldshowline = true;
+      let rline = document.getElementById("rline");
       rline.setAttribute("points", "");
-      rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-      game.moves.forEach(function(entry) {
-          let tmp = rline.getAttribute("points");
+      
+      // rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+      let tmp = "";
+      moves.forEach(function(entry) {
           let  x = entry.col * width + width / 2;
           let  y = entry.row * height + height / 2;
-          rline.setAttribute("points", tmp+x+","+y+" ");
+          tmp = tmp+x+","+y+" ";
       });
-      
+      rline.setAttribute("points", tmp);
+      log.info("moves 1 ", moves);
+      let nextMove = gameLogic.createMove(
+          state, moves, currentUpdateUI.move.turnIndexAfterMove);
       setTimeout(function(){
-        rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-        
-      },1000); 
-      moves = new Array();
+        // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+          shouldshowline = false;
+          moveService.makeMove(nextMove);
+          moves = new Array();
+      },500);
+      
     } catch (e) {
       log.info(e);
-      rline.setAttribute("points", "");
-      rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-      game.moves.forEach(function(entry) {
-          let tmp = rline.getAttribute("points");
-          let  x = entry.col * width + width / 2;
-          let  y = entry.row * height + height / 2;
-          rline.setAttribute("points", tmp+x+","+y+" ");
-      });
-      
-      setTimeout(function(){
-        rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-        
-      },1000); 
       moves = new Array();
       return;
     }
