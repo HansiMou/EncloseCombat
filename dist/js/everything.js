@@ -485,14 +485,17 @@ var game;
                 tmp = tmp + x + "," + y + " ";
             });
             if (game.currentUpdateUI.playMode !== "passAndPlay") {
+                rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 rline.setAttribute("points", tmp);
             }
             if (game.currentUpdateUI.playMode !== "passAndPlay") {
                 $timeout(function () {
-                    // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-                    rline.setAttribute("points", "");
-                    game.state = game.currentUpdateUI.move.stateAfterMove;
-                    game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+                    $rootScope.$apply(function () {
+                        rline.setAttribute("points", "");
+                        rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+                        game.state = game.currentUpdateUI.move.stateAfterMove;
+                        game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+                    });
                 }, 1000);
             }
             else {
