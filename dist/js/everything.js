@@ -381,7 +381,6 @@ var game;
     game.currentUpdateUI = null;
     game.animationEnded = false;
     game.didMakeMove = false; // You can only make one move per updateUI
-    game.isComputerTurn = false;
     game.state = null;
     game.isHelpModalShown = false;
     game.moves = new Array();
@@ -450,10 +449,9 @@ var game;
         });
     }
     function maybeSendComputerMove() {
-        if (!game.isComputerTurn) {
+        if (!isComputerTurn()) {
             return;
         }
-        game.isComputerTurn = false; // to make sure the computer can only move once.
         log.info("computer");
         game.didMakeMove = true;
         moveService.makeMove(aiService.findSimplyComputerMove(game.currentUpdateUI.move));
@@ -463,12 +461,12 @@ var game;
         game.animationEnded = false;
         game.didMakeMove = false; // Only one move per updateUI
         game.currentUpdateUI = params;
+        log.info("Game got up1", isComputerTurn());
         var rline = document.getElementById("rline");
-        rline.setAttribute("points", "");
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        // clearAnimationTimeout();
+        clearAnimationTimeout();
         if (isFirstMove()) {
             game.state = gameLogic.getInitialState();
             // This is the first move in the match, so
@@ -477,18 +475,18 @@ var game;
             maybeSendComputerMove();
         }
         else {
-            // rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+            rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
             var tmp = "";
             params.move.stateAfterMove.delta.forEach(function (entry) {
                 var x = entry.col * width + width / 2;
                 var y = entry.row * height + height / 2;
                 tmp = tmp + x + "," + y + " ";
             });
-            if (game.currentUpdateUI.playMode !== "passAndPlay") {
+            if ((!isComputerTurn() || !isMyTurn) && game.currentUpdateUI.playMode !== "passAndPlay") {
                 rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 rline.setAttribute("points", tmp);
             }
-            if (game.currentUpdateUI.playMode !== "passAndPlay") {
+            if ((!isComputerTurn() || !isMyTurn) && game.currentUpdateUI.playMode !== "passAndPlay") {
                 $timeout(function () {
                     $rootScope.$apply(function () {
                         rline.setAttribute("points", "");
@@ -502,6 +500,7 @@ var game;
                 game.state = game.currentUpdateUI.move.stateAfterMove;
                 game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
             }
+            log.info("Game got up2", isComputerTurn());
         }
     }
     function clearAnimationTimeout() {
@@ -509,6 +508,9 @@ var game;
             $timeout.cancel(game.animationEndedTimeout);
             game.animationEndedTimeout = null;
         }
+    }
+    function isComputerTurn() {
+        return isMyTurn() && isComputer();
     }
     function isFirstMove() {
         return !game.currentUpdateUI.move.stateAfterMove;

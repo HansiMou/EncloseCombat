@@ -10,7 +10,6 @@ module game {
   export let currentUpdateUI: IUpdateUI = null;
   export let animationEnded = false;
   export let didMakeMove: boolean = false; // You can only make one move per updateUI
-  export let isComputerTurn = false;
   export let state: IState = null;
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
@@ -84,12 +83,14 @@ module game {
   }
 
   function maybeSendComputerMove() {
-    if (!isComputerTurn) {
+    if (!isComputerTurn()) {
       return;
     }
-    isComputerTurn = false; // to make sure the computer can only move once.
     log.info("computer");
     didMakeMove = true;
+    
+    
+    
     moveService.makeMove(aiService.findSimplyComputerMove(currentUpdateUI.move));
   }
 
@@ -98,13 +99,13 @@ module game {
     animationEnded = false;
     didMakeMove = false; // Only one move per updateUI
     currentUpdateUI = params;
+    log.info("Game got up1", isComputerTurn());
     let rline = document.getElementById("rline");
-    rline.setAttribute("points", "");
     let gameArea = document.getElementById("gameArea");
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    // clearAnimationTimeout();
+    clearAnimationTimeout();
     if (isFirstMove()) {
       state = gameLogic.getInitialState();
       // This is the first move in the match, so
@@ -112,23 +113,23 @@ module game {
       // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
       maybeSendComputerMove();
     } else {
-      // rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+      rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
       let tmp = "";
       params.move.stateAfterMove.delta.forEach(function(entry) {
           let  x = entry.col * width + width / 2;
           let  y = entry.row * height + height / 2;
           tmp = tmp+x+","+y+" ";
       });
-      if (currentUpdateUI.playMode !== "passAndPlay"){
+      if ((!isComputerTurn() || !isMyTurn) && currentUpdateUI.playMode !== "passAndPlay"){
         rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         rline.setAttribute("points", tmp);    
       }
       
-      if (currentUpdateUI.playMode !== "passAndPlay"){
+      if ((!isComputerTurn() || !isMyTurn)&& currentUpdateUI.playMode !== "passAndPlay"){
         $timeout(function(){
           $rootScope.$apply(function () {
             rline.setAttribute("points", "");
-             rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+            rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
             state = currentUpdateUI.move.stateAfterMove;
             animationEndedTimeout = $timeout(animationEndedCallback, 1000);
           });
@@ -138,7 +139,7 @@ module game {
           state = currentUpdateUI.move.stateAfterMove;
           animationEndedTimeout = $timeout(animationEndedCallback, 1000);
       }
-      
+      log.info("Game got up2", isComputerTurn());
       // We calculate the AI move only after the animation finishes,
       // because if we call aiService now
       // then the animation will be paused until the javascript finishes.
@@ -149,6 +150,9 @@ module game {
       $timeout.cancel(animationEndedTimeout);
       animationEndedTimeout = null;
     }
+  }
+  function isComputerTurn() {
+    return isMyTurn() && isComputer();
   }
   function isFirstMove() {
     return !currentUpdateUI.move.stateAfterMove;
