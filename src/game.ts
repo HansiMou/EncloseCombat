@@ -88,7 +88,7 @@ module game {
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+    rline.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
     let tmp = "";
     let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
     nextAIMove.stateAfterMove.delta.forEach(function(entry) {
@@ -100,7 +100,7 @@ module game {
     rline.setAttribute("points", tmp);    
     setTimeout(function(){
       rline.setAttribute("points", "");
-      rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+      rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
       moveService.makeMove(nextAIMove);
     },2000);
     
