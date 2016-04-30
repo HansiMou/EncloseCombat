@@ -91,7 +91,7 @@ var game;
         rline.setAttribute("points", tmp);
         setTimeout(function () {
             rline.setAttribute("points", "");
-            rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
+            rline.setAttribute("style", "fill:none;stroke:white;stroke-width:1.5%; stroke-opacity: 0");
             moveService.makeMove(nextAIMove);
         }, 2000);
     }
@@ -113,8 +113,8 @@ var game;
             maybeSendComputerMove();
         }
         else {
-            game.state = params.stateBeforeMove;
             if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
+                game.state = params.stateBeforeMove;
                 log.info("try me", isMyTurn());
                 var rline_1 = document.getElementById("rline");
                 var gameArea_1 = document.getElementById("gameArea");
@@ -127,11 +127,11 @@ var game;
                     tmp = tmp + x + "," + y + " ";
                 });
                 rline_1.setAttribute("points", tmp);
-                rline_1.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+                rline_1.setAttribute("style", "fill:none;stroke:white;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
                 // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 setTimeout(function () {
                     rline_1.setAttribute("points", "");
-                    rline_1.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
+                    // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
                     game.state = game.currentUpdateUI.move.stateAfterMove;
                     game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
                 }, 2000);

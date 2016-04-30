@@ -100,7 +100,7 @@ module game {
     rline.setAttribute("points", tmp);    
     setTimeout(function(){
       rline.setAttribute("points", "");
-      rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
+      rline.setAttribute("style", "fill:none;stroke:white;stroke-width:1.5%; stroke-opacity: 0");
       moveService.makeMove(nextAIMove);
     },2000);
     
@@ -123,8 +123,8 @@ module game {
       // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
       maybeSendComputerMove();
     } else {
-      state = params.stateBeforeMove;
       if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
+        state = params.stateBeforeMove;
         log.info("try me", isMyTurn());
         let rline = document.getElementById("rline");
         let gameArea = document.getElementById("gameArea");
@@ -138,11 +138,11 @@ module game {
             tmp = tmp+x+","+y+" ";
         });
         rline.setAttribute("points", tmp);
-        rline.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:white;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         setTimeout(function(){
           rline.setAttribute("points", "");
-          rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
+          // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
           state = currentUpdateUI.move.stateAfterMove;
           animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         },2000);
