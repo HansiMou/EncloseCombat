@@ -79,7 +79,7 @@ var game;
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        rline.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:white;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         var tmp = "";
         var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
         nextAIMove.stateAfterMove.delta.forEach(function (entry) {
@@ -120,7 +120,7 @@ var game;
                     game.state.delta = [];
                 }
                 else {
-                    game.state.board = params.stateBeforeMove.intialboard;
+                    game.state.board = angular.copy(params.stateBeforeMove.intialboard);
                     game.state.delta = [];
                     game.state.current_turn = 0;
                     game.state.scores = [0, 0];
@@ -227,7 +227,7 @@ var game;
     game.isPieceX = isPieceX;
     function shouldSlowlyAppear(row, col) {
         var b = false;
-        if (game.state.delta !== null) {
+        if (game.currentUpdateUI.move.stateAfterMove.delta !== null) {
             for (var i = 0; i < game.state.delta.length; i++) {
                 if (game.state.delta[i].row >= row && game.state.delta[i].col === col) {
                     b = true;

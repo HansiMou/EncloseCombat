@@ -43,7 +43,7 @@ var gameLogic;
     /** Set the first turn to be 1, and the intial score for all players to be 0 */
     function getInitialState() {
         var ib = getInitialBoard();
-        return { board: ib, delta: null, current_turn: 0, scores: getIntialScores(), intialboard: ib };
+        return { board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), intialboard: angular.copy(ib) };
     }
     gameLogic.getInitialState = getInitialState;
     /**
