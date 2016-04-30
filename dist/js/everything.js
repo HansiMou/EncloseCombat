@@ -455,7 +455,7 @@ var game;
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        rline.setAttribute("style", "fill:none;stroke:white;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         var tmp = "";
         var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
         nextAIMove.stateAfterMove.delta.forEach(function (entry) {
