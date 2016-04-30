@@ -130,9 +130,9 @@ module game {
           state.delta = [];
         }
         else{
-          state.board = gameLogic.initialboard;
+          state.board = params.stateBeforeMove.intialboard;
           state.delta = [];
-          state.current_turn = 1;
+          state.current_turn = 0;
           state.scores = [0, 0];
         }
         

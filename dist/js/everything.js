@@ -15,7 +15,6 @@ var gameLogic;
                 board[i][j] = getRandomColor();
             }
         }
-        gameLogic.initialboard = board;
         return board;
     }
     /** Between 1 to num_of_colors, a random number is chosen and return a corresponding color */
@@ -43,7 +42,8 @@ var gameLogic;
     }
     /** Set the first turn to be 1, and the intial score for all players to be 0 */
     function getInitialState() {
-        return { board: getInitialBoard(), delta: null, current_turn: 0, scores: getIntialScores() };
+        var ib = getInitialBoard();
+        return { board: ib, delta: null, current_turn: 0, scores: getIntialScores(), intialboard: ib };
     }
     gameLogic.getInitialState = getInitialState;
     /**
@@ -247,7 +247,8 @@ var gameLogic;
             board: boardAfterMove,
             delta: moves,
             current_turn: stateBeforeMove.current_turn + 1,
-            scores: scores
+            scores: scores,
+            intialboard: stateBeforeMove.intialboard,
         };
         var winner = getWinner(stateAfterMove);
         var endMatchScores;
@@ -495,9 +496,9 @@ var game;
                     game.state.delta = [];
                 }
                 else {
-                    game.state.board = gameLogic.initialboard;
+                    game.state.board = params.stateBeforeMove.intialboard;
                     game.state.delta = [];
-                    game.state.current_turn = 1;
+                    game.state.current_turn = 0;
                     game.state.scores = [0, 0];
                 }
                 var rline_1 = document.getElementById("rline");

@@ -120,9 +120,9 @@ var game;
                     game.state.delta = [];
                 }
                 else {
-                    game.state.board = gameLogic.initialboard;
+                    game.state.board = params.stateBeforeMove.intialboard;
                     game.state.delta = [];
-                    game.state.current_turn = 1;
+                    game.state.current_turn = 0;
                     game.state.scores = [0, 0];
                 }
                 var rline_1 = document.getElementById("rline");
