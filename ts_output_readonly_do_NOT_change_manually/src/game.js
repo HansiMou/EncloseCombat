@@ -105,7 +105,6 @@ var game;
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
         clearAnimationTimeout();
-        game.state = params.stateBeforeMove;
         if (isFirstMove()) {
             game.state = gameLogic.getInitialState();
             // This is the first move in the match, so
@@ -114,6 +113,7 @@ var game;
             maybeSendComputerMove();
         }
         else {
+            game.state = params.stateBeforeMove;
             if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
                 log.info("try me", isMyTurn());
                 var rline_1 = document.getElementById("rline");

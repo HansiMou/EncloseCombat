@@ -116,7 +116,6 @@ module game {
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     clearAnimationTimeout();
-    state = params.stateBeforeMove;
     if (isFirstMove()) {
       state = gameLogic.getInitialState();
       // This is the first move in the match, so
@@ -124,6 +123,7 @@ module game {
       // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
       maybeSendComputerMove();
     } else {
+      state = params.stateBeforeMove;
       if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
         log.info("try me", isMyTurn());
         let rline = document.getElementById("rline");
