@@ -115,8 +115,16 @@ var game;
         }
         else {
             if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
-                if (params !== undefined && params.stateBeforeMove !== undefined)
-                    game.state.board = params.stateBeforeMove ? params.stateBeforeMove.board : gameLogic.initialboard;
+                if (params !== undefined && params.stateBeforeMove !== undefined) {
+                    game.state = params.stateBeforeMove;
+                    game.state.delta = [];
+                }
+                else {
+                    game.state.board = gameLogic.initialboard;
+                    game.state.delta = [];
+                    game.state.current_turn = 1;
+                    game.state.scores = [0, 0];
+                }
                 var rline_1 = document.getElementById("rline");
                 var gameArea_1 = document.getElementById("gameArea");
                 var width_1 = gameArea_1.clientWidth / gameLogic.COLS;

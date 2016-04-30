@@ -125,8 +125,17 @@ module game {
       maybeSendComputerMove();
     } else {
       if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
-        if (params !== undefined && params.stateBeforeMove !== undefined)
-          state.board = params.stateBeforeMove? params.stateBeforeMove.board : gameLogic.initialboard;
+        if (params !== undefined && params.stateBeforeMove !== undefined){
+          state = params.stateBeforeMove;
+          state.delta = [];
+        }
+        else{
+          state.board = gameLogic.initialboard;
+          state.delta = [];
+          state.current_turn = 1;
+          state.scores = [0, 0];
+        }
+        
         let rline = document.getElementById("rline");
         let gameArea = document.getElementById("gameArea");
         let width = gameArea.clientWidth / gameLogic.COLS;
