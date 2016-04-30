@@ -67,16 +67,16 @@ module game {
     };
   }
 
-  function animationEndedCallback(params: IUpdateUI) {
+  function animationEndedCallback() {
     log.info("Hi");
     $rootScope.$apply(function () {
       log.info("Animation ended");
       animationEnded = true;
-      maybeSendComputerMove(params);
+      maybeSendComputerMove();
     });
   }
 
-  function maybeSendComputerMove(params: IUpdateUI) {
+  function maybeSendComputerMove() {
     if (!isComputerTurn()) {
       return;
     }
@@ -115,14 +115,14 @@ module game {
     let gameArea = document.getElementById("gameArea");
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
-    
     clearAnimationTimeout();
+    state = params.stateBeforeMove;
     if (isFirstMove()) {
       state = gameLogic.getInitialState();
       // This is the first move in the match, so
       // there is not going to be an animation, so
       // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
-      maybeSendComputerMove(params);
+      maybeSendComputerMove();
     } else {
       if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
         log.info("try me", isMyTurn());
@@ -138,11 +138,11 @@ module game {
             tmp = tmp+x+","+y+" ";
         });
         rline.setAttribute("points", tmp);
-        rline.setAttribute("style", "fill:none;stroke:#FF7F50;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         setTimeout(function(){
           rline.setAttribute("points", "");
-          rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+          rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
           state = currentUpdateUI.move.stateAfterMove;
           animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         },2000);
