@@ -604,14 +604,14 @@ var game;
     function shouldSlowlyAppear(row, col) {
         var b = false;
         if (game.currentUpdateUI.move.stateAfterMove.delta !== null) {
-            for (var i = 0; i < game.state.delta.length; i++) {
-                if (game.state.delta[i].row >= row && game.state.delta[i].col === col) {
+            for (var i = 0; i < game.currentUpdateUI.move.stateAfterMove.delta.length; i++) {
+                if (game.currentUpdateUI.move.stateAfterMove.delta[i].row >= row && game.currentUpdateUI.move.stateAfterMove.delta[i].col === col) {
                     b = true;
                 }
             }
         }
         return !game.animationEnded &&
-            game.state.delta && b;
+            game.currentUpdateUI.move.stateAfterMove.delta && b;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
     function clickedOnModal(evt) {
