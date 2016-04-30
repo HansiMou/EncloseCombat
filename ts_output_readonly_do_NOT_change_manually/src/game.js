@@ -119,20 +119,24 @@ var game;
                 var gameArea_1 = document.getElementById("gameArea");
                 var width_1 = gameArea_1.clientWidth / gameLogic.COLS;
                 var height_1 = gameArea_1.clientHeight * 0.9 / gameLogic.ROWS;
-                rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
                 var tmp = "";
                 game.currentUpdateUI.move.stateAfterMove.delta.forEach(function (entry) {
                     var x = entry.col * width_1 + width_1 / 2;
                     var y = entry.row * height_1 + height_1 / 2;
                     tmp = tmp + x + "," + y + " ";
                 });
-                rline_1.setAttribute("points", tmp);
+                $rootScope.$apply(function () {
+                    rline_1.setAttribute("points", tmp);
+                    rline_1.setAttribute("style", "fill:none;stroke:#FF7F50;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+                });
                 // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 setTimeout(function () {
-                    rline_1.setAttribute("points", "");
-                    rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-                    game.animationEndedTimeout = $timeout(animationEndedCallback, 2000);
-                    game.state = game.currentUpdateUI.move.stateAfterMove;
+                    $rootScope.$apply(function () {
+                        rline_1.setAttribute("points", "");
+                        rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+                        game.state = game.currentUpdateUI.move.stateAfterMove;
+                        game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+                    });
                 }, 2000);
             }
             else {

@@ -131,20 +131,24 @@ module game {
         let width = gameArea.clientWidth / gameLogic.COLS;
         let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
         
-        rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         let tmp = "";
         currentUpdateUI.move.stateAfterMove.delta.forEach(function(entry) {
             let  x = entry.col * width + width / 2;
             let  y = entry.row * height + height / 2;
             tmp = tmp+x+","+y+" ";
         });
-        rline.setAttribute("points", tmp);
+        $rootScope.$apply(function () {
+          rline.setAttribute("points", tmp);
+          rline.setAttribute("style", "fill:none;stroke:#FF7F50;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        });
         // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         setTimeout(function(){
-          rline.setAttribute("points", "");
-          rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-          animationEndedTimeout = $timeout(animationEndedCallback, 2000);
-          state = currentUpdateUI.move.stateAfterMove;
+          $rootScope.$apply(function () {
+            rline.setAttribute("points", "");
+            rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+            state = currentUpdateUI.move.stateAfterMove;
+            animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+          });
         },2000);
       }
       else{
