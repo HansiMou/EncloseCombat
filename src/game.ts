@@ -88,7 +88,7 @@ module game {
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+    rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
     let tmp = "";
     let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
     nextAIMove.stateAfterMove.delta.forEach(function(entry) {
@@ -124,14 +124,14 @@ module game {
       // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
       maybeSendComputerMove(params);
     } else {
-      if (!isMyTurn && currentUpdateUI.playMode !== "passAndPlay"){
-
+      log.info("try me", isMyTurn());
+      if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
         let rline = document.getElementById("rline");
         let gameArea = document.getElementById("gameArea");
         let width = gameArea.clientWidth / gameLogic.COLS;
         let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
         
-        rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 9s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         let tmp = "";
         let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
         currentUpdateUI.move.stateAfterMove.delta.forEach(function(entry) {

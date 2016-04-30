@@ -426,7 +426,7 @@ var game;
                 zh: "关闭",
             },
             LEFT_TURNS: {
-                en: "Left turns",
+                en: "Turns left",
                 zh: "剩余回合",
             },
             PLAYER: {
@@ -453,7 +453,7 @@ var game;
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         var tmp = "";
         var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
         nextAIMove.stateAfterMove.delta.forEach(function (entry) {
@@ -487,12 +487,13 @@ var game;
             maybeSendComputerMove(params);
         }
         else {
-            if (!isMyTurn && game.currentUpdateUI.playMode !== "passAndPlay") {
+            log.info("try me", isMyTurn());
+            if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
                 var rline_1 = document.getElementById("rline");
                 var gameArea_1 = document.getElementById("gameArea");
                 var width_1 = gameArea_1.clientWidth / gameLogic.COLS;
                 var height_1 = gameArea_1.clientHeight * 0.9 / gameLogic.ROWS;
-                rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+                rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 9s linear;stroke-width:1.5%; stroke-opacity: 0.7");
                 var tmp = "";
                 var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
                 game.currentUpdateUI.move.stateAfterMove.delta.forEach(function (entry) {
