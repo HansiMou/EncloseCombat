@@ -113,20 +113,20 @@ var game;
             maybeSendComputerMove(params);
         }
         else {
-            log.info("try me", isMyTurn());
             if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
+                log.info("try me", isMyTurn());
                 var rline_1 = document.getElementById("rline");
                 var gameArea_1 = document.getElementById("gameArea");
                 var width_1 = gameArea_1.clientWidth / gameLogic.COLS;
                 var height_1 = gameArea_1.clientHeight * 0.9 / gameLogic.ROWS;
-                rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 9s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+                rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
                 var tmp = "";
-                var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
                 game.currentUpdateUI.move.stateAfterMove.delta.forEach(function (entry) {
                     var x = entry.col * width_1 + width_1 / 2;
                     var y = entry.row * height_1 + height_1 / 2;
                     tmp = tmp + x + "," + y + " ";
                 });
+                rline_1.setAttribute("points", tmp);
                 // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 setTimeout(function () {
                     rline_1.setAttribute("points", "");
