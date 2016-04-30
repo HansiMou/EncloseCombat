@@ -242,14 +242,14 @@ module game {
 
   export function shouldSlowlyAppear(row: number, col: number): boolean {
     let b: boolean = false;
-    if (currentUpdateUI.move.stateAfterMove.delta !== null){
+    if (currentUpdateUI.move.stateAfterMove.delta!== undefined && currentUpdateUI.move.stateAfterMove.delta !== null){
         for (let i = 0; i < currentUpdateUI.move.stateAfterMove.delta.length; i++) {
             if (currentUpdateUI.move.stateAfterMove.delta[i].row >= row && currentUpdateUI.move.stateAfterMove.delta[i].col === col) {
                 b = true;
             }
         }
     }
-    return !animationEnded &&
+    return !animationEnded && currentUpdateUI.move.stateAfterMove.delta!== undefined && 
         currentUpdateUI.move.stateAfterMove.delta && b;
   }
 

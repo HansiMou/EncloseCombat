@@ -603,14 +603,14 @@ var game;
     game.isPieceX = isPieceX;
     function shouldSlowlyAppear(row, col) {
         var b = false;
-        if (game.currentUpdateUI.move.stateAfterMove.delta !== null) {
+        if (game.currentUpdateUI.move.stateAfterMove.delta !== undefined && game.currentUpdateUI.move.stateAfterMove.delta !== null) {
             for (var i = 0; i < game.currentUpdateUI.move.stateAfterMove.delta.length; i++) {
                 if (game.currentUpdateUI.move.stateAfterMove.delta[i].row >= row && game.currentUpdateUI.move.stateAfterMove.delta[i].col === col) {
                     b = true;
                 }
             }
         }
-        return !game.animationEnded &&
+        return !game.animationEnded && game.currentUpdateUI.move.stateAfterMove.delta !== undefined &&
             game.currentUpdateUI.move.stateAfterMove.delta && b;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
