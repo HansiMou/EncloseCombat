@@ -499,18 +499,14 @@ var game;
                     var y = entry.row * height_1 + height_1 / 2;
                     tmp = tmp + x + "," + y + " ";
                 });
-                $rootScope.$apply(function () {
-                    rline_1.setAttribute("points", tmp);
-                    rline_1.setAttribute("style", "fill:none;stroke:#FF7F50;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-                });
+                rline_1.setAttribute("points", tmp);
+                rline_1.setAttribute("style", "fill:none;stroke:#FF7F50;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
                 // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 setTimeout(function () {
-                    $rootScope.$apply(function () {
-                        rline_1.setAttribute("points", "");
-                        rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-                        game.state = game.currentUpdateUI.move.stateAfterMove;
-                        game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
-                    });
+                    rline_1.setAttribute("points", "");
+                    rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+                    game.state = game.currentUpdateUI.move.stateAfterMove;
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
                 }, 2000);
             }
             else {

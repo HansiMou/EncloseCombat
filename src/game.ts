@@ -137,18 +137,14 @@ module game {
             let  y = entry.row * height + height / 2;
             tmp = tmp+x+","+y+" ";
         });
-        $rootScope.$apply(function () {
-          rline.setAttribute("points", tmp);
-          rline.setAttribute("style", "fill:none;stroke:#FF7F50;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-        });
+        rline.setAttribute("points", tmp);
+        rline.setAttribute("style", "fill:none;stroke:#FF7F50;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         setTimeout(function(){
-          $rootScope.$apply(function () {
-            rline.setAttribute("points", "");
-            rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-            state = currentUpdateUI.move.stateAfterMove;
-            animationEndedTimeout = $timeout(animationEndedCallback, 1000);
-          });
+          rline.setAttribute("points", "");
+          rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+          state = currentUpdateUI.move.stateAfterMove;
+          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         },2000);
       }
       else{
