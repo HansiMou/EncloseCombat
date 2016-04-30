@@ -15,6 +15,7 @@ var gameLogic;
                 board[i][j] = getRandomColor();
             }
         }
+        gameLogic.initialboard = board;
         return board;
     }
     /** Between 1 to num_of_colors, a random number is chosen and return a corresponding color */

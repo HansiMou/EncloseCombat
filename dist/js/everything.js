@@ -15,6 +15,7 @@ var gameLogic;
                 board[i][j] = getRandomColor();
             }
         }
+        gameLogic.initialboard = board;
         return board;
     }
     /** Between 1 to num_of_colors, a random number is chosen and return a corresponding color */
@@ -479,6 +480,7 @@ var game;
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
         clearAnimationTimeout();
+        log.info(params.stateBeforeMove);
         if (isFirstMove()) {
             game.state = gameLogic.getInitialState();
             // This is the first move in the match, so
@@ -489,7 +491,7 @@ var game;
         else {
             if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
                 if (params !== undefined && params.stateBeforeMove !== undefined)
-                    game.state = params.stateBeforeMove;
+                    game.state.board = params.stateBeforeMove ? params.stateBeforeMove.board : gameLogic.initialboard;
                 var rline_1 = document.getElementById("rline");
                 var gameArea_1 = document.getElementById("gameArea");
                 var width_1 = gameArea_1.clientWidth / gameLogic.COLS;
