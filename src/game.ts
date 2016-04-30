@@ -63,7 +63,7 @@ module game {
         zh: "关闭",
       },
       LEFT_TURNS: {
-        en: "Left turns",
+        en: "Turns left",
         zh: "剩余回合",
       },
       PLAYER: {
