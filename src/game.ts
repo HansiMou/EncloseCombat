@@ -125,7 +125,7 @@ module game {
     } else {
       if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
         // state = params.stateBeforeMove;
-        log.info("try me", isMyTurn());
+        log.info("try me", params.stateBeforeMove);
         let rline = document.getElementById("rline");
         let gameArea = document.getElementById("gameArea");
         let width = gameArea.clientWidth / gameLogic.COLS;
