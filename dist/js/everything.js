@@ -397,11 +397,6 @@ var game;
             checkMoveOk: gameLogic.checkMoveOkNoOp,
             updateUI: updateUI
         });
-        // See http://www.sitepoint.com/css3-animation-javascript-event-handlers/
-        document.addEventListener("animationend", animationEndedCallback, false); // standard
-        document.addEventListener("webkitAnimationEnd", animationEndedCallback, false); // WebKit
-        document.addEventListener("oanimationend", animationEndedCallback, false); // Opera
-        setTimeout(animationEndedCallback, 1000); // Just in case animationEnded is not fired by some browser.
         var w = window;
         if (w["HTMLInspector"]) {
             setInterval(function () {
@@ -440,28 +435,45 @@ var game;
             }
         };
     }
-    function animationEndedCallback() {
+    function animationEndedCallback(params) {
         log.info("Hi");
         $rootScope.$apply(function () {
             log.info("Animation ended");
             game.animationEnded = true;
-            maybeSendComputerMove();
+            maybeSendComputerMove(params);
         });
     }
-    function maybeSendComputerMove() {
+    function maybeSendComputerMove(params) {
         if (!isComputerTurn()) {
             return;
         }
         log.info("computer");
         game.didMakeMove = true;
-        moveService.makeMove(aiService.findSimplyComputerMove(game.currentUpdateUI.move));
+        var rline = document.getElementById("rline");
+        var gameArea = document.getElementById("gameArea");
+        var width = gameArea.clientWidth / gameLogic.COLS;
+        var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
+        rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        var tmp = "";
+        var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
+        nextAIMove.stateAfterMove.delta.forEach(function (entry) {
+            var x = entry.col * width + width / 2;
+            var y = entry.row * height + height / 2;
+            tmp = tmp + x + "," + y + " ";
+        });
+        // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("points", tmp);
+        setTimeout(function () {
+            rline.setAttribute("points", "");
+            rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+            moveService.makeMove(nextAIMove);
+        }, 2000);
     }
     function updateUI(params) {
         log.info("Game got updateUI???:", params);
         game.animationEnded = false;
         game.didMakeMove = false; // Only one move per updateUI
         game.currentUpdateUI = params;
-        log.info("Game got up1", isComputerTurn());
         var rline = document.getElementById("rline");
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
@@ -472,35 +484,34 @@ var game;
             // This is the first move in the match, so
             // there is not going to be an animation, so
             // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
-            maybeSendComputerMove();
+            maybeSendComputerMove(params);
         }
         else {
-            rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-            var tmp = "";
-            params.move.stateAfterMove.delta.forEach(function (entry) {
-                var x = entry.col * width + width / 2;
-                var y = entry.row * height + height / 2;
-                tmp = tmp + x + "," + y + " ";
-            });
-            if ((!isComputerTurn() || !isMyTurn) && game.currentUpdateUI.playMode !== "passAndPlay") {
-                rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
-                rline.setAttribute("points", tmp);
-            }
-            if ((!isComputerTurn() || !isMyTurn) && game.currentUpdateUI.playMode !== "passAndPlay") {
-                $timeout(function () {
-                    $rootScope.$apply(function () {
-                        rline.setAttribute("points", "");
-                        rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-                        game.state = game.currentUpdateUI.move.stateAfterMove;
-                        game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
-                    });
-                }, 1000);
+            if (!isMyTurn && game.currentUpdateUI.playMode !== "passAndPlay") {
+                var rline_1 = document.getElementById("rline");
+                var gameArea_1 = document.getElementById("gameArea");
+                var width_1 = gameArea_1.clientWidth / gameLogic.COLS;
+                var height_1 = gameArea_1.clientHeight * 0.9 / gameLogic.ROWS;
+                rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+                var tmp = "";
+                var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
+                game.currentUpdateUI.move.stateAfterMove.delta.forEach(function (entry) {
+                    var x = entry.col * width_1 + width_1 / 2;
+                    var y = entry.row * height_1 + height_1 / 2;
+                    tmp = tmp + x + "," + y + " ";
+                });
+                // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
+                setTimeout(function () {
+                    rline_1.setAttribute("points", "");
+                    rline_1.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, 2000);
+                    game.state = game.currentUpdateUI.move.stateAfterMove;
+                }, 2000);
             }
             else {
                 game.state = game.currentUpdateUI.move.stateAfterMove;
                 game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
             }
-            log.info("Game got up2", isComputerTurn());
         }
     }
     function clearAnimationTimeout() {

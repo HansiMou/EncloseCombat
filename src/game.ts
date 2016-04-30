@@ -14,7 +14,7 @@ module game {
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
   export let msg = "";
-  export let animationEndedTimeout: ng.IPromise<any> = null;
+  export let animationEndedTimeout: any = null;
   
   export function init() {
     translate.setTranslations(getTranslations());
@@ -27,12 +27,6 @@ module game {
       checkMoveOk: gameLogic.checkMoveOkNoOp,
       updateUI: updateUI
     });
-
-    // See http://www.sitepoint.com/css3-animation-javascript-event-handlers/
-    document.addEventListener("animationend", animationEndedCallback, false); // standard
-    document.addEventListener("webkitAnimationEnd", animationEndedCallback, false); // WebKit
-    document.addEventListener("oanimationend", animationEndedCallback, false); // Opera
-    setTimeout(animationEndedCallback, 1000); // Just in case animationEnded is not fired by some browser.
 
     let w: any = window;
     if (w["HTMLInspector"]) {
@@ -73,25 +67,43 @@ module game {
     };
   }
 
-  function animationEndedCallback() {
+  function animationEndedCallback(params: IUpdateUI) {
     log.info("Hi");
     $rootScope.$apply(function () {
       log.info("Animation ended");
       animationEnded = true;
-      maybeSendComputerMove();
+      maybeSendComputerMove(params);
     });
   }
 
-  function maybeSendComputerMove() {
+  function maybeSendComputerMove(params: IUpdateUI) {
     if (!isComputerTurn()) {
       return;
     }
     log.info("computer");
     didMakeMove = true;
     
+    let rline = document.getElementById("rline");
+    let gameArea = document.getElementById("gameArea");
+    let width = gameArea.clientWidth / gameLogic.COLS;
+    let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
+    rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+    let tmp = "";
+    let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
+    nextAIMove.stateAfterMove.delta.forEach(function(entry) {
+        let  x = entry.col * width + width / 2;
+        let  y = entry.row * height + height / 2;
+        tmp = tmp+x+","+y+" ";
+    });
+    // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
+    rline.setAttribute("points", tmp);    
+    setTimeout(function(){
+      rline.setAttribute("points", "");
+      rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+      moveService.makeMove(nextAIMove);
+    },2000);
     
-    moveService.makeMove(aiService.findSimplyComputerMove(currentUpdateUI.move));
   }
 
   function updateUI(params: IUpdateUI): void {
@@ -99,7 +111,6 @@ module game {
     animationEnded = false;
     didMakeMove = false; // Only one move per updateUI
     currentUpdateUI = params;
-    log.info("Game got up1", isComputerTurn());
     let rline = document.getElementById("rline");
     let gameArea = document.getElementById("gameArea");
     let width = gameArea.clientWidth / gameLogic.COLS;
@@ -111,35 +122,35 @@ module game {
       // This is the first move in the match, so
       // there is not going to be an animation, so
       // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
-      maybeSendComputerMove();
+      maybeSendComputerMove(params);
     } else {
-      rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 20;animation: dash 5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-      let tmp = "";
-      params.move.stateAfterMove.delta.forEach(function(entry) {
-          let  x = entry.col * width + width / 2;
-          let  y = entry.row * height + height / 2;
-          tmp = tmp+x+","+y+" ";
-      });
-      if ((!isComputerTurn() || !isMyTurn) && currentUpdateUI.playMode !== "passAndPlay"){
-        rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
-        rline.setAttribute("points", tmp);    
-      }
-      
-      if ((!isComputerTurn() || !isMyTurn)&& currentUpdateUI.playMode !== "passAndPlay"){
-        $timeout(function(){
-          $rootScope.$apply(function () {
-            rline.setAttribute("points", "");
-            rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
-            state = currentUpdateUI.move.stateAfterMove;
-            animationEndedTimeout = $timeout(animationEndedCallback, 1000);
-          });
-        },1000);
+      if (!isMyTurn && currentUpdateUI.playMode !== "passAndPlay"){
+
+        let rline = document.getElementById("rline");
+        let gameArea = document.getElementById("gameArea");
+        let width = gameArea.clientWidth / gameLogic.COLS;
+        let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
+        
+        rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-dasharray: 5;animation: dash 1s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        let tmp = "";
+        let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
+        currentUpdateUI.move.stateAfterMove.delta.forEach(function(entry) {
+            let  x = entry.col * width + width / 2;
+            let  y = entry.row * height + height / 2;
+            tmp = tmp+x+","+y+" ";
+        });
+        // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
+        setTimeout(function(){
+          rline.setAttribute("points", "");
+          rline.setAttribute("style", "fill:none;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0");
+          animationEndedTimeout = $timeout(animationEndedCallback, 2000);
+          state = currentUpdateUI.move.stateAfterMove;
+        },2000);
       }
       else{
-          state = currentUpdateUI.move.stateAfterMove;
-          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+        state = currentUpdateUI.move.stateAfterMove;
+        animationEndedTimeout = $timeout(animationEndedCallback, 1000);
       }
-      log.info("Game got up2", isComputerTurn());
       // We calculate the AI move only after the animation finishes,
       // because if we call aiService now
       // then the animation will be paused until the javascript finishes.
