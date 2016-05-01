@@ -88,7 +88,7 @@ module game {
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    rline.setAttribute("style", "fill:none;stroke:green;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+    rline.setAttribute("style", "fill:none;stroke:red;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
     let tmp = "";
     let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
     nextAIMove.stateAfterMove.delta.forEach(function(entry) {
@@ -103,7 +103,6 @@ module game {
       // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
       moveService.makeMove(nextAIMove);
     },2000);
-    
   }
 
   function updateUI(params: IUpdateUI): void {
@@ -131,7 +130,7 @@ module game {
           state.delta = [];
         }
         else{
-          if (params.move.stateAfterMove.intialboard) 
+          if (!params.move.stateAfterMove.intialboard) 
             log.info("wtf", params);
           state.board = params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board;
           state.delta = [];
