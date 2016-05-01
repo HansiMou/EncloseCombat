@@ -248,7 +248,7 @@ var gameLogic;
             delta: moves,
             current_turn: stateBeforeMove.current_turn + 1,
             scores: scores,
-            intialboard: stateBeforeMove.intialboard,
+            intialboard: angular.copy(stateBeforeMove.intialboard),
         };
         var winner = getWinner(stateAfterMove);
         var endMatchScores;
@@ -455,7 +455,7 @@ var game;
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        rline.setAttribute("style", "fill:none;stroke:red;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:green;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         var tmp = "";
         var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
         nextAIMove.stateAfterMove.delta.forEach(function (entry) {

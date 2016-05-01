@@ -248,7 +248,7 @@ var gameLogic;
             delta: moves,
             current_turn: stateBeforeMove.current_turn + 1,
             scores: scores,
-            intialboard: stateBeforeMove.intialboard,
+            intialboard: angular.copy(stateBeforeMove.intialboard),
         };
         var winner = getWinner(stateAfterMove);
         var endMatchScores;
