@@ -461,7 +461,7 @@ var game;
         var scorenotice = document.getElementById("scorenotice");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        rline.setAttribute("style", "fill:none;;stroke:blue;stroke-dasharray: 5;stroke-width:2.0%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;;stroke:red;stroke-dasharray: 5;stroke-width:2.0%; stroke-opacity: 0.7");
         var tmp = "";
         var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
         nextAIMove.stateAfterMove.delta.forEach(function (entry) {

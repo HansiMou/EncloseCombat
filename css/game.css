@@ -95,6 +95,7 @@ color: black; font-size: 0.9em;}
 .scoreNotice {
   animation: moveUpAndFade 1s ease-out;
   -webkit-animation: moveUpAndFade 1s ease-out;
+  -webkit-transform: translate3d(0,0,0);
 }
 @keyframes moveUpAndFade {
   from {opacity: 1; position:absolute; top:25%; left:25%; width:50%;height:50%}

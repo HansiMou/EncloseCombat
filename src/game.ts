@@ -90,7 +90,7 @@ module game {
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    rline.setAttribute("style", "fill:none;;stroke:blue;stroke-dasharray: 5;stroke-width:2.0%; stroke-opacity: 0.7");
+    rline.setAttribute("style", "fill:none;;stroke:red;stroke-dasharray: 5;stroke-width:2.0%; stroke-opacity: 0.7");
     let tmp = "";
     let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
     nextAIMove.stateAfterMove.delta.forEach(function(entry) {
