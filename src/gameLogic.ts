@@ -297,12 +297,16 @@ module gameLogic {
     let scores: number[] = angular.copy(stateBeforeMove.scores);
     scores[turnIndexBeforeMove] += tmp.score;
     
+    let tmpp = angular.copy(stateBeforeMove.intialboard? stateBeforeMove.intialboard : stateBeforeMove.board);
+    if (!stateBeforeMove.intialboard){
+        log.info("wtf2", stateBeforeMove);
+    }
     let stateAfterMove: IState = {
         board: boardAfterMove,
         delta: moves,
         current_turn: stateBeforeMove.current_turn+1,
         scores: scores,
-        intialboard: angular.copy(stateBeforeMove.intialboard),
+        intialboard: tmpp,
     };
     
     let winner = getWinner(stateAfterMove);

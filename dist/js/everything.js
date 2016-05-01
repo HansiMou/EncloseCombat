@@ -243,12 +243,16 @@ var gameLogic;
         /**Get the updated scores */
         var scores = angular.copy(stateBeforeMove.scores);
         scores[turnIndexBeforeMove] += tmp.score;
+        var tmpp = angular.copy(stateBeforeMove.intialboard ? stateBeforeMove.intialboard : stateBeforeMove.board);
+        if (!stateBeforeMove.intialboard) {
+            log.info("wtf2", stateBeforeMove);
+        }
         var stateAfterMove = {
             board: boardAfterMove,
             delta: moves,
             current_turn: stateBeforeMove.current_turn + 1,
             scores: scores,
-            intialboard: angular.copy(stateBeforeMove.intialboard),
+            intialboard: tmpp,
         };
         var winner = getWinner(stateAfterMove);
         var endMatchScores;
