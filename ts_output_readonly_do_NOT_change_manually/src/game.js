@@ -79,7 +79,7 @@ var game;
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        rline.setAttribute("style", "fill:none;stroke:white;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:green;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         var tmp = "";
         var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
         nextAIMove.stateAfterMove.delta.forEach(function (entry) {
@@ -120,8 +120,9 @@ var game;
                     game.state.delta = [];
                 }
                 else {
-                    // state.board = angular.copy(params.move.stateAfterMove.intialboard);
-                    log.info("wth3", game.state.intialboard);
+                    if (params.move.stateAfterMove.intialboard)
+                        log.info("wtf", params);
+                    game.state.board = params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board;
                     game.state.delta = [];
                     game.state.current_turn = 0;
                     game.state.scores = [0, 0];
@@ -143,7 +144,7 @@ var game;
                     rline_1.setAttribute("points", "");
                     // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
                     game.state = game.currentUpdateUI.move.stateAfterMove;
-                    game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, 0);
                 }, 2000);
             }
             else {

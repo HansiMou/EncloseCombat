@@ -133,8 +133,7 @@
           id="{{'e2e_test_div_' + row + 'x' + col}}">
         <div style="width:100%; height: 100%; "
             id="{{'e2e_test_pieceGG_' + row + 'x' + col}}"
-            ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col)}"
-            ng-if="game.shouldShowImage(row, col)">
+            ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col)}">
             
           <svg ng-if="game.isPieceR(row, col)"
               width="100%" height="100%">

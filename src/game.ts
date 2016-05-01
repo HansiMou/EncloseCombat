@@ -88,7 +88,7 @@ module game {
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    rline.setAttribute("style", "fill:none;stroke:white;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+    rline.setAttribute("style", "fill:none;stroke:green;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
     let tmp = "";
     let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
     nextAIMove.stateAfterMove.delta.forEach(function(entry) {
@@ -131,8 +131,9 @@ module game {
           state.delta = [];
         }
         else{
-          // state.board = angular.copy(params.move.stateAfterMove.intialboard);
-          log.info("wth3", state.intialboard);
+          if (params.move.stateAfterMove.intialboard) 
+            log.info("wtf", params);
+          state.board = params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board;
           state.delta = [];
           state.current_turn = 0;
           state.scores = [0, 0];
@@ -156,7 +157,7 @@ module game {
           rline.setAttribute("points", "");
           // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
           state = currentUpdateUI.move.stateAfterMove;
-          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+          animationEndedTimeout = $timeout(animationEndedCallback, 0);
         },2000);
       }
       else{
