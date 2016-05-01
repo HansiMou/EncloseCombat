@@ -103,9 +103,9 @@
     </svg>
     
     <!--show the score you or opponent got-->
-    <svg id="scorenotice" top="50%" width="100%" height="100%" ng-class="{scoreNotice: game.shouldShowScore(), myScoreText:true}"
-        style="display:block; position:absolute; z-index: 40;"  opacity="0">
-      <text x="50%" y="50%"  text-anchor="middle" font-size="7em" opacity="1">
+    <svg id="scorenotice" top="100%" width="100%" height="100%"
+        style="display:block; position:absolute; z-index: 40;"  opacity="1">
+      <text x="50%" y="50%"  text-anchor="middle" font-size="7em" ng-show="!game.animationEnded && game.getScores()!==0" ng-class="{scoreNotice: game.shouldShowScore(), opponentScore:true}">
         +{{game.getScores()}}
       </text>
     </svg>
