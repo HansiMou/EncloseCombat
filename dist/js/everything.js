@@ -455,7 +455,7 @@ var game;
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        rline.setAttribute("style", "fill:none;stroke:white;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:green;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         var tmp = "";
         var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
         nextAIMove.stateAfterMove.delta.forEach(function (entry) {
@@ -602,16 +602,17 @@ var game;
     }
     game.isPieceX = isPieceX;
     function shouldSlowlyAppear(row, col) {
-        var b = false;
-        if (game.currentUpdateUI.move.stateAfterMove.delta !== undefined && game.currentUpdateUI.move.stateAfterMove.delta !== null) {
-            for (var i = 0; i < game.currentUpdateUI.move.stateAfterMove.delta.length; i++) {
-                if (game.currentUpdateUI.move.stateAfterMove.delta[i].row >= row && game.currentUpdateUI.move.stateAfterMove.delta[i].col === col) {
-                    b = true;
-                }
-            }
-        }
-        return !game.animationEnded && game.currentUpdateUI.move.stateAfterMove.delta !== undefined &&
-            game.currentUpdateUI.move.stateAfterMove.delta && b;
+        // let b: boolean = false;
+        // if (state.delta !== null){
+        //     for (let i = 0; i < state.delta.length; i++) {
+        //         if (state.delta[i].row >= row && state.delta[i].col === col) {
+        //             b = true;
+        //         }
+        //     }
+        // }
+        // return !animationEnded &&
+        //     state.delta && b;
+        return true;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
     function clickedOnModal(evt) {
