@@ -88,7 +88,7 @@ module game {
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    rline.setAttribute("style", "fill:none;stroke:green;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+    rline.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
     let tmp = "";
     let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
     nextAIMove.stateAfterMove.delta.forEach(function(entry) {
@@ -125,12 +125,12 @@ module game {
       maybeSendComputerMove();
     } else {
       if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
-        if (params !== undefined && params.stateBeforeMove !== undefined){
+        if (params.stateBeforeMove !== undefined){
           state = params.stateBeforeMove;
           state.delta = [];
         }
         else{
-          state.board = angular.copy(params.stateBeforeMove.intialboard);
+          state.board = angular.copy(params.move.stateAfterMove.intialboard);
           state.delta = [];
           state.current_turn = 0;
           state.scores = [0, 0];
@@ -241,18 +241,16 @@ module game {
   }
 
   export function shouldSlowlyAppear(row: number, col: number): boolean {
-    // let b: boolean = false;
-    // if (state.delta !== null){
-    //     for (let i = 0; i < state.delta.length; i++) {
-    //         if (state.delta[i].row >= row && state.delta[i].col === col) {
-    //             b = true;
-    //         }
-    //     }
-    // }
-    // return !animationEnded &&
-    //     state.delta && b;
-    
-    return true;
+    let b: boolean = false;
+    if (state.delta !== null){
+        for (let i = 0; i < state.delta.length; i++) {
+            if (state.delta[i].row >= row && state.delta[i].col === col) {
+                b = true;
+            }
+        }
+    }
+    return !animationEnded &&
+        state.delta && b;
   }
 
   export function clickedOnModal(evt: Event) {

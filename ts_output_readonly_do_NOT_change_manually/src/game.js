@@ -79,7 +79,7 @@ var game;
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        rline.setAttribute("style", "fill:none;stroke:green;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         var tmp = "";
         var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
         nextAIMove.stateAfterMove.delta.forEach(function (entry) {
@@ -115,12 +115,12 @@ var game;
         }
         else {
             if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
-                if (params !== undefined && params.stateBeforeMove !== undefined) {
+                if (params.stateBeforeMove !== undefined) {
                     game.state = params.stateBeforeMove;
                     game.state.delta = [];
                 }
                 else {
-                    game.state.board = angular.copy(params.stateBeforeMove.intialboard);
+                    game.state.board = angular.copy(params.move.stateAfterMove.intialboard);
                     game.state.delta = [];
                     game.state.current_turn = 0;
                     game.state.scores = [0, 0];
@@ -226,17 +226,16 @@ var game;
     }
     game.isPieceX = isPieceX;
     function shouldSlowlyAppear(row, col) {
-        // let b: boolean = false;
-        // if (state.delta !== null){
-        //     for (let i = 0; i < state.delta.length; i++) {
-        //         if (state.delta[i].row >= row && state.delta[i].col === col) {
-        //             b = true;
-        //         }
-        //     }
-        // }
-        // return !animationEnded &&
-        //     state.delta && b;
-        return true;
+        var b = false;
+        if (game.state.delta !== null) {
+            for (var i = 0; i < game.state.delta.length; i++) {
+                if (game.state.delta[i].row >= row && game.state.delta[i].col === col) {
+                    b = true;
+                }
+            }
+        }
+        return !game.animationEnded &&
+            game.state.delta && b;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
     function clickedOnModal(evt) {
