@@ -98,6 +98,6 @@ color: black; font-size: 0.9em;}
   -webkit-transform: translate3d(0,0,0);
 }
 @keyframes moveUpAndFade {
-  from {opacity: 1; position:absolute; top:25%; left:25%; width:50%;height:50%}
-  to {opacity: 0; position:absolute; top:0%; left:25%;  width:50%;height:50%}
+  from {opacity: 1; position:absolute; top:25%;}
+  to {opacity: 0; position:absolute; top:0%}
 }
