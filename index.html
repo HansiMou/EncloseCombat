@@ -127,7 +127,7 @@
     
     <!--show the score you or opponent got-->
     <svg id="scorenotice" ng-class="{scoreNotice: game.shouldShowScore()}"
-        style="display:block; position:absolute; z-index: 40;"  opacity="0">
+        style="display:block; position:absolute; z-index: 40;"  opacity="1">
       <text x="50%" y="50%"  text-anchor="middle" opacity="1" font-size="7em">
         +{{game.getScores()}}
       </text>
