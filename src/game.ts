@@ -15,6 +15,7 @@ module game {
   export let moves: BoardDelta[] = new Array();
   export let msg = "";
   export let animationEndedTimeout: any = null;
+  export let ismyscore = 0;
   
   export function init() {
     translate.setTranslations(getTranslations());
@@ -85,10 +86,11 @@ module game {
     
     let rline = document.getElementById("rline");
     let gameArea = document.getElementById("gameArea");
+    let scorenotice = document.getElementById("scorenotice");
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    rline.setAttribute("style", "fill=black;fill-opacity=0.4;stroke:black;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:2.5%; stroke-opacity: 0.7");
+    rline.setAttribute("style", "fill:none;;stroke:blue;stroke-dasharray: 5;stroke-width:2.0%; stroke-opacity: 0.7");
     let tmp = "";
     let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
     nextAIMove.stateAfterMove.delta.forEach(function(entry) {
@@ -98,6 +100,7 @@ module game {
     });
     // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
     rline.setAttribute("points", tmp);    
+    scorenotice.setAttribute("z-index", "50");
     setTimeout(function(){
       rline.setAttribute("points", "");
       // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
@@ -150,7 +153,7 @@ module game {
             tmp = tmp+x+","+y+" ";
         });
         rline.setAttribute("points", tmp);
-        rline.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;stroke:blue;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
         // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         setTimeout(function(){
           rline.setAttribute("points", "");
@@ -221,7 +224,21 @@ module game {
       return;
     }
   }
-
+  export function getScores(){
+    let afterscoresum = 0;
+    if (currentUpdateUI.move.stateAfterMove){
+      afterscoresum += currentUpdateUI.move.stateAfterMove.scores[0]+currentUpdateUI.move.stateAfterMove.scores[1];
+    }
+    let beforescoresum = 0;
+    if (currentUpdateUI.stateBeforeMove){
+      beforescoresum += currentUpdateUI.stateBeforeMove.scores[0]+currentUpdateUI.stateBeforeMove.scores[1];
+    }
+    return afterscoresum-beforescoresum;
+  }
+  
+  export function shouldShowScore() {
+    return !animationEnded && getScores() !== 0;
+  }
   export function shouldShowImage(row: number, col: number): boolean {
     return true;
   }

@@ -392,6 +392,7 @@ var game;
     game.moves = new Array();
     game.msg = "";
     game.animationEndedTimeout = null;
+    game.ismyscore = 0;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -457,9 +458,10 @@ var game;
         game.didMakeMove = true;
         var rline = document.getElementById("rline");
         var gameArea = document.getElementById("gameArea");
+        var scorenotice = document.getElementById("scorenotice");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        rline.setAttribute("style", "fill=black;fill-opacity=0.4;stroke:black;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:2.5%; stroke-opacity: 0.7");
+        rline.setAttribute("style", "fill:none;;stroke:blue;stroke-dasharray: 5;stroke-width:2.0%; stroke-opacity: 0.7");
         var tmp = "";
         var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
         nextAIMove.stateAfterMove.delta.forEach(function (entry) {
@@ -469,6 +471,7 @@ var game;
         });
         // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         rline.setAttribute("points", tmp);
+        scorenotice.setAttribute("z-index", "50");
         setTimeout(function () {
             rline.setAttribute("points", "");
             // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
@@ -518,7 +521,7 @@ var game;
                     tmp = tmp + x + "," + y + " ";
                 });
                 rline_1.setAttribute("points", tmp);
-                rline_1.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+                rline_1.setAttribute("style", "fill:none;stroke:blue;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
                 // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 setTimeout(function () {
                     rline_1.setAttribute("points", "");
@@ -587,6 +590,22 @@ var game;
         }
     }
     game.cellPressedUp = cellPressedUp;
+    function getScores() {
+        var afterscoresum = 0;
+        if (game.currentUpdateUI.move.stateAfterMove) {
+            afterscoresum += game.currentUpdateUI.move.stateAfterMove.scores[0] + game.currentUpdateUI.move.stateAfterMove.scores[1];
+        }
+        var beforescoresum = 0;
+        if (game.currentUpdateUI.stateBeforeMove) {
+            beforescoresum += game.currentUpdateUI.stateBeforeMove.scores[0] + game.currentUpdateUI.stateBeforeMove.scores[1];
+        }
+        return afterscoresum - beforescoresum;
+    }
+    game.getScores = getScores;
+    function shouldShowScore() {
+        return !game.animationEnded && getScores() !== 0;
+    }
+    game.shouldShowScore = shouldShowScore;
     function shouldShowImage(row, col) {
         return true;
     }
