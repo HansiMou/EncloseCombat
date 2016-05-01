@@ -88,7 +88,7 @@ module game {
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    rline.setAttribute("style", "fill:none;stroke:black;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+    rline.setAttribute("style", "fill:none;stroke:white;stroke-dasharray: 5;animation: dash 1.5s linear;stroke-width:1.5%; stroke-opacity: 0.7");
     let tmp = "";
     let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
     nextAIMove.stateAfterMove.delta.forEach(function(entry) {
@@ -119,6 +119,7 @@ module game {
     log.info(params.stateBeforeMove);
     if (isFirstMove()) {
       state = gameLogic.getInitialState();
+      
       // This is the first move in the match, so
       // there is not going to be an animation, so
       // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
@@ -130,7 +131,8 @@ module game {
           state.delta = [];
         }
         else{
-          state.board = angular.copy(params.move.stateAfterMove.intialboard);
+          // state.board = angular.copy(params.move.stateAfterMove.intialboard);
+          log.info("wth3", state.intialboard);
           state.delta = [];
           state.current_turn = 0;
           state.scores = [0, 0];
