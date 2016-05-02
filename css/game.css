@@ -173,7 +173,7 @@ td {
 }
 
 .movedown1 {
-  animation: movedown1 2s ease-in-out;
+  animation: movedown1 2s ease-in-out forwards;
 }
 
 .movedown2 {
