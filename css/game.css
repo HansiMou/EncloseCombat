@@ -157,49 +157,32 @@ td {
 
 .movedown1 {
   animation: movedown1 0.25s ease-in-out;
-  -webkit-animation: movedown1 0.25s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown2 {
   animation: movedown2 0.5s ease-in-out;
-  -webkit-animation: movedown2 0.5s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown3 {
   animation: movedown3 0.75s ease-in-out;
-  -webkit-animation: movedown3 0.75s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
-
 
 .movedown4 {
   animation: movedown4 1s ease-in-out;
-  -webkit-animation: movedown4 1s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown5 {
   animation: movedown5 1.25s ease-in-out;
-  -webkit-animation: movedown5 1.25s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown6 {
   animation: movedown6 1.5s ease-in-out;
-  -webkit-animation: movedown6 1.5s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown7 {
   animation: movedown7 1.75s ease-in-out;
-  -webkit-animation: movedown7 1.75s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown8 {
   animation: movedown8 2s ease-in-out;
-  -webkit-animation: movedown8 2s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
