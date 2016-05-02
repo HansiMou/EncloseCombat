@@ -390,6 +390,7 @@ var game;
     // simply typing in the console:
     // game.state
     game.currentUpdateUI = null;
+    game.animationEnded = false;
     game.didMakeMove = false; // You can only make one move per updateUI
     game.state = null;
     game.isHelpModalShown = false;
@@ -529,6 +530,7 @@ var game;
     function animationEndedCallback() {
         log.info("Hi");
         log.info("Animation ended");
+        game.animationEnded = true;
         maybeSendComputerMove();
     }
     function maybeSendComputerMove() {
@@ -561,6 +563,7 @@ var game;
     }
     function updateUI(params) {
         log.info("Game got updateUI???:", params);
+        game.animationEnded = false;
         game.didMakeMove = false; // Only one move per updateUI
         game.currentUpdateUI = params;
         var rline = document.getElementById("rline");
@@ -687,7 +690,7 @@ var game;
     }
     game.getScores = getScores;
     function shouldShowScore() {
-        return getScores() !== 0;
+        return !game.animationEnded && getScores() !== 0;
     }
     game.shouldShowScore = shouldShowScore;
     function shouldShowImage(row, col) {
@@ -734,7 +737,8 @@ var game;
                 }
             }
         }
-        return game.state.changed_delta && b;
+        return !game.animationEnded &&
+            game.state.changed_delta && b;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
     function getMoveDownClass(row, col) {
