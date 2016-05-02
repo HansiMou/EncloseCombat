@@ -10,7 +10,13 @@
 .slowlyAppear {
   animation: slowlyAppear 1s ease-in;
 }
-
+#gameArea {
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  -o-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+}
 
 @keyframes slowlyAppear {
   from {opacity: 0.1;}
@@ -154,42 +160,42 @@ td {
 }
 
 .movedown1 {
-  transform: translate3d(0,0,0);  
+  
   animation: movedown1 0.25s ease-in-out;
 }
 
 .movedown2 {
-  transform: translate3d(0,0,0);  
+  
   animation: movedown2 0.5s ease-in-out;
 }
 
 .movedown3 {
   animation: movedown3 0.75s ease-in-out;
-  transform: translate3d(0,0,0);  
+  
 }
 
 
 .movedown4 {
-  transform: translate3d(0,0,0);  
+  
   animation: movedown4 1s ease-in-out;
 }
 
 .movedown5 {
-  transform: translate3d(0,0,0);  
+  
   animation: movedown5 1.25s ease-in-out;
 }
 
 .movedown6 {
-  transform: translate3d(0,0,0);  
+  
   animation: movedown6 1.5s ease-in-out;
 }
 
 .movedown7 {
-  transform: translate3d(0,0,0);  
+  
   animation: movedown7 1.75s ease-in-out;
 }
 
 .movedown8 {
-  transform: translate3d(0,0,0);  
+  
   animation: movedown8 2s ease-in-out;
 }
