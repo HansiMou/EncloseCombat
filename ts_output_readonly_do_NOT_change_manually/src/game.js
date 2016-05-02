@@ -147,7 +147,7 @@ var game;
                     rline_1.setAttribute("points", "");
                     // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
                     game.state = game.currentUpdateUI.move.stateAfterMove;
-                    game.animationEndedTimeout = $timeout(animationEndedCallback, 0);
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
                 }, 2000);
             }
             else {
@@ -248,15 +248,15 @@ var game;
     game.isPieceX = isPieceX;
     function shouldSlowlyAppear(row, col) {
         var b = false;
-        if (game.state.delta !== null) {
-            for (var i = 0; i < game.state.delta.length; i++) {
-                if (game.state.delta[i].row >= row && game.state.delta[i].col === col) {
+        if (game.state.changed_delta !== null) {
+            for (var i = 0; i < game.state.changed_delta.length; i++) {
+                if (game.state.changed_delta[i].row >= row && game.state.changed_delta[i].col === col) {
                     b = true;
                 }
             }
         }
         return !game.animationEnded &&
-            game.state.delta && b;
+            game.state.changed_delta && b;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
     function clickedOnModal(evt) {

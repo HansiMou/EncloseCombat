@@ -159,7 +159,7 @@ module game {
           rline.setAttribute("points", "");
           // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
           state = currentUpdateUI.move.stateAfterMove;
-          animationEndedTimeout = $timeout(animationEndedCallback, 0);
+          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         },2000);
       }
       else{
@@ -261,15 +261,15 @@ module game {
 
   export function shouldSlowlyAppear(row: number, col: number): boolean {
     let b: boolean = false;
-    if (state.delta !== null){
-        for (let i = 0; i < state.delta.length; i++) {
-            if (state.delta[i].row >= row && state.delta[i].col === col) {
+    if (state.changed_delta !== null){
+        for (let i = 0; i < state.changed_delta.length; i++) {
+            if (state.changed_delta[i].row >= row && state.changed_delta[i].col === col) {
                 b = true;
             }
         }
     }
     return !animationEnded &&
-        state.delta && b;
+        state.changed_delta && b;
   }
 
   export function clickedOnModal(evt: Event) {

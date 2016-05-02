@@ -93,8 +93,8 @@ color: black; font-size: 0.9em;}
 }
 
 .scoreNotice {
-  animation: Fade 1s ease-out;
-  -webkit-animation: Fade 1s ease-out;
+  animation: Fade 1.5s ease-out;
+  -webkit-animation: Fade 1.5s ease-out;
   -webkit-transform: translate3d(0,0,0);
 }
 @keyframes Fade {
@@ -103,8 +103,8 @@ color: black; font-size: 0.9em;}
 }
 
 .scoreBox {
-  animation: moveup 1s ease-out;
-  -webkit-animation: moveup 1s ease-out;
+  animation: moveup 1.5s ease-out;
+  -webkit-animation: moveup 1.5s ease-out;
   -webkit-transform: translate3d(0,0,0);  
 }
 

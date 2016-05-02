@@ -15,14 +15,16 @@ interface IState {
   current_turn: number;
   scores: number[];
   intialboard: Board;
+  changed_delta: BoardDelta[];
 }
 interface Colrange {
     left: number;
     right: number;
 }
-interface ScoreAndBoard {
+interface ScoreAndBoardAndChangedArea {
     board: Board;
     score: number;
+    changed_delta: BoardDelta[];
 }
 
 interface ColorsAndFlag {
@@ -79,7 +81,7 @@ module gameLogic {
   /** Set the first turn to be 1, and the intial score for all players to be 0 */
   export function getInitialState(): IState {
     let ib = getInitialBoard();
-    return {board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), intialboard: angular.copy(ib)};
+    return {board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), intialboard: angular.copy(ib), changed_delta: null};
   }
 
   /**
@@ -135,10 +137,10 @@ module gameLogic {
         }
         return false;
     }
-  function getBoardAndScore(board: Board, moves: BoardDelta[]): ScoreAndBoard{
+  function getBoardAndScoreAndChangedArea(board: Board, moves: BoardDelta[]): ScoreAndBoardAndChangedArea{
       let score = 0;
       let boardAfterMove = board;
-      
+      let changed_delta: BoardDelta[] = [];
       let helper: boolean[][] = [];
       
       let cleanR = false;
@@ -208,6 +210,7 @@ module gameLogic {
                   helper[i][j] = true;
               }
               if (helper[i][j] === true){
+                  changed_delta.push({row: i, col: j});
                   score++;
               }
           }
@@ -224,7 +227,7 @@ module gameLogic {
               flag--;
           }
       }
-      return {score: score, board: boardAfterMove};
+      return {score: score, board: boardAfterMove, changed_delta: changed_delta};
   }
   function foundRangeOfCertainRow(moves: BoardDelta[], row: number): Colrange{
       let left = 100;
@@ -285,7 +288,7 @@ module gameLogic {
     
     // TODO: to refill the board
     let boardAfterMove = angular.copy(board);
-    let tmp = getBoardAndScore(boardAfterMove, moves);
+    let tmp =getBoardAndScoreAndChangedArea(boardAfterMove, moves);
     boardAfterMove = tmp.board;
     
     while (!CheckMovesAvaiable(boardAfterMove)){
@@ -307,6 +310,7 @@ module gameLogic {
         current_turn: stateBeforeMove.current_turn+1,
         scores: scores,
         intialboard: tmpp,
+        changed_delta: angular.copy(tmp.changed_delta),
     };
     
     let winner = getWinner(stateAfterMove);

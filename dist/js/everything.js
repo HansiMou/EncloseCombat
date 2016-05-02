@@ -43,7 +43,7 @@ var gameLogic;
     /** Set the first turn to be 1, and the intial score for all players to be 0 */
     function getInitialState() {
         var ib = getInitialBoard();
-        return { board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), intialboard: angular.copy(ib) };
+        return { board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), intialboard: angular.copy(ib), changed_delta: null };
     }
     gameLogic.getInitialState = getInitialState;
     /**
@@ -97,9 +97,10 @@ var gameLogic;
         }
         return false;
     }
-    function getBoardAndScore(board, moves) {
+    function getBoardAndScoreAndChangedArea(board, moves) {
         var score = 0;
         var boardAfterMove = board;
+        var changed_delta = [];
         var helper = [];
         var cleanR = false;
         var cleanG = false;
@@ -165,6 +166,7 @@ var gameLogic;
                     helper[i][j] = true;
                 }
                 if (helper[i][j] === true) {
+                    changed_delta.push({ row: i, col: j });
                     score++;
                 }
             }
@@ -180,7 +182,7 @@ var gameLogic;
                 flag--;
             }
         }
-        return { score: score, board: boardAfterMove };
+        return { score: score, board: boardAfterMove, changed_delta: changed_delta };
     }
     function foundRangeOfCertainRow(moves, row) {
         var left = 100;
@@ -234,7 +236,7 @@ var gameLogic;
         }
         // TODO: to refill the board
         var boardAfterMove = angular.copy(board);
-        var tmp = getBoardAndScore(boardAfterMove, moves);
+        var tmp = getBoardAndScoreAndChangedArea(boardAfterMove, moves);
         boardAfterMove = tmp.board;
         while (!CheckMovesAvaiable(boardAfterMove)) {
             boardAfterMove = getInitialBoard();
@@ -253,6 +255,7 @@ var gameLogic;
             current_turn: stateBeforeMove.current_turn + 1,
             scores: scores,
             intialboard: tmpp,
+            changed_delta: angular.copy(tmp.changed_delta),
         };
         var winner = getWinner(stateAfterMove);
         var endMatchScores;
@@ -527,7 +530,7 @@ var game;
                     rline_1.setAttribute("points", "");
                     // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
                     game.state = game.currentUpdateUI.move.stateAfterMove;
-                    game.animationEndedTimeout = $timeout(animationEndedCallback, 0);
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
                 }, 2000);
             }
             else {
@@ -628,15 +631,15 @@ var game;
     game.isPieceX = isPieceX;
     function shouldSlowlyAppear(row, col) {
         var b = false;
-        if (game.state.delta !== null) {
-            for (var i = 0; i < game.state.delta.length; i++) {
-                if (game.state.delta[i].row >= row && game.state.delta[i].col === col) {
+        if (game.state.changed_delta !== null) {
+            for (var i = 0; i < game.state.changed_delta.length; i++) {
+                if (game.state.changed_delta[i].row >= row && game.state.changed_delta[i].col === col) {
                     b = true;
                 }
             }
         }
         return !game.animationEnded &&
-            game.state.delta && b;
+            game.state.changed_delta && b;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
     function clickedOnModal(evt) {
