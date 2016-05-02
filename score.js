@@ -1,1 +1,1 @@
-var sss="m::1";
+"use strict";var sss="m::1";
