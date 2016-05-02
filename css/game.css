@@ -117,20 +117,18 @@ td {
 @keyframes movedown1 {
   0% {
     position:absolute; 
-    top: 0;
-    left: 0;
+    top: -100%;
+    left: -100%;
   }
   50% {
     position:absolute; 
-    max-width: 140%;
-    top: 50%;
+    top: -50%;
     left: -50%
   }
   100% {
     position:absolute; 
-    max-width: 100%;
-    top: 100%;
-    left: -100%
+    top: 0%;
+    left: 0%
   }
 }
 
@@ -171,7 +169,7 @@ td {
 }
 
 .movedown1 {
-  animation: movedown1 0.25s ease-in-out;
+  animation: movedown1 2s ease-in-out;
 }
 
 .movedown2 {
