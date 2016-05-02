@@ -98,8 +98,8 @@ td {
   -webkit-transform: translate3d(0,0,0);
 }
 @keyframes Fade {
-  from {opacity: 1;  top: 0%}
-  to {opacity: 0.1;  top: -25%}
+  from {opacity: 1; position:absolute; top: 0%}
+  to {opacity: 0.1; position:absolute; top: -25%}
 }
 
 .scoreBox {
@@ -109,50 +109,57 @@ td {
 }
 
 @keyframes moveup {
-  from {  top: 0%}
-  to { top: -25%}
+  from { position:absolute; top: 0%}
+  to {position:absolute; top: -25%}
 }
 
 
 @keyframes movedown1 {
-  from {  top: -100%}
-  to { top: 0%}
+  0% {
+    top: -100%;
+  }
+  50% {
+    top: -50%;
+  }
+  100% {
+    top: 0%;
+  }
 }
 
 @keyframes movedown2 {
-  from {  top: -200%}
-  to { top: 0%}
+  from { position:absolute; top: -200%}
+  to {position:absolute; top: 0%}
 }
 
 @keyframes movedown3 {
-  from {  top: -300%}
-  to { top: 0%}
+  from { position:absolute; top: -300%}
+  to {position:absolute; top: 0%}
 }
 
 @keyframes movedown4 {
-  from {  top: -400%}
-  to { top: 0%}
+  from { position:absolute; top: -400%}
+  to {position:absolute; top: 0%}
 }
 
 @keyframes movedown5 {
-  from {  top: -500%}
-  to { top: 0%}
+  from { position:absolute; top: -500%}
+  to {position:absolute; top: 0%}
 }
 
 @keyframes movedown6 {
-  from {  top: -600%}
-  to { top: 0%}
+  from { position:absolute; top: -600%}
+  to {position:absolute; top: 0%}
 }
 
 @keyframes movedown7 {
-  from {  top: -700%}
-  to { top: 0%}
+  from { position:absolute; top: -700%}
+  to {position:absolute; top: 0%}
 }
 
 
 @keyframes movedown8 {
-  from {  top: -800%}
-  to { top: 0%}
+  from { position:absolute; top: -800%}
+  to {position:absolute; top: 0%}
 }
 
 .movedown1 {
