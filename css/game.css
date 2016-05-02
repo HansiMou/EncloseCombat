@@ -93,8 +93,8 @@ td {
 }
 
 .scoreNotice {
-  animation: Fade 1.5s ease-out;
-  -webkit-animation: Fade 1.5s ease-out;
+  animation: Fade 2s ease-out;
+  -webkit-animation: Fade 2s ease-out;
   -webkit-transform: translate3d(0,0,0);
 }
 @keyframes Fade {
@@ -103,8 +103,8 @@ td {
 }
 
 .scoreBox {
-  animation: moveup 1.5s ease-out;
-  -webkit-animation: moveup 1.5s ease-out;
+  animation: moveup 2s ease-out;
+  -webkit-animation: moveup 2s ease-out;
   -webkit-transform: translate3d(0,0,0);  
 }
 
