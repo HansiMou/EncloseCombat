@@ -109,7 +109,6 @@ td {
 
 .scoreBox {
   animation: moveup 2s ease-out;
-  transform: translate3d(0,0,0);  
 }
 
 @keyframes moveup {

@@ -212,13 +212,13 @@ var game;
                 var gameArea_1 = document.getElementById("gameArea");
                 var width_1 = gameArea_1.clientWidth / gameLogic.COLS;
                 var height_1 = gameArea_1.clientHeight * 0.9 / gameLogic.ROWS;
-                var tmp = "";
+                var tmp_1 = "";
                 game.currentUpdateUI.move.stateAfterMove.delta.forEach(function (entry) {
                     var x = entry.col * width_1 + width_1 / 2;
                     var y = entry.row * height_1 + height_1 / 2;
-                    tmp = tmp + x + "," + y + " ";
+                    tmp_1 = tmp_1 + x + "," + y + " ";
                 });
-                rline_1.setAttribute("points", tmp);
+                rline_1.setAttribute("points", tmp_1);
                 rline_1.setAttribute("style", "fill:none;stroke:blue;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
                 // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 setTimeout(function () {
@@ -294,18 +294,35 @@ var game;
     game.cellPressedUp = cellPressedUp;
     function getScores() {
         var afterscoresum = 0;
+        var beforePlayer0 = 0;
+        var beforePlayer1 = 0;
+        var afterPlayer0 = 0;
+        var afterPlayer1 = 0;
         if (game.currentUpdateUI.move.stateAfterMove) {
-            afterscoresum += game.currentUpdateUI.move.stateAfterMove.scores[0] + game.currentUpdateUI.move.stateAfterMove.scores[1];
+            afterPlayer0 = game.currentUpdateUI.move.stateAfterMove.scores[0];
+            afterPlayer1 = game.currentUpdateUI.move.stateAfterMove.scores[1];
+            afterscoresum = afterPlayer0 + afterPlayer1;
         }
         var beforescoresum = 0;
         if (game.currentUpdateUI.stateBeforeMove) {
-            beforescoresum += game.currentUpdateUI.stateBeforeMove.scores[0] + game.currentUpdateUI.stateBeforeMove.scores[1];
+            beforePlayer0 = game.currentUpdateUI.stateBeforeMove.scores[0];
+            beforePlayer1 = game.currentUpdateUI.stateBeforeMove.scores[1];
+            beforescoresum = beforePlayer0 + beforePlayer1;
         }
-        return afterscoresum - beforescoresum;
+        var b = false;
+        if (afterPlayer0 - beforePlayer0 > 0) {
+            b = game.currentUpdateUI.yourPlayerIndex === 0;
+            log.info("scoreby0", game.currentUpdateUI.yourPlayerIndex);
+        }
+        else if (afterPlayer1 - beforePlayer1 > 0) {
+            b = game.currentUpdateUI.yourPlayerIndex === 1;
+            log.info("scoreby1", game.currentUpdateUI.yourPlayerIndex);
+        }
+        return { score: afterscoresum - beforescoresum, color: b ? 'blue' : 'red' };
     }
     game.getScores = getScores;
     function shouldShowScore() {
-        return !game.animationEnded && getScores() !== 0;
+        return !game.animationEnded && getScores().score !== 0;
     }
     game.shouldShowScore = shouldShowScore;
     function shouldShowImage(row, col) {
@@ -352,6 +369,7 @@ var game;
                 }
             }
         }
+        log.info("test it out", game.animationEnded, row, col);
         return !game.animationEnded &&
             game.state.changed_delta && b;
     }
@@ -464,13 +482,13 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 if ((game.moves.length === 0) || (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col) && ((Math.abs(game.moves[game.moves.length - 1].row - row) <= 1) && (Math.abs(game.moves[game.moves.length - 1].col - col) <= 1)))) {
                     // if only two points, it cannot go back and select the points in the moves. if more than two points, it cannot go back and select the points other than the first one.
                     if (game.moves.length < 2 || (game.moves.length === 2 && !(game.moves[0].row === row && game.moves[0].col === col)) || (game.moves.length > 2 && !containsDupOthanThanFirst(game.moves, row, col))) {
-                        var tt = game.isPieceR(row, col) ?
+                        var tt_1 = game.isPieceR(row, col) ?
                             document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
                             document.getElementById("e2e_test_pieceG_" + row + "x" + col) : game.isPieceB(row, col) ?
                             document.getElementById("e2e_test_pieceB_" + row + "x" + col) : document.getElementById("e2e_test_pieceX_" + row + "x" + col);
-                        tt.setAttribute("r", "55%");
-                        tt.setAttribute("r", "45%");
-                        setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
+                        tt_1.setAttribute("r", "55%");
+                        tt_1.setAttribute("r", "45%");
+                        setTimeout(function () { tt_1.setAttribute("r", "40%"); }, 100);
                         draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                         game.moves.push({ row: row, col: col });
                         draggingLines.style.display = "block";

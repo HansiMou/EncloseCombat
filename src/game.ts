@@ -307,18 +307,38 @@ module game {
   }
   export function getScores(){
     let afterscoresum = 0;
+    let beforePlayer0 = 0;
+    let beforePlayer1 = 0;
+    let afterPlayer0 = 0;
+    let afterPlayer1 = 0;
+    
     if (currentUpdateUI.move.stateAfterMove){
-      afterscoresum += currentUpdateUI.move.stateAfterMove.scores[0]+currentUpdateUI.move.stateAfterMove.scores[1];
+      afterPlayer0 = currentUpdateUI.move.stateAfterMove.scores[0];
+      afterPlayer1 = currentUpdateUI.move.stateAfterMove.scores[1];
+      afterscoresum = afterPlayer0 + afterPlayer1;
     }
     let beforescoresum = 0;
     if (currentUpdateUI.stateBeforeMove){
-      beforescoresum += currentUpdateUI.stateBeforeMove.scores[0]+currentUpdateUI.stateBeforeMove.scores[1];
+      beforePlayer0 = currentUpdateUI.stateBeforeMove.scores[0];
+      beforePlayer1 = currentUpdateUI.stateBeforeMove.scores[1];
+      beforescoresum = beforePlayer0 + beforePlayer1;
     }
-    return afterscoresum-beforescoresum;
+    
+    let b = false;
+    if (afterPlayer0 - beforePlayer0 > 0){
+      b = currentUpdateUI.yourPlayerIndex === 0;
+      log.info("scoreby0", currentUpdateUI.yourPlayerIndex);
+    }
+    else if (afterPlayer1 - beforePlayer1 > 0){
+      b = currentUpdateUI.yourPlayerIndex === 1;
+      log.info("scoreby1", currentUpdateUI.yourPlayerIndex);
+    }
+    
+    return {score: afterscoresum-beforescoresum, color: b?'blue':'red'};
   }
   
   export function shouldShowScore() {
-    return !animationEnded && getScores() !== 0;
+    return !animationEnded && getScores().score !== 0;
   }
   export function shouldShowImage(row: number, col: number): boolean {
     return true;
@@ -363,6 +383,7 @@ module game {
             }
         }
     }
+    log.info("test it out", animationEnded, row, col);
     return !animationEnded &&
         state.changed_delta && b;
   }
