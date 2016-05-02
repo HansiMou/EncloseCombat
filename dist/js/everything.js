@@ -834,8 +834,8 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                         document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
                         document.getElementById("e2e_test_pieceG_" + row + "x" + col) : game.isPieceB(row, col) ?
                         document.getElementById("e2e_test_pieceB_" + row + "x" + col) : document.getElementById("e2e_test_pieceX_" + row + "x" + col);
-                    tt.setAttribute("r", "55%");
-                    setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
+                    // tt.setAttribute("r", "55%");
+                    // setTimeout(function(){tt.setAttribute("r", "40%");},100);
                     draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                     game.moves.push({ row: row, col: col });
                 }
