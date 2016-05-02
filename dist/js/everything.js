@@ -610,7 +610,7 @@ var game;
                     rline_1.setAttribute("points", "");
                     // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
                     game.state = game.currentUpdateUI.move.stateAfterMove;
-                    game.animationEndedTimeout = $timeout(animationEndedCallback, 0);
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, 2000);
                 }, 2000);
             }
             else {
