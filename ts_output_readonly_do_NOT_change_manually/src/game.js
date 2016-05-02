@@ -144,11 +144,9 @@ var game;
     }
     function animationEndedCallback() {
         log.info("Hi");
-        $rootScope.$apply(function () {
-            log.info("Animation ended");
-            game.animationEnded = true;
-            maybeSendComputerMove();
-        });
+        log.info("Animation ended");
+        game.animationEnded = true;
+        maybeSendComputerMove();
     }
     function maybeSendComputerMove() {
         if (!isComputerTurn()) {
@@ -409,9 +407,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             else {
                 draggingLines.style.display = "none";
                 draggingLines.offsetHeight;
-                // $rootScope.$apply(function () {
-                //   game.shouldshowline = false;
-                // });            
                 return;
             }
         }
@@ -479,9 +474,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                         draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                         game.moves.push({ row: row, col: col });
                         draggingLines.style.display = "block";
-                        // $rootScope.$apply(function () {
-                        //   game.shouldshowline = true;
-                        // });                    
                         if (type === "touchstart") {
                             pline2.setAttribute("x1", "0");
                             pline2.setAttribute("y1", "0");

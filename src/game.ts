@@ -150,11 +150,9 @@ module game {
 
   function animationEndedCallback() {
     log.info("Hi");
-    $rootScope.$apply(function () {
       log.info("Animation ended");
       animationEnded = true;
       maybeSendComputerMove();
-    });
   }
 
   function maybeSendComputerMove() {
@@ -426,9 +424,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
           } else {
             draggingLines.style.display = "none";
             draggingLines.offsetHeight;
-                // $rootScope.$apply(function () {
-                //   game.shouldshowline = false;
-                // });            
             return;
           }
         } else {
@@ -455,9 +450,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 draggingLines.style.display = "none";
                 draggingLines.style.webkitTransform = 'scale(1)';
                 draggingLines.offsetHeight;
-                // $rootScope.$apply(function () {
-                //   game.shouldshowline = false;
-                // });
             }
             return ;
           }
@@ -500,9 +492,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                     game.moves.push({row: row, col: col});
                     draggingLines.style.display = "block";
-                    // $rootScope.$apply(function () {
-                    //   game.shouldshowline = true;
-                    // });                    
                     if (type === "touchstart"){
                         pline2.setAttribute("x1","0");
                         pline2.setAttribute("y1","0");
