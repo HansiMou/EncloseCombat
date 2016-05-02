@@ -724,7 +724,7 @@ var game;
     game.getOppoName = getOppoName;
     function shouldSlowlyAppear(row, col) {
         var b = false;
-        if (game.state.changed_delta !== null) {
+        if (game.state.changed_delta) {
             for (var i = 0; i < game.state.changed_delta.length; i++) {
                 if (game.state.changed_delta[i].row >= row && game.state.changed_delta[i].col === col) {
                     b = true;

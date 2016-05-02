@@ -350,7 +350,7 @@ module game {
 
   export function shouldSlowlyAppear(row: number, col: number): boolean {
     let b: boolean = false;
-    if (state.changed_delta !== null){
+    if (state.changed_delta){
         for (let i = 0; i < state.changed_delta.length; i++) {
             if (state.changed_delta[i].row >= row && state.changed_delta[i].col === col) {
                 b = true;
