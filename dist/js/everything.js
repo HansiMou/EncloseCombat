@@ -398,6 +398,7 @@ var game;
     game.msg = "";
     game.animationEndedTimeout = null;
     game.ismyscore = 0;
+    game.movedowncount = -1;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -617,7 +618,7 @@ var game;
             }
             else {
                 game.state = game.currentUpdateUI.move.stateAfterMove;
-                game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+                game.animationEndedTimeout = $timeout(animationEndedCallback, 2000);
             }
         }
     }
@@ -743,6 +744,20 @@ var game;
             game.state.changed_delta && b;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
+    function getMoveDownClass(row, col) {
+        var res = 0;
+        if (game.state.changed_delta) {
+            for (var i = 0; i < game.state.changed_delta.length; i++) {
+                if (game.state.changed_delta[i].row >= row && game.state.changed_delta[i].col === col) {
+                    res++;
+                }
+            }
+        }
+        if (shouldSlowlyAppear(row, col))
+            return 'movedown' + res;
+        return '';
+    }
+    game.getMoveDownClass = getMoveDownClass;
     function clickedOnModal(evt) {
         if (evt.target === evt.currentTarget) {
             evt.preventDefault();

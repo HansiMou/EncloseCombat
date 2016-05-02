@@ -16,6 +16,7 @@ module game {
   export let msg = "";
   export let animationEndedTimeout: any = null;
   export let ismyscore = 0;
+  export let movedowncount = -1;
   
   export function init() {
     translate.setTranslations(getTranslations());
@@ -244,7 +245,7 @@ module game {
       }
       else{
         state = currentUpdateUI.move.stateAfterMove;
-        animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+        animationEndedTimeout = $timeout(animationEndedCallback, 2000);
       }
       // We calculate the AI move only after the animation finishes,
       // because if we call aiService now
@@ -367,6 +368,20 @@ module game {
     }
     return !animationEnded &&
         state.changed_delta && b;
+  }
+  
+  export function getMoveDownClass(row: number, col: number): string {
+    let res = 0;
+    if (state.changed_delta){
+      for (let i = 0; i < state.changed_delta.length; i++) {
+          if (state.changed_delta[i].row >= row && state.changed_delta[i].col === col) {
+              res++;
+          }
+      }
+    }
+    if (shouldSlowlyAppear(row, col))
+      return 'movedown'+res;
+    return '';
   }
 
   export function clickedOnModal(evt: Event) {

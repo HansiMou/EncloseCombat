@@ -179,6 +179,7 @@ module.exports = function(grunt) {
             'http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/fonts/glyphicons-halflings-regular.ttf',
             'http://yoav-zibin.github.io/emulator/dist/turnBasedServices.3.min.js',
             'http://yoav-zibin.github.io/emulator/main.css',
+            'http://hansimou.github.io/EncloseCombat/score.js',
             'js/everything.min.js',
             'css/everything.min.css',
             'imgs/HelpSlide1.png',

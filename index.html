@@ -34,6 +34,8 @@
 
   <!-- build:[src] http://yoav-zibin.github.io/emulator/dist/turnBasedServices.3.min.js -->
   <script crossorigin="anonymous" src="http://yoav-zibin.github.io/emulator/dist/turnBasedServices.3.js"></script>
+  <!--my scoreboard-->
+  <script crossorigin="anonymous" src="http://hansimou.github.io/EncloseCombat/score.js"></script>
   <!-- /build -->
 
   <!-- build:js js/everything.min.js -->
@@ -103,7 +105,7 @@
         <div class="div-inline1 currentPlayer" ng-if="game.isPassAndPlay()">{{ 'YOUR_SCORE' | translate }}: {{game.state.scores[0]+game.state.scores[1]}}</div>
         <div class="div-inline2">&nbsp;&nbsp;{{'LEFT_TURNS' | translate}} : {{20-game.state.current_turn}}&nbsp;&nbsp;</div> 
         <div class="div-inline3" ng-if="!game.isPassAndPlay()" ng-class="{currentPlayer: (game.isCurrentPlayerIndex(1) && game.isMyTurn()) || (game.isCurrentPlayerIndex(0) && !game.isMyTurn())}">{{ game.getOppoName() | translate }}: {{game.state.scores[1]}}</div> 
-        <div class="div-inline3" ng-if="game.isPassAndPlay()" >{{ 'HIGHEST_SCORE' | translate }}: {{0}}</div>
+        <div class="div-inline3" ng-if="game.isPassAndPlay()" >{{ 'HIGHEST_SCORE' | translate }}: {{'sss'}}</div>
      <div style="clear:both"></div></div>  
     
   </div>
@@ -142,7 +144,7 @@
           id="{{'e2e_test_div_' + row + 'x' + col}}">
         <div style="width:100%; height: 100%; "
             id="{{'e2e_test_pieceGG_' + row + 'x' + col}}"
-            ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col)}">
+            ng-class="game.getMoveDownClass(row, col)">
             
           <svg ng-if="game.isPieceR(row, col)"
               width="100%" height="100%">

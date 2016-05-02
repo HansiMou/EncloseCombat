@@ -112,3 +112,78 @@ td {
   from { position:absolute; top: 0%}
   to {position:absolute; top: -25%}
 }
+
+
+@keyframes movedown1 {
+  from { position:absolute; top: -11.25%}
+  to {position:absolute; top: 0%}
+}
+
+@keyframes movedown2 {
+  from { position:absolute; top: -22.5%}
+  to {position:absolute; top: 0%}
+}
+
+@keyframes movedown3 {
+  from { position:absolute; top: -33.75%}
+  to {position:absolute; top: 0%}
+}
+
+@keyframes movedown4 {
+  from { position:absolute; top: -45%}
+  to {position:absolute; top: 0%}
+}
+
+@keyframes movedown5 {
+  from { position:absolute; top: -56.25%}
+  to {position:absolute; top: 0%}
+}
+
+@keyframes movedown6 {
+  from { position:absolute; top: -67.5%}
+  to {position:absolute; top: 0%}
+}
+
+@keyframes movedown7 {
+  from { position:absolute; top: -78.75%}
+  to {position:absolute; top: 0%}
+}
+
+
+@keyframes movedown8 {
+  from { position:absolute; top: -90%}
+  to {position:absolute; top: 0%}
+}
+
+.movedown1 {
+  animation: movedown1 0.25s ease-in-out;
+}
+
+.movedown2 {
+  animation: movedown2 0.5s ease-in-out;
+}
+
+.movedown3 {
+  animation: movedown3 0.75s ease-in-out;
+}
+
+
+.movedown4 {
+  animation: movedown4 1s ease-in-out;
+}
+
+.movedown5 {
+  animation: movedown5 1.25s ease-in-out;
+}
+
+.movedown6 {
+  animation: movedown6 1.5s ease-in-out;
+}
+
+.movedown7 {
+  animation: movedown7 1.75s ease-in-out;
+}
+
+.movedown8 {
+  animation: movedown8 2s ease-in-out;
+}
