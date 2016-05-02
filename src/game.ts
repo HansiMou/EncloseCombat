@@ -202,7 +202,7 @@ module game {
       if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
         if (params.stateBeforeMove !== undefined){
           state = params.stateBeforeMove;
-          state.delta = [];
+          state.changed_delta = null;
         }
         else{
           state.board = params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board;

@@ -192,7 +192,7 @@ var game;
             if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
                 if (params.stateBeforeMove !== undefined) {
                     game.state = params.stateBeforeMove;
-                    game.state.delta = [];
+                    game.state.changed_delta = null;
                 }
                 else {
                     game.state.board = params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board;
