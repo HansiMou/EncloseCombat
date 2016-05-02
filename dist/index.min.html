@@ -82,7 +82,7 @@
         <div class="div-inline1 currentPlayer" ng-if="game.isPassAndPlay()">{{ 'YOUR_SCORE' | translate }}: {{game.state.scores[0]+game.state.scores[1]}}</div>
         <div class="div-inline2">&nbsp;&nbsp;{{'LEFT_TURNS' | translate}} : {{20-game.state.current_turn}}&nbsp;&nbsp;</div> 
         <div class="div-inline3" ng-if="!game.isPassAndPlay()" ng-class="{currentPlayer: (game.isCurrentPlayerIndex(1) && game.isMyTurn()) || (game.isCurrentPlayerIndex(0) && !game.isMyTurn())}">{{ game.getOppoName() | translate }}: {{game.state.scores[1]}}</div> 
-        <div class="div-inline3" ng-if="game.isPassAndPlay()" >{{ 'HIGHEST_SCORE' | translate }}: 'not available'</div>
+        <div class="div-inline3" ng-if="game.isPassAndPlay()" >{{ 'HIGHEST_SCORE' | translate }}: '0'</div>
      <div style="clear:both"></div></div>  
     
   </div>
@@ -108,7 +108,7 @@
     
     <!--show the score you or opponent got-->
     <svg id="scorenotice" top="100%" width="100%" height="100%"
-        style="display:block; position:absolute; z-index: 40;"  opacity="1"ng-show="!game.animationEnded && game.getScores()!==0" ng-class="{scoreBox: game.shouldShowScore()}">
+        style="display:block; position:absolute; z-index: 40;"  opacity="1" ng-show="!game.animationEnded && game.getScores()!==0" ng-class="{scoreBox: game.shouldShowScore()}">
       <text x="50%" y="50%"  text-anchor="middle" font-size="7em" ng-show="!game.animationEnded && game.getScores()!==0" ng-class="{scoreNotice: game.shouldShowScore(), opponentScore:true}">
         +{{game.getScores()}}
       </text>
@@ -121,27 +121,27 @@
           id="{{'e2e_test_div_' + row + 'x' + col}}">
         <div style="width:100%; height: 100%; "
             id="{{'e2e_test_pieceGG_' + row + 'x' + col}}"
-            ng-class="game.getMoveDownClass(row, col)">
+            >
             
-          <svg ng-if="game.isPieceR(row, col)"
+          <svg ng-if="game.isPieceR(row, col)" ng-class="game.getMoveDownClass(row, col)"
               width="100%" height="100%">
             <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceR_' + row + 'x' + col}}"
               stroke="#DD4124" stroke-width="5%" fill="#DD4124" style="transition: r 0.1s"/>
           </svg>
           
-          <svg ng-if="game.isPieceG(row, col)"
+          <svg ng-if="game.isPieceG(row, col)" ng-class="game.getMoveDownClass(row, col)"
               width="100%" height="100%">
           <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceG_' + row + 'x' + col}}"
               stroke="#556B2F" stroke-width="5%" fill="#556B2F" style="transition: r 0.1s"/>
           </svg>
           
-          <svg ng-if="game.isPieceB(row, col)"
+          <svg ng-if="game.isPieceB(row, col)" ng-class="game.getMoveDownClass(row, col)"
               width="100%" height="100%">
             <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceB_' + row + 'x' + col}}"
               stroke="#20B2AA" stroke-width="5%" fill="#20B2AA" style="transition: r 0.1s"/>
           </svg>
           
-          <svg ng-if="game.isPieceX(row, col)"
+          <svg ng-if="game.isPieceX(row, col)" ng-class="game.getMoveDownClass(row, col)"
               width="100%" height="100%">
             <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceX_' + row + 'x' + col}}"
               stroke="#ffd700" stroke-width="5%" fill="#ffd700" style="transition: r 0.1s"/>
