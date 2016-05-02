@@ -57,11 +57,11 @@ var game;
                 zh: "剩余回合",
             },
             YOUR_SCORE: {
-                en: "Your Score",
+                en: "Yours",
                 zh: "你的分数",
             },
             HIGHEST_SCORE: {
-                en: "Highest Score",
+                en: "Highest",
                 zh: "最高分",
             },
             PLAYER: {
@@ -132,6 +132,14 @@ var game;
                 en: "Magneto",
                 zh: "万磁王",
             },
+            PLAYER17: {
+                en: "Harley Quinn",
+                zh: "哈莉·奎茵",
+            },
+            PLAYER18: {
+                en: "Joker",
+                zh: "小丑",
+            }
         };
     }
     function animationEndedCallback() {

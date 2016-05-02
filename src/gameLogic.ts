@@ -82,7 +82,7 @@ module gameLogic {
   /** Set the first turn to be 1, and the intial score for all players to be 0 */
   export function getInitialState(): IState {
     let ib = getInitialBoard();
-    let index = Math.floor((Math.random() * 16) + 1);
+    let index = Math.floor((Math.random() * 18) + 1);
     return {board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), intialboard: angular.copy(ib), changed_delta: null, Random: index%2 === 0?index-1 : index};
   }
 

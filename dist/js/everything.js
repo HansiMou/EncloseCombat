@@ -43,7 +43,7 @@ var gameLogic;
     /** Set the first turn to be 1, and the intial score for all players to be 0 */
     function getInitialState() {
         var ib = getInitialBoard();
-        var index = Math.floor((Math.random() * 16) + 1);
+        var index = Math.floor((Math.random() * 18) + 1);
         return { board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), intialboard: angular.copy(ib), changed_delta: null, Random: index % 2 === 0 ? index - 1 : index };
     }
     gameLogic.getInitialState = getInitialState;
@@ -442,11 +442,11 @@ var game;
                 zh: "剩余回合",
             },
             YOUR_SCORE: {
-                en: "Your Score",
+                en: "Yours",
                 zh: "你的分数",
             },
             HIGHEST_SCORE: {
-                en: "Highest Score",
+                en: "Highest",
                 zh: "最高分",
             },
             PLAYER: {
@@ -517,6 +517,14 @@ var game;
                 en: "Magneto",
                 zh: "万磁王",
             },
+            PLAYER17: {
+                en: "Harley Quinn",
+                zh: "哈莉·奎茵",
+            },
+            PLAYER18: {
+                en: "Joker",
+                zh: "小丑",
+            }
         };
     }
     function animationEndedCallback() {
