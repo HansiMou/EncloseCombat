@@ -115,8 +115,17 @@ td {
 
 
 @keyframes movedown1 {
-  from { position:absolute; top: -100%}
-  to {position:absolute; top: 0%}
+  0% {
+    top: 0;
+  }
+  50% {
+    max-width: 140%;
+    top: 50%;
+  }
+  100% {
+    max-width: 100%;
+    top: 100%;
+  }
 }
 
 @keyframes movedown2 {

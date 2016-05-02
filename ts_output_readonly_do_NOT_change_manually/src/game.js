@@ -406,7 +406,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             else {
                 draggingLines.style.display = "none";
-                draggingLines.offsetHeight;
                 return;
             }
         }
@@ -430,8 +429,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     game.moves = new Array();
                     pline.setAttribute("points", "");
                     draggingLines.style.display = "none";
-                    draggingLines.style.webkitTransform = 'scale(1)';
-                    draggingLines.offsetHeight;
                 }
                 return;
             }
@@ -499,7 +496,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             draggingPiece = null;
             draggingLines.style.display = "none";
             draggingLines.offsetHeight;
-            draggingLines.style.webkitTransform = 'scale(1)';
+            // draggingLines.style.webkitTransform = 'scale(1)';
             game.moves = new Array();
         }
     }
@@ -533,18 +530,16 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             y: row * size.height + size.height / 2
         };
     }
-    function forceRedraw(element) {
-        if (!element) {
-            return;
-        }
-        var n = document.createTextNode(' ');
-        element.appendChild(n);
-        element.style.display = 'none';
-        setTimeout(function () {
-            element.style.display = 'none';
-            n.parentNode.removeChild(n);
-        }, 200); // you can play with this timeout to make it as short as possible
-    }
+    // function forceRedraw(element:any){
+    //     if (!element) { return; }
+    //     let n = document.createTextNode(' ');
+    //     element.appendChild(n);
+    //     element.style.display = 'none';
+    //     setTimeout(function(){
+    //         element.style.display = 'none';
+    //         n.parentNode.removeChild(n);
+    //     },200); // you can play with this timeout to make it as short as possible
+    // }
     function dragDone() {
         $rootScope.$apply(function () {
             // Update piece in board
