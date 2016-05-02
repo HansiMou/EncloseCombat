@@ -231,7 +231,7 @@ module game {
           rline.setAttribute("points", "");
           // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
           state = currentUpdateUI.move.stateAfterMove;
-          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+          animationEndedTimeout = $timeout(animationEndedCallback, 0);
         },2000);
       }
       else{
