@@ -122,11 +122,13 @@ td {
   }
   50% {
     position:absolute; 
+    max-width: 140%;
     top: 50%;
     left: -50%
   }
   100% {
     position:absolute; 
+    max-width: 100%;
     top: 100%;
     left: -100%
   }
