@@ -143,7 +143,7 @@
           style="position:absolute; top:0; left:{{col * 16.666667}}%; width:16.666667%; height:100%;"
           id="{{'e2e_test_div_' + row + 'x' + col}}">
         <div style="width:100%; height: 100%; "
-            id="{{'e2e_test_pieceGG_' + row + 'x' + col}}"
+            id="{{'e2e_test_pieceGG_' + row + 'x' + col}}" ng-class="game.getMoveDownClass(row, col)"
             >
             
           <svg ng-if="game.isPieceR(row, col)" ng-class="game.getMoveDownClass(row, col)"

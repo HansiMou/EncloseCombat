@@ -8,13 +8,12 @@ module game {
   // simply typing in the console:
   // game.state
   export let currentUpdateUI: IUpdateUI = null;
-  export let animationEnded = false;
   export let didMakeMove: boolean = false; // You can only make one move per updateUI
   export let state: IState = null;
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
   export let msg = "";
-  export let animationEndedTimeout: any = null;
+  export let animationEndedTimeout: ng.IPromise<any> = null;
   export let ismyscore = 0;
   
   export function init() {
@@ -151,7 +150,6 @@ module game {
   function animationEndedCallback() {
     log.info("Hi");
       log.info("Animation ended");
-      animationEnded = true;
       maybeSendComputerMove();
   }
 
@@ -188,7 +186,6 @@ module game {
 
   function updateUI(params: IUpdateUI): void {
     log.info("Game got updateUI???:", params);
-    animationEnded = false;
     didMakeMove = false; // Only one move per updateUI
     currentUpdateUI = params;
     let rline = document.getElementById("rline");
@@ -318,7 +315,7 @@ module game {
   }
   
   export function shouldShowScore() {
-    return !animationEnded && getScores() !== 0;
+    return getScores() !== 0;
   }
   export function shouldShowImage(row: number, col: number): boolean {
     return true;
@@ -363,8 +360,7 @@ module game {
             }
         }
     }
-    return !animationEnded &&
-        state.changed_delta && b;
+    return state.changed_delta && b;
   }
   
   export function getMoveDownClass(row: number, col: number): string {
