@@ -94,7 +94,7 @@ td {
 
 .scoreNotice {
   animation: Fade 2s ease-out;
-  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
 }
 @keyframes Fade {
   from {opacity: 1;  top: 0%}
@@ -103,7 +103,7 @@ td {
 
 .scoreBox {
   animation: moveup 2s ease-out;
-  -webkit-transform: translate3d(0,0,0);  
+  transform: translate3d(0,0,0);  
 }
 
 @keyframes moveup {
@@ -154,43 +154,42 @@ td {
 }
 
 .movedown1 {
+  transform: translate3d(0,0,0);  
   animation: movedown1 0.25s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown2 {
+  transform: translate3d(0,0,0);  
   animation: movedown2 0.5s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown3 {
   animation: movedown3 0.75s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
+  transform: translate3d(0,0,0);  
 }
 
 
 .movedown4 {
+  transform: translate3d(0,0,0);  
   animation: movedown4 1s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown5 {
+  transform: translate3d(0,0,0);  
   animation: movedown5 1.25s ease-in-out;
-  -webkit-animation: movedown5 1.25s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown6 {
+  transform: translate3d(0,0,0);  
   animation: movedown6 1.5s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown7 {
+  transform: translate3d(0,0,0);  
   animation: movedown7 1.75s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
 
 .movedown8 {
+  transform: translate3d(0,0,0);  
   animation: movedown8 2s ease-in-out;
-  -webkit-transform: translate3d(0,0,0);  
 }
