@@ -398,7 +398,6 @@ var game;
     game.msg = "";
     game.animationEndedTimeout = null;
     game.ismyscore = 0;
-    game.movedowncount = -1;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');

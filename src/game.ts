@@ -16,7 +16,6 @@ module game {
   export let msg = "";
   export let animationEndedTimeout: any = null;
   export let ismyscore = 0;
-  export let movedowncount = -1;
   
   export function init() {
     translate.setTranslations(getTranslations());
