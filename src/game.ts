@@ -61,10 +61,82 @@ module game {
         en: "Turns left",
         zh: "剩余回合",
       },
+      YOUR_SCORE: {
+        en: "Your Score",
+        zh: "你的分数",
+      },
+      HIGHEST_SCORE: {
+        en: "Highest Score",
+        zh: "最高分",
+      },
       PLAYER: {
         en: "Player",
         zh: "玩家",
-      }
+      },
+      PLAYER1: {
+        en: "Captain",
+        zh: "美队",
+      },
+      PLAYER2: {
+        en: "Ironman",
+        zh: "钢铁侠",
+      },
+      PLAYER3: {
+        en: "Batman",
+        zh: "蝙蝠侠",
+      },
+      PLAYER4: {
+        en: "Superman",
+        zh: "超人",
+      },
+      PLAYER5: {
+        en: "Deadpool",
+        zh: "死侍",
+      },
+      PLAYER6: {
+        en: "Ladypool",
+        zh: "女死侍",
+      },
+      PLAYER7: {
+        en: "Blade",
+        zh: "刀锋",
+      },
+      PLAYER8: {
+        en: "Deacon",
+        zh: "Deacon",
+      },
+      PLAYER9: {
+        en: "Thor",
+        zh: "索尔",
+      },
+      PLAYER10: {
+        en: "Loki",
+        zh: "洛基",
+      },
+      PLAYER11: {
+        en: "Hulk",
+        zh: "浩克",
+      },
+      PLAYER12: {
+        en: "Black Widow",
+        zh: "黑寡妇",
+      },
+      PLAYER13: {
+        en: "Batman",
+        zh: "蝙蝠侠",
+      },
+      PLAYER14: {
+        en: "Joker",
+        zh: "小丑",
+      },
+      PLAYER15: {
+        en: "Charles",
+        zh: "X",
+      },
+      PLAYER16: {
+        en: "Magneto",
+        zh: "万磁王",
+      },
     };
   }
 
@@ -133,12 +205,12 @@ module game {
           state.delta = [];
         }
         else{
-          if (!params.move.stateAfterMove.intialboard) 
-            log.info("wtf", params);
           state.board = params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board;
           state.delta = [];
           state.current_turn = 0;
           state.scores = [0, 0];
+          state.changed_delta = null;
+          state.Random = params.move.stateAfterMove.Random;
         }
         
         let rline = document.getElementById("rline");
@@ -183,6 +255,9 @@ module game {
   function isFirstMove() {
     return !currentUpdateUI.move.stateAfterMove;
   }    
+  export function isPassAndPlay():boolean {
+    return currentUpdateUI.playMode? currentUpdateUI.playMode === 'passAndPlay' : false;
+  }
   export function isComputer() {
     return currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex] !== undefined && currentUpdateUI.playersInfo[currentUpdateUI.yourPlayerIndex].playerId === '';
   }
@@ -257,6 +332,20 @@ module game {
   
   export function isPieceX(row: number, col: number): boolean {
     return state.board[row][col] === 'X';
+  }
+  
+  export function getName(): string {
+    if (state.Random){
+      return 'PLAYER'+state.Random;
+    }
+    return 'PLAYER';
+  }
+  export function getOppoName(): string {
+    if (state.Random){
+      let tmp = state.Random+1;
+      return 'PLAYER'+tmp;
+    }
+    return 'PLAYER';
   }
 
   export function shouldSlowlyAppear(row: number, col: number): boolean {

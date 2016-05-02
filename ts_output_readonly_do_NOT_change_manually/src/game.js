@@ -56,10 +56,82 @@ var game;
                 en: "Turns left",
                 zh: "剩余回合",
             },
+            YOUR_SCORE: {
+                en: "Your Score",
+                zh: "你的分数",
+            },
+            HIGHEST_SCORE: {
+                en: "Highest Score",
+                zh: "最高分",
+            },
             PLAYER: {
                 en: "Player",
                 zh: "玩家",
-            }
+            },
+            PLAYER1: {
+                en: "Captain",
+                zh: "美队",
+            },
+            PLAYER2: {
+                en: "Ironman",
+                zh: "钢铁侠",
+            },
+            PLAYER3: {
+                en: "Batman",
+                zh: "蝙蝠侠",
+            },
+            PLAYER4: {
+                en: "Superman",
+                zh: "超人",
+            },
+            PLAYER5: {
+                en: "Deadpool",
+                zh: "死侍",
+            },
+            PLAYER6: {
+                en: "Ladypool",
+                zh: "女死侍",
+            },
+            PLAYER7: {
+                en: "Blade",
+                zh: "刀锋",
+            },
+            PLAYER8: {
+                en: "Deacon",
+                zh: "Deacon",
+            },
+            PLAYER9: {
+                en: "Thor",
+                zh: "索尔",
+            },
+            PLAYER10: {
+                en: "Loki",
+                zh: "洛基",
+            },
+            PLAYER11: {
+                en: "Hulk",
+                zh: "浩克",
+            },
+            PLAYER12: {
+                en: "Black Widow",
+                zh: "黑寡妇",
+            },
+            PLAYER13: {
+                en: "Batman",
+                zh: "蝙蝠侠",
+            },
+            PLAYER14: {
+                en: "Joker",
+                zh: "小丑",
+            },
+            PLAYER15: {
+                en: "Charles",
+                zh: "X",
+            },
+            PLAYER16: {
+                en: "Magneto",
+                zh: "万磁王",
+            },
         };
     }
     function animationEndedCallback() {
@@ -123,12 +195,12 @@ var game;
                     game.state.delta = [];
                 }
                 else {
-                    if (!params.move.stateAfterMove.intialboard)
-                        log.info("wtf", params);
                     game.state.board = params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board;
                     game.state.delta = [];
                     game.state.current_turn = 0;
                     game.state.scores = [0, 0];
+                    game.state.changed_delta = null;
+                    game.state.Random = params.move.stateAfterMove.Random;
                 }
                 var rline_1 = document.getElementById("rline");
                 var gameArea_1 = document.getElementById("gameArea");
@@ -168,6 +240,10 @@ var game;
     function isFirstMove() {
         return !game.currentUpdateUI.move.stateAfterMove;
     }
+    function isPassAndPlay() {
+        return game.currentUpdateUI.playMode ? game.currentUpdateUI.playMode === 'passAndPlay' : false;
+    }
+    game.isPassAndPlay = isPassAndPlay;
     function isComputer() {
         return game.currentUpdateUI.playersInfo[game.currentUpdateUI.yourPlayerIndex] !== undefined && game.currentUpdateUI.playersInfo[game.currentUpdateUI.yourPlayerIndex].playerId === '';
     }
@@ -246,6 +322,21 @@ var game;
         return game.state.board[row][col] === 'X';
     }
     game.isPieceX = isPieceX;
+    function getName() {
+        if (game.state.Random) {
+            return 'PLAYER' + game.state.Random;
+        }
+        return 'PLAYER';
+    }
+    game.getName = getName;
+    function getOppoName() {
+        if (game.state.Random) {
+            var tmp = game.state.Random + 1;
+            return 'PLAYER' + tmp;
+        }
+        return 'PLAYER';
+    }
+    game.getOppoName = getOppoName;
     function shouldSlowlyAppear(row, col) {
         var b = false;
         if (game.state.changed_delta !== null) {

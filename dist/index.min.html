@@ -76,9 +76,11 @@
   <div class="changingBG" id="gameArea" ng-class="{currentPlayerBG: game.state.current_turn === 0 || game.isMyTurn()||game.isComputer(), notcurrentPlayerBG: game.state.current_turn !== 0 && !game.isMyTurn()&&!game.isComputer()}">
   <div class="container" style="position:absolute; height: 10%; width: 100%; top: 0; left: 0;">
      <div class="center">
-        <div class="div-inline1" ng-class="{currentPlayer: (game.isCurrentPlayerIndex(0) && game.isMyTurn()) || (game.isCurrentPlayerIndex(1) && !game.isMyTurn())}">{{ 'PLAYER' | translate }}1: {{game.state.scores[0]}}</div> 
+        <div class="div-inline1" ng-if="!game.isPassAndPlay()" ng-class="{currentPlayer: (game.isCurrentPlayerIndex(0) && game.isMyTurn()) || (game.isCurrentPlayerIndex(1) && !game.isMyTurn())}">{{ game.getName() | translate }}: {{game.state.scores[0]}}</div> 
+        <div class="div-inline1 currentPlayer" ng-if="game.isPassAndPlay()">{{ 'YOUR_SCORE' | translate }}: {{game.state.scores[0]+game.state.scores[1]}}</div>
         <div class="div-inline2">&nbsp;&nbsp;{{'LEFT_TURNS' | translate}} : {{20-game.state.current_turn}}&nbsp;&nbsp;</div> 
-        <div class="div-inline3" ng-class="{currentPlayer: (game.isCurrentPlayerIndex(1) && game.isMyTurn()) || (game.isCurrentPlayerIndex(0) && !game.isMyTurn())}">{{ 'PLAYER' | translate }}2: {{game.state.scores[1]}}</div> 
+        <div class="div-inline3" ng-if="!game.isPassAndPlay()" ng-class="{currentPlayer: (game.isCurrentPlayerIndex(1) && game.isMyTurn()) || (game.isCurrentPlayerIndex(0) && !game.isMyTurn())}">{{ game.getOppoName() | translate }}: {{game.state.scores[1]}}</div> 
+        <div class="div-inline3" ng-if="game.isPassAndPlay()" >{{ 'HIGHEST_SCORE' | translate }}: {{0}}</div>
      <div style="clear:both"></div></div>  
     
   </div>
