@@ -199,12 +199,15 @@ module game {
     log.info("Game got updateUI???:", params);
     animationEnded = false;
     didMakeMove = false; // Only one move per updateUI
+    log.info("test it out -2 should start");
     currentUpdateUI = params;
+    log.info("test it out -1 should start");
     let rline = document.getElementById("rline");
     let gameArea = document.getElementById("gameArea");
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     clearAnimationTimeout();
+    log.info("test it out 0 should start");
     log.info(params.stateBeforeMove);
     if (isFirstMove()) {
       state = gameLogic.getInitialState();

@@ -573,12 +573,15 @@ var game;
         log.info("Game got updateUI???:", params);
         game.animationEnded = false;
         game.didMakeMove = false; // Only one move per updateUI
+        log.info("test it out -2 should start");
         game.currentUpdateUI = params;
+        log.info("test it out -1 should start");
         var rline = document.getElementById("rline");
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
         clearAnimationTimeout();
+        log.info("test it out 0 should start");
         log.info(params.stateBeforeMove);
         if (isFirstMove()) {
             game.state = gameLogic.getInitialState();
