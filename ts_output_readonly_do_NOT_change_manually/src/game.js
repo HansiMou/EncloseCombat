@@ -61,7 +61,7 @@ var game;
                 zh: "当前分数",
             },
             HIGHEST_SCORE: {
-                en: "Recond",
+                en: "Record",
                 zh: "记录",
             },
             PLAYER: {
