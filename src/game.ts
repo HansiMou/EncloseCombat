@@ -267,6 +267,7 @@ module game {
       // }
       // else{
         
+        // set up the state before move 
         if (params.stateBeforeMove !== undefined){
           state = params.stateBeforeMove;
           state.changed_delta = null;
@@ -292,17 +293,19 @@ module game {
           }
         }
         
+        // set up the sliding lines of opponent
         let tmp = "";
         currentUpdateUI.move.stateAfterMove.delta.forEach(function(entry) {
             let  x = entry.col * width + width / 2;
             let  y = entry.row * height + height / 2;
             tmp = tmp+x+","+y+" ";
         });
+        
         rline.setAttribute("points", tmp);
         setTimeout(function(){
           rline.setAttribute("points", "");
         },2000);
-        log.info("test it out???");
+        
         state = currentUpdateUI.move.stateAfterMove;
         animationEndedTimeout = $timeout(animationEndedCallback, 1000);
       // }

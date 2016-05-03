@@ -254,6 +254,7 @@ var game;
             //   },2000);
             // }
             // else{
+            // set up the state before move 
             if (params.stateBeforeMove !== undefined) {
                 game.state = params.stateBeforeMove;
                 game.state.changed_delta = null;
@@ -278,6 +279,7 @@ var game;
                     board: params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
                 };
             }
+            // set up the sliding lines of opponent
             var tmp = "";
             game.currentUpdateUI.move.stateAfterMove.delta.forEach(function (entry) {
                 var x = entry.col * width + width / 2;
@@ -288,7 +290,6 @@ var game;
             setTimeout(function () {
                 rline.setAttribute("points", "");
             }, 2000);
-            log.info("test it out???");
             game.state = game.currentUpdateUI.move.stateAfterMove;
             game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         }
