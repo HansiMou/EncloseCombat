@@ -442,12 +442,12 @@ var game;
                 zh: "剩余回合",
             },
             YOUR_SCORE: {
-                en: "Yours",
-                zh: "你的分数",
+                en: "Current",
+                zh: "当前分数",
             },
             HIGHEST_SCORE: {
-                en: "Highest",
-                zh: "最高分",
+                en: "Recond",
+                zh: "记录",
             },
             PLAYER: {
                 en: "Player",
@@ -562,6 +562,13 @@ var game;
         }, 2000);
     }
     function updateUI(params) {
+        // my local scoreboard update
+        if (params.playMode === "passAndPlay" && params.move.endMatchScores !== null) {
+            var current_game_score = params.move.stateAfterMove.scores[0] + params.move.stateAfterMove.scores[1];
+            if (current_game_score > parseInt(game.getHighestScore())) {
+                localStorage.setItem("score", current_game_score + "");
+            }
+        }
         log.info("Game got updateUI???:", params);
         game.animationEnded = false;
         game.didMakeMove = false; // Only one move per updateUI
@@ -625,6 +632,17 @@ var game;
             game.animationEndedTimeout = null;
         }
     }
+    // lcoalstorage
+    function getHighestScore() {
+        if (localStorage.getItem("score")) {
+            return localStorage.getItem("score");
+        }
+        else {
+            localStorage.setItem("score", "0");
+            return 0;
+        }
+    }
+    game.getHighestScore = getHighestScore;
     function isComputerTurn() {
         return isMyTurn() && isComputer();
     }
