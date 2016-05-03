@@ -537,7 +537,6 @@ var game;
         if (!isComputerTurn()) {
             return;
         }
-        log.info("computer");
         game.didMakeMove = true;
         var rline = document.getElementById("rline");
         var gameArea = document.getElementById("gameArea");
@@ -559,7 +558,7 @@ var game;
             rline.setAttribute("points", "");
             // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
             moveService.makeMove(nextAIMove);
-        }, 2000);
+        }, 1500);
     }
     function updateUI(params) {
         // my local scoreboard update
@@ -591,15 +590,28 @@ var game;
                 if (params.stateBeforeMove !== undefined) {
                     game.state = params.stateBeforeMove;
                     game.state.changed_delta = null;
+                    game.state = {
+                        intialboard: params.stateBeforeMove.intialboard,
+                        delta: params.stateBeforeMove.delta,
+                        current_turn: params.stateBeforeMove.current_turn,
+                        scores: params.stateBeforeMove.scores,
+                        changed_delta: null,
+                        Random: params.stateBeforeMove.Random,
+                        board: params.stateBeforeMove.board
+                    };
                 }
                 else {
-                    game.state.board = params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board;
-                    game.state.delta = [];
-                    game.state.current_turn = 0;
-                    game.state.scores = [0, 0];
-                    game.state.changed_delta = null;
-                    game.state.Random = params.move.stateAfterMove.Random;
+                    game.state = {
+                        intialboard: params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board,
+                        delta: [],
+                        current_turn: 0,
+                        scores: [0, 0],
+                        changed_delta: null,
+                        Random: params.move.stateAfterMove.Random,
+                        board: params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
+                    };
                 }
+                log.info("test it out 1 should end");
                 var rline_1 = document.getElementById("rline");
                 var gameArea_1 = document.getElementById("gameArea");
                 var width_1 = gameArea_1.clientWidth / gameLogic.COLS;
@@ -612,11 +624,14 @@ var game;
                 });
                 rline_1.setAttribute("points", tmp);
                 rline_1.setAttribute("style", "fill:none;stroke:blue;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+                log.info("test it out 2 should end");
                 // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 setTimeout(function () {
                     rline_1.setAttribute("points", "");
                     // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
+                    log.info("test it out 3 should end");
                     game.state = game.currentUpdateUI.move.stateAfterMove;
+                    log.info("test it out 4 should end");
                     game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
                 }, 2000);
             }

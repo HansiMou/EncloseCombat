@@ -159,7 +159,6 @@ module game {
     if (!isComputerTurn()) {
       return;
     }
-    log.info("computer");
     didMakeMove = true;
     
     let rline = document.getElementById("rline");
@@ -183,7 +182,7 @@ module game {
       rline.setAttribute("points", "");
       // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
       moveService.makeMove(nextAIMove);
-    },2000);
+    },1500);
   }
 
   function updateUI(params: IUpdateUI): void {
@@ -217,15 +216,28 @@ module game {
         if (params.stateBeforeMove !== undefined){
           state = params.stateBeforeMove;
           state.changed_delta = null;
+          state ={
+            intialboard: params.stateBeforeMove.intialboard,
+            delta : params.stateBeforeMove.delta,
+            current_turn : params.stateBeforeMove.current_turn,
+            scores : params.stateBeforeMove.scores,
+            changed_delta : null,
+            Random : params.stateBeforeMove.Random,
+            board: params.stateBeforeMove.board
+          }
         }
         else{
-          state.board = params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board;
-          state.delta = [];
-          state.current_turn = 0;
-          state.scores = [0, 0];
-          state.changed_delta = null;
-          state.Random = params.move.stateAfterMove.Random;
+          state ={
+            intialboard: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board,
+            delta : [],
+            current_turn : 0,
+            scores : [0, 0],
+            changed_delta : null,
+            Random : params.move.stateAfterMove.Random,
+            board: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
+          }
         }
+        log.info("test it out 1 should end");
         let rline = document.getElementById("rline");
         let gameArea = document.getElementById("gameArea");
         let width = gameArea.clientWidth / gameLogic.COLS;
@@ -239,11 +251,14 @@ module game {
         });
         rline.setAttribute("points", tmp);
         rline.setAttribute("style", "fill:none;stroke:blue;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
+        log.info("test it out 2 should end");
         // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         setTimeout(function(){
           rline.setAttribute("points", "");
           // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
+          log.info("test it out 3 should end");
           state = currentUpdateUI.move.stateAfterMove;
+          log.info("test it out 4 should end");
           animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         },2000);
       }
