@@ -304,6 +304,10 @@ module game {
         rline.setAttribute("points", tmp);
         $timeout(function(){
           rline.setAttribute("points", "");
+          // remove the lines 
+          rline.setAttribute("points", "");
+          
+          // change the state
           state = currentUpdateUI.move.stateAfterMove;
           animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         },2000);

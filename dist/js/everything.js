@@ -674,6 +674,9 @@ var game;
             rline.setAttribute("points", tmp);
             $timeout(function () {
                 rline.setAttribute("points", "");
+                // remove the lines 
+                rline.setAttribute("points", "");
+                // change the state
                 game.state = game.currentUpdateUI.move.stateAfterMove;
                 game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
             }, 2000);
