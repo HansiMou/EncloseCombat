@@ -216,61 +216,56 @@ module game {
       // call maybeSendComputerMove() now (can happen in ?onlyAIs mode)
       maybeSendComputerMove();
     } else {
+      // set up the state before move 
+      if (params.stateBeforeMove !== undefined){
+        state = params.stateBeforeMove;
+        state.changed_delta = null;
+        state ={
+          intialboard: params.stateBeforeMove.intialboard,
+          delta : params.stateBeforeMove.delta,
+          current_turn : params.stateBeforeMove.current_turn,
+          scores : params.stateBeforeMove.scores,
+          changed_delta : null,
+          Random : params.stateBeforeMove.Random,
+          board: params.stateBeforeMove.board
+        }
+      }
+      else{
+        state ={
+          intialboard: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board,
+          delta : [],
+          current_turn : 0,
+          scores : [0, 0],
+          changed_delta : null,
+          Random : params.move.stateAfterMove.Random,
+          board: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
+        }
+      }
+      if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
+      // set up the sliding lines of opponent
+        let tmp = "";
+        currentUpdateUI.move.stateAfterMove.delta.forEach(function(entry) {
+            let  x = entry.col * width + width / 2;
+            let  y = entry.row * height + height / 2;
+            tmp = tmp+x+","+y+" ";
+        });
         
-        // set up the state before move 
-        if (params.stateBeforeMove !== undefined){
-          state = params.stateBeforeMove;
-          state.changed_delta = null;
-          state ={
-            intialboard: params.stateBeforeMove.intialboard,
-            delta : params.stateBeforeMove.delta,
-            current_turn : params.stateBeforeMove.current_turn,
-            scores : params.stateBeforeMove.scores,
-            changed_delta : null,
-            Random : params.stateBeforeMove.Random,
-            board: params.stateBeforeMove.board
-          }
-        }
-        else{
-          state ={
-            intialboard: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board,
-            delta : [],
-            current_turn : 0,
-            scores : [0, 0],
-            changed_delta : null,
-            Random : params.move.stateAfterMove.Random,
-            board: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
-          }
-        }
-        if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
-        // set up the sliding lines of opponent
-          let tmp = "";
-          currentUpdateUI.move.stateAfterMove.delta.forEach(function(entry) {
-              let  x = entry.col * width + width / 2;
-              let  y = entry.row * height + height / 2;
-              tmp = tmp+x+","+y+" ";
-          });
+        rline.setAttribute("points", tmp);
+        $timeout(function(){
+          rline.setAttribute("points", "");
+          // remove the lines 
+          rline.setAttribute("points", "");
           
-          rline.setAttribute("points", tmp);
-          $timeout(function(){
-            rline.setAttribute("points", "");
-            // remove the lines 
-            rline.setAttribute("points", "");
-            
-            // change the state
-            state = currentUpdateUI.move.stateAfterMove;
-            animationEndedTimeout = $timeout(animationEndedCallback, 1000);
-          },2000);
-        }
-        else{
-            state = currentUpdateUI.move.stateAfterMove;
-            animationEndedTimeout = $timeout(animationEndedCallback, 1000);
-        }
+          // change the state
+          state = currentUpdateUI.move.stateAfterMove;
+          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+        },2000);
+      }
+      else{
+          state = currentUpdateUI.move.stateAfterMove;
+          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+      }
         
-      // }
-      // We calculate the AI move only after the animation finishes,
-      // because if we call aiService now
-      // then the animation will be paused until the javascript finishes.
     }
   }
   function clearAnimationTimeout() {
