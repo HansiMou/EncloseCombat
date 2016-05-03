@@ -292,8 +292,6 @@ var game;
                 game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
             }, 2000);
             log.info("test it out???");
-            game.state = game.currentUpdateUI.move.stateAfterMove;
-            game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         }
     }
     function clearAnimationTimeout() {
