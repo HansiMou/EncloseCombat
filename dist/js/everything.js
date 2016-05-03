@@ -590,55 +590,6 @@ var game;
             maybeSendComputerMove();
         }
         else {
-            // if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
-            //   log.info("test it out 1 should start");
-            //   if (params.stateBeforeMove !== undefined){
-            //     state = params.stateBeforeMove;
-            //     state.changed_delta = null;
-            //     state ={
-            //       intialboard: params.stateBeforeMove.intialboard,
-            //       delta : params.stateBeforeMove.delta,
-            //       current_turn : params.stateBeforeMove.current_turn,
-            //       scores : params.stateBeforeMove.scores,
-            //       changed_delta : null,
-            //       Random : params.stateBeforeMove.Random,
-            //       board: params.stateBeforeMove.board
-            //     }
-            //   }
-            //   else{
-            //     state ={
-            //       intialboard: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board,
-            //       delta : [],
-            //       current_turn : 0,
-            //       scores : [0, 0],
-            //       changed_delta : null,
-            //       Random : params.move.stateAfterMove.Random,
-            //       board: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
-            //     }
-            //   }
-            //   log.info("test it out 1 should end");
-            //   let rline = document.getElementById("rline");
-            //   let gameArea = document.getElementById("gameArea");
-            //   let width = gameArea.clientWidth / gameLogic.COLS;
-            //   let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
-            //   let tmp = "";
-            //   currentUpdateUI.move.stateAfterMove.delta.forEach(function(entry) {
-            //       let  x = entry.col * width + width / 2;
-            //       let  y = entry.row * height + height / 2;
-            //       tmp = tmp+x+","+y+" ";
-            //   });
-            //   rline.setAttribute("points", tmp);
-            //   rline.setAttribute("style", "fill:none;stroke:blue;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-            //   // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
-            //   setTimeout(function(){
-            //     rline.setAttribute("points", "");
-            //     // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
-            //     state = currentUpdateUI.move.stateAfterMove;
-            //     log.info("test it out 2 should end");
-            //     animationEndedTimeout = $timeout(animationEndedCallback, 1000);
-            //   },2000);
-            // }
-            // else{
             // set up the state before move 
             if (params.stateBeforeMove !== undefined) {
                 game.state = params.stateBeforeMove;
@@ -664,22 +615,28 @@ var game;
                     board: params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
                 };
             }
-            // set up the sliding lines of opponent
-            var tmp = "";
-            game.currentUpdateUI.move.stateAfterMove.delta.forEach(function (entry) {
-                var x = entry.col * width + width / 2;
-                var y = entry.row * height + height / 2;
-                tmp = tmp + x + "," + y + " ";
-            });
-            rline.setAttribute("points", tmp);
-            $timeout(function () {
-                rline.setAttribute("points", "");
-                // remove the lines 
-                rline.setAttribute("points", "");
-                // change the state
+            if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
+                // set up the sliding lines of opponent
+                var tmp = "";
+                game.currentUpdateUI.move.stateAfterMove.delta.forEach(function (entry) {
+                    var x = entry.col * width + width / 2;
+                    var y = entry.row * height + height / 2;
+                    tmp = tmp + x + "," + y + " ";
+                });
+                rline.setAttribute("points", tmp);
+                $timeout(function () {
+                    rline.setAttribute("points", "");
+                    // remove the lines 
+                    rline.setAttribute("points", "");
+                    // change the state
+                    game.state = game.currentUpdateUI.move.stateAfterMove;
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+                }, 2000);
+            }
+            else {
                 game.state = game.currentUpdateUI.move.stateAfterMove;
                 game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
-            }, 2000);
+            }
         }
     }
     function clearAnimationTimeout() {
