@@ -152,9 +152,8 @@ module game {
     log.info("Hi");
       log.info("Animation ended");
       animationEnded = true;
-      log.info("test it out 3 should end");
+      clearAnimationTimeout();
       maybeSendComputerMove();
-      log.info("test it out 4 should end");
   }
 
   function maybeSendComputerMove() {
@@ -292,6 +291,20 @@ module game {
             board: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
           }
         }
+        
+        let tmp = "";
+        currentUpdateUI.move.stateAfterMove.delta.forEach(function(entry) {
+            let  x = entry.col * width + width / 2;
+            let  y = entry.row * height + height / 2;
+            tmp = tmp+x+","+y+" ";
+        });
+        rline.setAttribute("points", tmp);
+        setTimeout(function(){
+          rline.setAttribute("points", "");
+          state = currentUpdateUI.move.stateAfterMove;
+          log.info("test it out 2 should end");
+          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+        },2000);
         log.info("test it out???");
         state = currentUpdateUI.move.stateAfterMove;
         animationEndedTimeout = $timeout(animationEndedCallback, 1000);

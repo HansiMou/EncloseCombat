@@ -146,9 +146,8 @@ var game;
         log.info("Hi");
         log.info("Animation ended");
         game.animationEnded = true;
-        log.info("test it out 3 should end");
+        clearAnimationTimeout();
         maybeSendComputerMove();
-        log.info("test it out 4 should end");
     }
     function maybeSendComputerMove() {
         if (!isComputerTurn()) {
@@ -279,6 +278,19 @@ var game;
                     board: params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
                 };
             }
+            var tmp = "";
+            game.currentUpdateUI.move.stateAfterMove.delta.forEach(function (entry) {
+                var x = entry.col * width + width / 2;
+                var y = entry.row * height + height / 2;
+                tmp = tmp + x + "," + y + " ";
+            });
+            rline.setAttribute("points", tmp);
+            setTimeout(function () {
+                rline.setAttribute("points", "");
+                game.state = game.currentUpdateUI.move.stateAfterMove;
+                log.info("test it out 2 should end");
+                game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+            }, 2000);
             log.info("test it out???");
             game.state = game.currentUpdateUI.move.stateAfterMove;
             game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
