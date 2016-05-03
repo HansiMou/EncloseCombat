@@ -99,7 +99,7 @@ td {
 }
 
 .scoreNotice {
-  animation: Fade 2s ease-out;
+  animation: Fade 1s ease-out;
   transform: translate3d(0,0,0);
 }
 @keyframes Fade {
@@ -108,7 +108,7 @@ td {
 }
 
 .scoreBox {
-  animation: moveup 2s ease-out;
+  animation: moveup 1s ease-out;
 }
 
 @keyframes moveup {

@@ -610,12 +610,12 @@ var game;
                     rline_1.setAttribute("points", "");
                     // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
                     game.state = game.currentUpdateUI.move.stateAfterMove;
-                    game.animationEndedTimeout = $timeout(animationEndedCallback, 2000);
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
                 }, 2000);
             }
             else {
                 game.state = game.currentUpdateUI.move.stateAfterMove;
-                game.animationEndedTimeout = $timeout(animationEndedCallback, 2000);
+                game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
             }
         }
     }
@@ -628,6 +628,7 @@ var game;
     function isComputerTurn() {
         return isMyTurn() && isComputer();
     }
+    game.isComputerTurn = isComputerTurn;
     function isFirstMove() {
         return !game.currentUpdateUI.move.stateAfterMove;
     }
@@ -649,10 +650,10 @@ var game;
         return game.currentUpdateUI.move.turnIndexAfterMove == playerIndex;
     }
     game.isCurrentPlayerIndex = isCurrentPlayerIndex;
-    function cellPressedDown(row, col) {
-        game.moves.push({ row: row, col: col });
+    function animationEndedorNot() {
+        return game.didMakeMove;
     }
-    game.cellPressedDown = cellPressedDown;
+    game.animationEndedorNot = animationEndedorNot;
     function cellEnter(row, col) {
         if (game.moves.length !== 0 && !(game.moves.length === 1 && game.moves[0] === { row: row, col: col })) {
             game.moves.push({ row: row, col: col });
@@ -679,18 +680,35 @@ var game;
     game.cellPressedUp = cellPressedUp;
     function getScores() {
         var afterscoresum = 0;
+        var beforePlayer0 = 0;
+        var beforePlayer1 = 0;
+        var afterPlayer0 = 0;
+        var afterPlayer1 = 0;
         if (game.currentUpdateUI.move.stateAfterMove) {
-            afterscoresum += game.currentUpdateUI.move.stateAfterMove.scores[0] + game.currentUpdateUI.move.stateAfterMove.scores[1];
+            afterPlayer0 = game.currentUpdateUI.move.stateAfterMove.scores[0];
+            afterPlayer1 = game.currentUpdateUI.move.stateAfterMove.scores[1];
+            afterscoresum = afterPlayer0 + afterPlayer1;
         }
         var beforescoresum = 0;
         if (game.currentUpdateUI.stateBeforeMove) {
-            beforescoresum += game.currentUpdateUI.stateBeforeMove.scores[0] + game.currentUpdateUI.stateBeforeMove.scores[1];
+            beforePlayer0 = game.currentUpdateUI.stateBeforeMove.scores[0];
+            beforePlayer1 = game.currentUpdateUI.stateBeforeMove.scores[1];
+            beforescoresum = beforePlayer0 + beforePlayer1;
         }
-        return afterscoresum - beforescoresum;
+        var b = false;
+        if (afterPlayer0 - beforePlayer0 > 0) {
+            b = game.currentUpdateUI.yourPlayerIndex === 0;
+            log.info("scoreby0", game.currentUpdateUI.yourPlayerIndex);
+        }
+        else if (afterPlayer1 - beforePlayer1 > 0) {
+            b = game.currentUpdateUI.yourPlayerIndex === 1;
+            log.info("scoreby1", game.currentUpdateUI.yourPlayerIndex);
+        }
+        return { score: afterscoresum - beforescoresum, color: b ? 'blue' : 'red' };
     }
     game.getScores = getScores;
     function shouldShowScore() {
-        return !game.animationEnded && getScores() !== 0;
+        return !game.animationEnded && getScores().score !== 0;
     }
     game.shouldShowScore = shouldShowScore;
     function shouldShowImage(row, col) {
@@ -737,6 +755,7 @@ var game;
                 }
             }
         }
+        log.info("test it out", game.animationEnded, row, col);
         return !game.animationEnded &&
             game.state.changed_delta && b;
     }
@@ -828,7 +847,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             if (!draggingPiece) {
                 return;
             }
-            if (type === "touchend") {
+            if (game.isMyTurn() && type === "touchend") {
                 if (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col)) {
                     var tt = game.isPieceR(row, col) ?
                         document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
@@ -857,27 +876,33 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                         tt.setAttribute("r", "45%");
                         setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
                         draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
-                        game.moves.push({ row: row, col: col });
-                        draggingLines.style.display = "block";
-                        if (type === "touchstart") {
-                            pline2.setAttribute("x1", "0");
-                            pline2.setAttribute("y1", "0");
-                            pline2.setAttribute("x2", "0");
-                            pline2.setAttribute("y2", "0");
-                        }
-                        var centerXY = getSquareCenterXY(row, col);
-                        if (game.moves.length == 1) {
-                            pline.setAttribute("points", centerXY.x + "," + centerXY.y + " ");
+                        log.info("animationwhat", game.isComputerTurn());
+                        if (game.isMyTurn()) {
+                            game.moves.push({ row: row, col: col });
+                            draggingLines.style.display = "block";
+                            if (type === "touchstart") {
+                                pline2.setAttribute("x1", "0");
+                                pline2.setAttribute("y1", "0");
+                                pline2.setAttribute("x2", "0");
+                                pline2.setAttribute("y2", "0");
+                            }
+                            var centerXY = getSquareCenterXY(row, col);
+                            if (game.moves.length == 1) {
+                                pline.setAttribute("points", centerXY.x + "," + centerXY.y + " ");
+                            }
+                            else {
+                                var tmp = pline.getAttribute("points");
+                                pline.setAttribute("points", tmp + centerXY.x + "," + centerXY.y + " ");
+                            }
                         }
                         else {
-                            var tmp = pline.getAttribute("points");
-                            pline.setAttribute("points", tmp + centerXY.x + "," + centerXY.y + " ");
+                            pline.setAttribute("points", "");
                         }
                     }
                 }
             }
         }
-        if (type === "touchend" || type === "touchcancel" || type === "touchleave") {
+        if (!game.didMakeMove && (type === "touchend" || type === "touchcancel" || type === "touchleave")) {
             // drag ended
             // return the piece to it's original style (then angular will take care to hide it).
             draggingStartedRowCol = null;
@@ -917,18 +942,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             x: col * size.width + size.width / 2,
             y: row * size.height + size.height / 2
         };
-    }
-    function forceRedraw(element) {
-        if (!element) {
-            return;
-        }
-        var n = document.createTextNode(' ');
-        element.appendChild(n);
-        element.style.display = 'none';
-        setTimeout(function () {
-            element.style.display = 'none';
-            n.parentNode.removeChild(n);
-        }, 200); // you can play with this timeout to make it as short as possible
     }
     function dragDone() {
         $rootScope.$apply(function () {

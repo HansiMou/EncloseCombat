@@ -212,25 +212,25 @@ var game;
                 var gameArea_1 = document.getElementById("gameArea");
                 var width_1 = gameArea_1.clientWidth / gameLogic.COLS;
                 var height_1 = gameArea_1.clientHeight * 0.9 / gameLogic.ROWS;
-                var tmp_1 = "";
+                var tmp = "";
                 game.currentUpdateUI.move.stateAfterMove.delta.forEach(function (entry) {
                     var x = entry.col * width_1 + width_1 / 2;
                     var y = entry.row * height_1 + height_1 / 2;
-                    tmp_1 = tmp_1 + x + "," + y + " ";
+                    tmp = tmp + x + "," + y + " ";
                 });
-                rline_1.setAttribute("points", tmp_1);
+                rline_1.setAttribute("points", tmp);
                 rline_1.setAttribute("style", "fill:none;stroke:blue;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
                 // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 setTimeout(function () {
                     rline_1.setAttribute("points", "");
                     // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
                     game.state = game.currentUpdateUI.move.stateAfterMove;
-                    game.animationEndedTimeout = $timeout(animationEndedCallback, 2000);
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
                 }, 2000);
             }
             else {
                 game.state = game.currentUpdateUI.move.stateAfterMove;
-                game.animationEndedTimeout = $timeout(animationEndedCallback, 2000);
+                game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
             }
         }
     }
@@ -243,6 +243,7 @@ var game;
     function isComputerTurn() {
         return isMyTurn() && isComputer();
     }
+    game.isComputerTurn = isComputerTurn;
     function isFirstMove() {
         return !game.currentUpdateUI.move.stateAfterMove;
     }
@@ -264,10 +265,10 @@ var game;
         return game.currentUpdateUI.move.turnIndexAfterMove == playerIndex;
     }
     game.isCurrentPlayerIndex = isCurrentPlayerIndex;
-    function cellPressedDown(row, col) {
-        game.moves.push({ row: row, col: col });
+    function animationEndedorNot() {
+        return game.didMakeMove;
     }
-    game.cellPressedDown = cellPressedDown;
+    game.animationEndedorNot = animationEndedorNot;
     function cellEnter(row, col) {
         if (game.moves.length !== 0 && !(game.moves.length === 1 && game.moves[0] === { row: row, col: col })) {
             game.moves.push({ row: row, col: col });
@@ -461,7 +462,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             if (!draggingPiece) {
                 return;
             }
-            if (type === "touchend") {
+            if (game.isMyTurn() && type === "touchend") {
                 if (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col)) {
                     var tt = game.isPieceR(row, col) ?
                         document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
@@ -482,35 +483,41 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 if ((game.moves.length === 0) || (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col) && ((Math.abs(game.moves[game.moves.length - 1].row - row) <= 1) && (Math.abs(game.moves[game.moves.length - 1].col - col) <= 1)))) {
                     // if only two points, it cannot go back and select the points in the moves. if more than two points, it cannot go back and select the points other than the first one.
                     if (game.moves.length < 2 || (game.moves.length === 2 && !(game.moves[0].row === row && game.moves[0].col === col)) || (game.moves.length > 2 && !containsDupOthanThanFirst(game.moves, row, col))) {
-                        var tt_1 = game.isPieceR(row, col) ?
+                        var tt = game.isPieceR(row, col) ?
                             document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
                             document.getElementById("e2e_test_pieceG_" + row + "x" + col) : game.isPieceB(row, col) ?
                             document.getElementById("e2e_test_pieceB_" + row + "x" + col) : document.getElementById("e2e_test_pieceX_" + row + "x" + col);
-                        tt_1.setAttribute("r", "55%");
-                        tt_1.setAttribute("r", "45%");
-                        setTimeout(function () { tt_1.setAttribute("r", "40%"); }, 100);
+                        tt.setAttribute("r", "55%");
+                        tt.setAttribute("r", "45%");
+                        setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
                         draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
-                        game.moves.push({ row: row, col: col });
-                        draggingLines.style.display = "block";
-                        if (type === "touchstart") {
-                            pline2.setAttribute("x1", "0");
-                            pline2.setAttribute("y1", "0");
-                            pline2.setAttribute("x2", "0");
-                            pline2.setAttribute("y2", "0");
-                        }
-                        var centerXY = getSquareCenterXY(row, col);
-                        if (game.moves.length == 1) {
-                            pline.setAttribute("points", centerXY.x + "," + centerXY.y + " ");
+                        log.info("animationwhat", game.isComputerTurn());
+                        if (game.isMyTurn()) {
+                            game.moves.push({ row: row, col: col });
+                            draggingLines.style.display = "block";
+                            if (type === "touchstart") {
+                                pline2.setAttribute("x1", "0");
+                                pline2.setAttribute("y1", "0");
+                                pline2.setAttribute("x2", "0");
+                                pline2.setAttribute("y2", "0");
+                            }
+                            var centerXY = getSquareCenterXY(row, col);
+                            if (game.moves.length == 1) {
+                                pline.setAttribute("points", centerXY.x + "," + centerXY.y + " ");
+                            }
+                            else {
+                                var tmp = pline.getAttribute("points");
+                                pline.setAttribute("points", tmp + centerXY.x + "," + centerXY.y + " ");
+                            }
                         }
                         else {
-                            var tmp = pline.getAttribute("points");
-                            pline.setAttribute("points", tmp + centerXY.x + "," + centerXY.y + " ");
+                            pline.setAttribute("points", "");
                         }
                     }
                 }
             }
         }
-        if (type === "touchend" || type === "touchcancel" || type === "touchleave") {
+        if (!game.didMakeMove && (type === "touchend" || type === "touchcancel" || type === "touchleave")) {
             // drag ended
             // return the piece to it's original style (then angular will take care to hide it).
             draggingStartedRowCol = null;
@@ -550,18 +557,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             x: col * size.width + size.width / 2,
             y: row * size.height + size.height / 2
         };
-    }
-    function forceRedraw(element) {
-        if (!element) {
-            return;
-        }
-        var n = document.createTextNode(' ');
-        element.appendChild(n);
-        element.style.display = 'none';
-        setTimeout(function () {
-            element.style.display = 'none';
-            n.parentNode.removeChild(n);
-        }, 200); // you can play with this timeout to make it as short as possible
     }
     function dragDone() {
         $rootScope.$apply(function () {
