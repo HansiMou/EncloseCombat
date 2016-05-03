@@ -305,10 +305,9 @@ module game {
         setTimeout(function(){
           rline.setAttribute("points", "");
         },2000);
-        setTimeout(function(){
-          state = currentUpdateUI.move.stateAfterMove;
-          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
-        }, 2000);
+        
+        state = currentUpdateUI.move.stateAfterMove;
+        animationEndedTimeout = $timeout(animationEndedCallback, 1000);
       // }
       // We calculate the AI move only after the animation finishes,
       // because if we call aiService now
