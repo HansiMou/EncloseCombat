@@ -287,11 +287,10 @@ var game;
             rline.setAttribute("points", tmp);
             setTimeout(function () {
                 rline.setAttribute("points", "");
-                game.state = game.currentUpdateUI.move.stateAfterMove;
-                log.info("test it out 2 should end");
-                game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
             }, 2000);
             log.info("test it out???");
+            game.state = game.currentUpdateUI.move.stateAfterMove;
+            game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         }
     }
     function clearAnimationTimeout() {

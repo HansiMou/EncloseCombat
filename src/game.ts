@@ -301,13 +301,10 @@ module game {
         rline.setAttribute("points", tmp);
         setTimeout(function(){
           rline.setAttribute("points", "");
-          state = currentUpdateUI.move.stateAfterMove;
-          log.info("test it out 2 should end");
-          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         },2000);
         log.info("test it out???");
-        // state = currentUpdateUI.move.stateAfterMove;
-        // animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+        state = currentUpdateUI.move.stateAfterMove;
+        animationEndedTimeout = $timeout(animationEndedCallback, 1000);
       // }
       // We calculate the AI move only after the animation finishes,
       // because if we call aiService now
