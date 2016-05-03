@@ -672,11 +672,11 @@ var game;
                 tmp = tmp + x + "," + y + " ";
             });
             rline.setAttribute("points", tmp);
-            setTimeout(function () {
+            $timeout(function () {
                 rline.setAttribute("points", "");
+                game.state = game.currentUpdateUI.move.stateAfterMove;
+                game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
             }, 2000);
-            game.state = game.currentUpdateUI.move.stateAfterMove;
-            game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         }
     }
     function clearAnimationTimeout() {
