@@ -531,7 +531,9 @@ var game;
         log.info("Hi");
         log.info("Animation ended");
         game.animationEnded = true;
+        log.info("test it out 3 should end");
         maybeSendComputerMove();
+        log.info("test it out 4 should end");
     }
     function maybeSendComputerMove() {
         if (!isComputerTurn()) {
@@ -587,6 +589,7 @@ var game;
         }
         else {
             if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
+                log.info("test it out 1 should start");
                 if (params.stateBeforeMove !== undefined) {
                     game.state = params.stateBeforeMove;
                     game.state.changed_delta = null;
@@ -624,18 +627,17 @@ var game;
                 });
                 rline_1.setAttribute("points", tmp);
                 rline_1.setAttribute("style", "fill:none;stroke:blue;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-                log.info("test it out 2 should end");
                 // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
                 setTimeout(function () {
                     rline_1.setAttribute("points", "");
                     // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
-                    log.info("test it out 3 should end");
                     game.state = game.currentUpdateUI.move.stateAfterMove;
-                    log.info("test it out 4 should end");
+                    log.info("test it out 2 should end");
                     game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
                 }, 2000);
             }
             else {
+                log.info("test it out???");
                 game.state = game.currentUpdateUI.move.stateAfterMove;
                 game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
             }
@@ -779,20 +781,6 @@ var game;
         return 'PLAYER';
     }
     game.getOppoName = getOppoName;
-    function shouldSlowlyAppear(row, col) {
-        var b = false;
-        if (game.state.changed_delta) {
-            for (var i = 0; i < game.state.changed_delta.length; i++) {
-                if (game.state.changed_delta[i].row >= row && game.state.changed_delta[i].col === col) {
-                    b = true;
-                }
-            }
-        }
-        log.info("test it out", game.animationEnded, row, col);
-        return !game.animationEnded &&
-            game.state.changed_delta && b;
-    }
-    game.shouldSlowlyAppear = shouldSlowlyAppear;
     function getMoveDownClass(row, col) {
         var res = 0;
         if (game.state.changed_delta) {
@@ -802,7 +790,8 @@ var game;
                 }
             }
         }
-        if (shouldSlowlyAppear(row, col))
+        log.info("test it out", game.animationEnded, row, col, res, game.state.changed_delta);
+        if (res !== 0 && !game.animationEnded && game.state.changed_delta)
             return 'movedown' + res;
         return '';
     }

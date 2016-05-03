@@ -14,7 +14,7 @@ module game {
   export let isHelpModalShown: boolean = false;
   export let moves: BoardDelta[] = new Array();
   export let msg = "";
-  export let animationEndedTimeout: any = null;
+  export let animationEndedTimeout: ng.IPromise<any> = null;
   export let ismyscore = 0;
   
   export function init() {
@@ -152,7 +152,9 @@ module game {
     log.info("Hi");
       log.info("Animation ended");
       animationEnded = true;
+      log.info("test it out 3 should end");
       maybeSendComputerMove();
+      log.info("test it out 4 should end");
   }
 
   function maybeSendComputerMove() {
@@ -213,6 +215,7 @@ module game {
       maybeSendComputerMove();
     } else {
       if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
+        log.info("test it out 1 should start");
         if (params.stateBeforeMove !== undefined){
           state = params.stateBeforeMove;
           state.changed_delta = null;
@@ -251,18 +254,17 @@ module game {
         });
         rline.setAttribute("points", tmp);
         rline.setAttribute("style", "fill:none;stroke:blue;stroke-dasharray: 5;animation: dash 2s linear;stroke-width:1.5%; stroke-opacity: 0.7");
-        log.info("test it out 2 should end");
         // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         setTimeout(function(){
           rline.setAttribute("points", "");
           // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
-          log.info("test it out 3 should end");
           state = currentUpdateUI.move.stateAfterMove;
-          log.info("test it out 4 should end");
+          log.info("test it out 2 should end");
           animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         },2000);
       }
       else{
+        log.info("test it out???");
         state = currentUpdateUI.move.stateAfterMove;
         animationEndedTimeout = $timeout(animationEndedCallback, 1000);
       }
@@ -405,20 +407,6 @@ module game {
     return 'PLAYER';
   }
 
-  export function shouldSlowlyAppear(row: number, col: number): boolean {
-    let b: boolean = false;
-    if (state.changed_delta){
-        for (let i = 0; i < state.changed_delta.length; i++) {
-            if (state.changed_delta[i].row >= row && state.changed_delta[i].col === col) {
-                b = true;
-            }
-        }
-    }
-    log.info("test it out", animationEnded, row, col);
-    return !animationEnded &&
-        state.changed_delta && b;
-  }
-  
   export function getMoveDownClass(row: number, col: number): string {
     let res = 0;
     if (state.changed_delta){
@@ -428,7 +416,8 @@ module game {
           }
       }
     }
-    if (shouldSlowlyAppear(row, col))
+    log.info("test it out", animationEnded, row, col, res, state.changed_delta);
+    if (res !== 0 && !animationEnded && state.changed_delta)
       return 'movedown'+res;
     return '';
   }
