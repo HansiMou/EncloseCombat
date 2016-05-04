@@ -289,7 +289,7 @@ var game;
     game.getHighestScore = getHighestScore;
     // global leaderboard to maintain
     function getHighestScoreGlobally() {
-        if (highest_score_name !== null && highest_score_name !== undefined && highest_score_name.length !== 0) {
+        if (highest_score_name !== undefined && highest_score_name !== null && highest_score_name.length !== 0) {
             var res = highest_score_name.split(" ")[0];
             log.info("high?", res);
             return parseInt(res);
