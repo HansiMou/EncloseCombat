@@ -626,6 +626,10 @@ var game;
                 });
                 game.shouldshowscore = true;
                 rline.setAttribute("points", tmp);
+                // clear the score animation
+                $timeout(function () {
+                    game.shouldshowscore = false;
+                }, 1000);
                 $timeout(function () {
                     rline.setAttribute("points", "");
                     // remove the lines 
@@ -639,6 +643,10 @@ var game;
             else {
                 game.state = game.currentUpdateUI.move.stateAfterMove;
                 game.animationEndedTimeout = $timeout(animationEndedCallback, game.animationlength);
+                // clear the score animation
+                $timeout(function () {
+                    game.shouldshowscore = false;
+                }, 1000);
             }
         }
     }

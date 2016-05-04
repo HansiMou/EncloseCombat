@@ -252,6 +252,10 @@ module game {
         });
         shouldshowscore = true;
         rline.setAttribute("points", tmp);
+        // clear the score animation
+        $timeout(function(){
+          shouldshowscore = false;
+        }, 1000)
         $timeout(function(){
           rline.setAttribute("points", "");
           // remove the lines 
@@ -265,8 +269,12 @@ module game {
         },1500);
       }
       else{
-          state = currentUpdateUI.move.stateAfterMove;
-          animationEndedTimeout = $timeout(animationEndedCallback, animationlength);
+        state = currentUpdateUI.move.stateAfterMove;
+        animationEndedTimeout = $timeout(animationEndedCallback, animationlength);
+        // clear the score animation
+        $timeout(function(){
+          shouldshowscore = false;
+        }, 1000)
       }
     }
   }
