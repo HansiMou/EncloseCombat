@@ -399,6 +399,7 @@ var game;
     game.animationEndedTimeout = null;
     game.ismyscore = 0;
     game.shouldshowscore = true;
+    game.linesstyle = false;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -553,9 +554,11 @@ var game;
             var y = entry.row * height + height / 2;
             tmp = tmp + x + "," + y + " ";
         });
+        game.linesstyle = true;
         rline.setAttribute("points", tmp);
         scorenotice.setAttribute("z-index", "50");
         $timeout(function () {
+            game.linesstyle = false;
             rline.setAttribute("points", "");
             moveService.makeMove(nextAIMove);
         }, 1500);
@@ -624,9 +627,11 @@ var game;
                 $timeout(function () {
                     game.shouldshowscore = false;
                 }, 1000);
+                game.linesstyle = true;
                 rline.setAttribute("points", tmp);
                 $timeout(function () {
                     // remove the lines 
+                    game.linesstyle = false;
                     rline.setAttribute("points", "");
                     // change the state
                     game.state = game.currentUpdateUI.move.stateAfterMove;

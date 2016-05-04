@@ -83,12 +83,6 @@ td {
   -webkit-transition: background-color 1s ease-in-out;
 }
 
-.remindLinesTS {
-  transition: stroke-opacity 1s ease-in-out;
-  -moz-transition: stroke-opacity 1s ease-in-out;
-  -webkit-transition: stroke-opacity 1s ease-in-out;
-}
-
 
 .myScoreText {
   fill: purple;
@@ -157,6 +151,17 @@ td {
   from {  top: -800%}
   to { top: 0%}
 }
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 100;
+  }
+}
+
+.path {
+  animation: dash 1.5s ease-in-out;
+}
+
 
 .movedown1 {
   

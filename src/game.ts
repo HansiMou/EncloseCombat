@@ -17,6 +17,7 @@ module game {
   export let animationEndedTimeout: ng.IPromise<any> = null;
   export let ismyscore = 0;
   export let shouldshowscore = true;
+  export let linesstyle = false;
   
   export function init() {
     translate.setTranslations(getTranslations());
@@ -177,9 +178,11 @@ module game {
         let  y = entry.row * height + height / 2;
         tmp = tmp+x+","+y+" ";
     });
-    rline.setAttribute("points", tmp);    
+    linesstyle = true; 
+    rline.setAttribute("points", tmp);   
     scorenotice.setAttribute("z-index", "50");
     $timeout(function(){
+      linesstyle = false; 
       rline.setAttribute("points", "");
       moveService.makeMove(nextAIMove);
     },1500);
@@ -250,9 +253,11 @@ module game {
         $timeout(function(){
           shouldshowscore = false;
         }, 1000)
+        linesstyle = true;
         rline.setAttribute("points", tmp);
         $timeout(function(){
           // remove the lines 
+          linesstyle = false;
           rline.setAttribute("points", "");
           
           // change the state
