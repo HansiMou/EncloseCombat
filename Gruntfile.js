@@ -184,10 +184,9 @@ module.exports = function(grunt) {
             'imgs/HelpSlide1.png',
             'imgs/HelpSlide2.png',
           ],
-          network: [
-            'js/everything.min.js.map',
-            'js/everything.js',
-          ],
+          network: 
+            '*'
+          ,
           timestamp: true
         },
         dest: 'dist/index.min.appcache',
