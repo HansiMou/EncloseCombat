@@ -189,11 +189,17 @@ module game {
   }
 
   function updateUI(params: IUpdateUI): void {
-    // my local scoreboard update
-    if (params.playMode === "passAndPlay" && params.move.endMatchScores !== null){
+    // global and my local scoreboard update
+    if (params.playMode === "passAndPlay" && params.move.stateAfterMove !== undefined){
       let current_game_score = params.move.stateAfterMove.scores[0]+params.move.stateAfterMove.scores[1];
       if (current_game_score > parseInt(game.getHighestScore())){
         localStorage.setItem("score", current_game_score+"");
+      }
+      if (current_game_score > game.getHighestScoreGlobally()){
+        let tosend = 'http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore='+'"'+'use strict"'+";var highest_score_name=";
+        tosend += '"'+current_game_score+'"'+";";
+        log.info("high?", tosend);
+        loadXMLDoc(tosend);
       }
     }
     
@@ -292,6 +298,23 @@ module game {
         return 0;
     }
   }
+  
+  // global leaderboard to maintain
+  export function getHighestScoreGlobally(){
+    if (highest_score_name !== null && highest_score_name !== undefined && highest_score_name.length !== 0){
+      let res = highest_score_name.split(" ")[0];
+      log.info("high?", res);
+      return parseInt(res);
+    }
+    else{
+      let tosend = "http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore='use strict';var highest_score_name=";
+      tosend += 0;
+      loadXMLDoc(tosend);
+      log.info("high?", 0);
+      return 0;
+    }
+  }
+  
   export function isComputerTurn() {
     return isMyTurn() && isComputer();
   }

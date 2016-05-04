@@ -48,6 +48,28 @@
   <!-- https://github.com/philipwalton/html-inspector#getting-started -->
   <script src="http://cdnjs.cloudflare.com/ajax/libs/html-inspector/0.8.2/html-inspector.js"></script>
   <!-- /build -->
+  <script type="text/javascript">
+      function loadXMLDoc(theURL)
+      {
+          if (window.XMLHttpRequest)
+          {// code for IE7+, Firefox, Chrome, Opera, Safari, SeaMonkey
+              xmlhttp=new XMLHttpRequest();
+          }
+          else
+          {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+          xmlhttp.onreadystatechange=function()
+          {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+              {
+              }
+          }
+          xmlhttp.open("GET", theURL, false);
+          xmlhttp.send();
+      }
+  var xmlhttp=false;
+  </script>
 </head>
 <body ng-cloak style="background:#FAF0E6;"> 
   <div id="e2e_test_open_rules_modal" class="help-tip" ng-click="game.isHelpModalShown = true" aria-hidden="true"></div>
@@ -102,10 +124,10 @@
   <div class="container" style="position:absolute; height: 10%; width: 100%; top: 0; left: 0;">
      <div class="center">
         <div class="div-inline1" ng-if="!game.isPassAndPlay()" ng-class="{currentPlayer: (game.isCurrentPlayerIndex(0) && game.isMyTurn()) || (game.isCurrentPlayerIndex(1) && !game.isMyTurn())}">{{ game.getName() | translate }}: {{game.state.scores[0]}}</div> 
-        <div class="div-inline1 currentPlayer" ng-if="game.isPassAndPlay()">{{ 'YOUR_SCORE' | translate }}: {{game.state.scores[0]+game.state.scores[1]}}</div>
+        <div class="div-inline1 currentPlayer" ng-if="game.isPassAndPlay()">{{ 'YOUR_SCORE' | translate }}: {{game.state.scores[0]+game.state.scores[1]}}/{{game.getHighestScore()}}</div>
         <div class="div-inline2">&nbsp;&nbsp;{{'LEFT_TURNS' | translate}} : {{20-game.state.current_turn}}&nbsp;&nbsp;</div> 
         <div class="div-inline3" ng-if="!game.isPassAndPlay()" ng-class="{currentPlayer: (game.isCurrentPlayerIndex(1) && game.isMyTurn()) || (game.isCurrentPlayerIndex(0) && !game.isMyTurn())}">{{ game.getOppoName() | translate }}: {{game.state.scores[1]}}</div> 
-        <div class="div-inline3" ng-if="game.isPassAndPlay()" >{{ 'HIGHEST_SCORE' | translate }}: {{game.getHighestScore()}}/{{sss}}</div>
+        <div class="div-inline3" ng-if="game.isPassAndPlay()" >{{ 'HIGHEST_SCORE' | translate }}: {{game.getHighestScoreGlobally()}}</div>
      <div style="clear:both"></div></div>  
     
   </div>

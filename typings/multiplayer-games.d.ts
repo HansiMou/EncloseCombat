@@ -2,7 +2,8 @@ declare var $rootScope: angular.IScope;
 declare var $location: angular.ILocationService;
 declare var $timeout: angular.ITimeoutService;
 declare var $interval: angular.IIntervalService;
-declare let sss: string; 
+declare var highest_score_name: string; 
+declare function loadXMLDoc(url: string): void;
 // IState should be defined by the game, e.g., TicTacToe defines it as:
 // interface IState { board: Board; delta: BoardDelta; }
 // When the match ends, set turnIndexAfterMove -1 and endMatchScores to an array of scores.
