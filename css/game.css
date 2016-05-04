@@ -153,13 +153,18 @@ td {
 }
 
 @keyframes dash {
-  to {
+  from {
     stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }
 
 .path {
-  animation: dash 1.5s ease-in-out;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: dash 1.5s linear alternate infinite;
 }
 
 
