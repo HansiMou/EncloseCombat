@@ -185,6 +185,12 @@ var game;
             if (current_game_score > parseInt(game.getHighestScore())) {
                 localStorage.setItem("score", current_game_score + "");
             }
+            if (current_game_score > game.getHighestScoreGlobally()) {
+                var tosend = 'http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore=' + '"' + 'use strict"' + ";var highest_score_name=";
+                tosend += '"' + current_game_score + '"' + ";";
+                log.info("high?", tosend);
+                loadXMLDoc(tosend);
+            }
         }
         log.info("Game got updateUI???:", params);
         game.animationEnded = false;
