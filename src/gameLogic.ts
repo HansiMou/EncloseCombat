@@ -14,9 +14,9 @@ interface IState {
   delta: BoardDelta[];
   current_turn: number;
   scores: number[];
-  intialboard: Board;
+  initialboard: Board;
   changed_delta: BoardDelta[];
-  Random: number;
+  random: number;
 }
 interface Colrange {
     left: number;

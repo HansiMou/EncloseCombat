@@ -16,6 +16,7 @@ module game {
   export let msg = "";
   export let animationEndedTimeout: ng.IPromise<any> = null;
   export let ismyscore = 0;
+  export let shouldshowscore = true;
   
   export function init() {
     translate.setTranslations(getTranslations());
@@ -152,6 +153,7 @@ module game {
     log.info("Hi");
       log.info("Animation ended");
       animationEnded = true;
+      shouldshowscore = true;
       clearAnimationTimeout();
       maybeSendComputerMove();
   }
@@ -198,15 +200,12 @@ module game {
     log.info("Game got updateUI???:", params);
     animationEnded = false;
     didMakeMove = false; // Only one move per updateUI
-    log.info("test it out -2 should start");
     currentUpdateUI = params;
-    log.info("test it out -1 should start");
     let rline = document.getElementById("rline");
     let gameArea = document.getElementById("gameArea");
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     clearAnimationTimeout();
-    log.info("test it out 0 should start");
     log.info(params.stateBeforeMove);
     if (isFirstMove()) {
       state = gameLogic.getInitialState();
@@ -221,24 +220,24 @@ module game {
         state = params.stateBeforeMove;
         state.changed_delta = null;
         state ={
-          intialboard: params.stateBeforeMove.intialboard,
+          initialboard: params.stateBeforeMove.initialboard,
           delta : params.stateBeforeMove.delta,
           current_turn : params.stateBeforeMove.current_turn,
           scores : params.stateBeforeMove.scores,
           changed_delta : null,
-          Random : params.stateBeforeMove.Random,
+          random : params.stateBeforeMove.random,
           board: params.stateBeforeMove.board
         }
       }
       else{
         state ={
-          intialboard: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board,
+          initialboard: params.move.stateAfterMove.initialboard? params.move.stateAfterMove.initialboard : params.move.stateAfterMove.board,
           delta : [],
           current_turn : 0,
           scores : [0, 0],
           changed_delta : null,
-          Random : params.move.stateAfterMove.Random,
-          board: params.move.stateAfterMove.intialboard? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
+          random : params.move.stateAfterMove.random,
+          board: params.move.stateAfterMove.initialboard? params.move.stateAfterMove.initialboard : params.move.stateAfterMove.board
         }
       }
       if (isMyTurn() && currentUpdateUI.playMode !== "passAndPlay" && currentUpdateUI.playMode !== "playAgainstTheComputer"){
@@ -249,7 +248,7 @@ module game {
             let  y = entry.row * height + height / 2;
             tmp = tmp+x+","+y+" ";
         });
-        
+        shouldshowscore = true;
         rline.setAttribute("points", tmp);
         $timeout(function(){
           rline.setAttribute("points", "");
@@ -258,6 +257,8 @@ module game {
           
           // change the state
           state = currentUpdateUI.move.stateAfterMove;
+          
+          shouldshowscore = false;
           animationEndedTimeout = $timeout(animationEndedCallback, 1000);
         },2000);
       }
@@ -389,14 +390,14 @@ module game {
   }
   
   export function getName(): string {
-    if (state.Random){
-      return 'PLAYER'+state.Random;
+    if (state.random){
+      return 'PLAYER'+state.random;
     }
     return 'PLAYER';
   }
   export function getOppoName(): string {
-    if (state.Random){
-      let tmp = state.Random+1;
+    if (state.random){
+      let tmp = state.random+1;
       return 'PLAYER'+tmp;
     }
     return 'PLAYER';

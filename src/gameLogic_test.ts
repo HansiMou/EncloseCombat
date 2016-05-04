@@ -5,49 +5,49 @@ describe("In EncloseCombat", function() {
   let TWO_TURN = 1;
   let NO_ONE_TURN = -1;
   let NO_ONE_WINS: number[] = null;
-//   let X_WIN_SCORES = [1, 0];
-//   let O_WIN_SCORES = [0, 1];
-//   let TIE_SCORES = [0, 0];
+  let X_WIN_SCORES = [1, 0];
+  let O_WIN_SCORES = [0, 1];
+  let TIE_SCORES = [0, 0];
 
-//   function expectMove(
-//       isOk: boolean,
-//       turnIndexBeforeMove: number,
-//       boardBeforeMove: Board,
-//       scoresBeforeMove: number[],
-//       current_turnBeforeMove: number,
-//       moves: BoardDelta[],
-//       boardAfterMove: Board,
-//       turnIndexAfterMove: number,
-//       scoresAfterMove: number[],
-//       current_turnAfterMove: number,
-//       endMatchScores: number[]): void {
-//     let stateTransition: IStateTransition = {
-//       turnIndexBeforeMove: turnIndexBeforeMove,
-//       stateBeforeMove: boardBeforeMove ? {board: boardBeforeMove, delta: null, 
-//           current_turn: current_turnBeforeMove, scores: scoresBeforeMove} : null,
-//       move: {
-//           endMatchScores: endMatchScores,
-//         turnIndexAfterMove: turnIndexAfterMove,
-//         stateAfterMove: {board: boardAfterMove, delta: moves,
-//             current_turn: current_turnAfterMove, scores: scoresAfterMove}
-//       },
-//       numberOfPlayers: null
-//     };
-//     if (isOk) {
-//       gameLogic.checkMoveOk(stateTransition);
-//     } else {
-//       // We expect an exception to be thrown :)
-//       let didThrowException = false;
-//       try {
-//         gameLogic.checkMoveOk(stateTransition);
-//       } catch (e) {
-//         didThrowException = true;
-//       }
-//       if (!didThrowException) {
-//         throw new Error("We expect an illegal move, but checkMoveOk didn't throw any exception!")
-//       }
-//     }
-//   }
+  function expectMove(
+      isOk: boolean,
+      turnIndexBeforeMove: number,
+      boardBeforeMove: Board,
+      scoresBeforeMove: number[],
+      current_turnBeforeMove: number,
+      moves: BoardDelta[],
+      boardAfterMove: Board,
+      turnIndexAfterMove: number,
+      scoresAfterMove: number[],
+      current_turnAfterMove: number,
+      endMatchScores: number[]): void {
+    let stateTransition: IStateTransition = {
+      turnIndexBeforeMove: turnIndexBeforeMove,
+      stateBeforeMove: boardBeforeMove ? {board: boardBeforeMove, delta: null, 
+          current_turn: current_turnBeforeMove, scores: scoresBeforeMove} : null,
+      move: {
+          endMatchScores: endMatchScores,
+        turnIndexAfterMove: turnIndexAfterMove,
+        stateAfterMove: {board: boardAfterMove, delta: moves,
+            current_turn: current_turnAfterMove, scores: scoresAfterMove}
+      },
+      numberOfPlayers: null
+    };
+    if (isOk) {
+      gameLogic.checkMoveOk(stateTransition);
+    } else {
+      // We expect an exception to be thrown :)
+      let didThrowException = false;
+      try {
+        gameLogic.checkMoveOk(stateTransition);
+      } catch (e) {
+        didThrowException = true;
+      }
+      if (!didThrowException) {
+        throw new Error("We expect an illegal move, but checkMoveOk didn't throw any exception!")
+      }
+    }
+  }
 // it("drawing one small chip from initial state at upper left is illegal", function() {
 //     expectMove(ILLEGAL, ONE_TURN, null, null, 1,
 //     [{row:0, col:0}],

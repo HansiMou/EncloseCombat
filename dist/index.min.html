@@ -108,7 +108,7 @@
     
     <!--show the score you or opponent got-->
     <svg id="scorenotice" top="100%" width="100%" height="100%"
-        style="display:block; position:absolute; z-index: 40;"  opacity="1" ng-show="!game.animationEnded && game.getScores()!==0" ng-class="{scoreBox: game.shouldShowScore()}">
+        style="display:block; position:absolute; z-index: 40;"  opacity="1" ng-show="!game.animationEnded && game.getScores()!==0 && game.shouldshowscore" ng-class="{scoreBox: game.shouldShowScore()}">
       <text x="50%" y="50%"  text-anchor="middle" font-size="7em" ng-style="{fill:game.getScores().color}" ng-show="!game.animationEnded && game.getScores().score!==0" ng-class="{scoreNotice: game.shouldShowScore()}">
         +{{game.getScores().score}}
       </text>
@@ -143,7 +143,7 @@
           <svg ng-if="game.isPieceX(row, col)" 
               width="100%" height="100%">
             <circle cx="50%" cy="50%" r="40%" id="{{'e2e_test_pieceX_' + row + 'x' + col}}"
-              stroke="#ffd700" stroke-width="5%" fill="#ffd700" style="transition: r 0.1s"/>
+              stroke="black" stroke-width="5%" fill="#ffd700" style="transition: r 0.1s"/>
           </svg>
           
         </div>

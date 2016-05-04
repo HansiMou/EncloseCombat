@@ -13,6 +13,7 @@ var game;
     game.msg = "";
     game.animationEndedTimeout = null;
     game.ismyscore = 0;
+    game.shouldshowscore = true;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -146,6 +147,7 @@ var game;
         log.info("Hi");
         log.info("Animation ended");
         game.animationEnded = true;
+        game.shouldshowscore = true;
         clearAnimationTimeout();
         maybeSendComputerMove();
     }
@@ -187,15 +189,12 @@ var game;
         log.info("Game got updateUI???:", params);
         game.animationEnded = false;
         game.didMakeMove = false; // Only one move per updateUI
-        log.info("test it out -2 should start");
         game.currentUpdateUI = params;
-        log.info("test it out -1 should start");
         var rline = document.getElementById("rline");
         var gameArea = document.getElementById("gameArea");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
         clearAnimationTimeout();
-        log.info("test it out 0 should start");
         log.info(params.stateBeforeMove);
         if (isFirstMove()) {
             game.state = gameLogic.getInitialState();
@@ -210,24 +209,24 @@ var game;
                 game.state = params.stateBeforeMove;
                 game.state.changed_delta = null;
                 game.state = {
-                    intialboard: params.stateBeforeMove.intialboard,
+                    initialboard: params.stateBeforeMove.initialboard,
                     delta: params.stateBeforeMove.delta,
                     current_turn: params.stateBeforeMove.current_turn,
                     scores: params.stateBeforeMove.scores,
                     changed_delta: null,
-                    Random: params.stateBeforeMove.Random,
+                    random: params.stateBeforeMove.random,
                     board: params.stateBeforeMove.board
                 };
             }
             else {
                 game.state = {
-                    intialboard: params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board,
+                    initialboard: params.move.stateAfterMove.initialboard ? params.move.stateAfterMove.initialboard : params.move.stateAfterMove.board,
                     delta: [],
                     current_turn: 0,
                     scores: [0, 0],
                     changed_delta: null,
-                    Random: params.move.stateAfterMove.Random,
-                    board: params.move.stateAfterMove.intialboard ? params.move.stateAfterMove.intialboard : params.move.stateAfterMove.board
+                    random: params.move.stateAfterMove.random,
+                    board: params.move.stateAfterMove.initialboard ? params.move.stateAfterMove.initialboard : params.move.stateAfterMove.board
                 };
             }
             if (isMyTurn() && game.currentUpdateUI.playMode !== "passAndPlay" && game.currentUpdateUI.playMode !== "playAgainstTheComputer") {
@@ -238,6 +237,7 @@ var game;
                     var y = entry.row * height + height / 2;
                     tmp = tmp + x + "," + y + " ";
                 });
+                game.shouldshowscore = true;
                 rline.setAttribute("points", tmp);
                 $timeout(function () {
                     rline.setAttribute("points", "");
@@ -245,6 +245,7 @@ var game;
                     rline.setAttribute("points", "");
                     // change the state
                     game.state = game.currentUpdateUI.move.stateAfterMove;
+                    game.shouldshowscore = false;
                     game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
                 }, 2000);
             }
@@ -378,15 +379,15 @@ var game;
     }
     game.isPieceX = isPieceX;
     function getName() {
-        if (game.state.Random) {
-            return 'PLAYER' + game.state.Random;
+        if (game.state.random) {
+            return 'PLAYER' + game.state.random;
         }
         return 'PLAYER';
     }
     game.getName = getName;
     function getOppoName() {
-        if (game.state.Random) {
-            var tmp = game.state.Random + 1;
+        if (game.state.random) {
+            var tmp = game.state.random + 1;
             return 'PLAYER' + tmp;
         }
         return 'PLAYER';
