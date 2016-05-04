@@ -18,8 +18,10 @@ module game {
   export let ismyscore = 0;
   export let shouldshowscore = true;
   export let linesstyle = false;
+  export let record: number;
+  export let $httpt: angular.IHttpService; 
   
-  export function init() {
+  export function init($http: any) {
     translate.setTranslations(getTranslations());
     translate.setLanguage('en');
     log.log("Translation of 'RULES_OF_ENCLOSECOMBAT' is " + translate('RULES_OF_ENCLOSECOMBAT'));
@@ -30,7 +32,6 @@ module game {
       checkMoveOk: gameLogic.checkMoveOkNoOp,
       updateUI: updateUI
     });
-
     let w: any = window;
     if (w["HTMLInspector"]) {
       setInterval(function () {
@@ -39,6 +40,18 @@ module game {
         });
       }, 3000);
     }
+    $http({
+      method: 'GET',
+      url: 'http://cs.nyu.edu/~hm1305/smg/score'
+    }).then(function successCallback(response:any) {
+      record = parseInt(response.data);
+      log.info("finallll", angular.toJson(response.data));
+    }, function errorCallback(response:any) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+      log.info("finalll", response);
+      record = 0;
+    });
   }
 
   function getTranslations(): Translations {
@@ -195,13 +208,19 @@ module game {
       if (current_game_score > parseInt(game.getHighestScore())){
         localStorage.setItem("score", current_game_score+"");
       }
-      // if (current_game_score > game.getHighestScoreGlobally()){
-      //   let tosend = 'http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore='+'"'+'use strict"'+";var highest_score_name=";
-      //   tosend += '"'+current_game_score+'"'+";";
-      //   log.info("high?", tosend);
-      //   loadXMLDoc(tosend);
-      // }
-    }
+      
+        if (current_game_score > game.getHighestScoreGlobally()){
+          $httpt({
+            method: 'GET',
+            url: 'http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore='+current_game_score
+          }).then(function successCallback(response:any) {
+            log.info("finallll", angular.toJson(response));
+            record = current_game_score;
+          }, function errorCallback(response:any) {
+            log.info("finalll", response);
+          });
+        }
+      }
     
     log.info("Game got updateUI???:", params);
     animationEnded = false;
@@ -301,18 +320,7 @@ module game {
   
   // global leaderboard to maintain
   export function getHighestScoreGlobally(){
-    // if (highest_score_name !== undefined && highest_score_name !== null && highest_score_name.length !== 0){
-    //   let res = highest_score_name.split(" ")[0];
-    //   log.info("high?", res);
-    //   return parseInt(res);
-    // }
-    // else{
-    //   let tosend = "http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore='use strict';var highest_score_name=";
-    //   tosend += 0;
-    //   loadXMLDoc(tosend);
-    //   log.info("high?", 0);
-      return 0;
-    // }
+    return record;
   }
   
   export function isComputerTurn() {
@@ -339,7 +347,7 @@ module game {
   export function animationEndedorNot() : boolean{
     return game.didMakeMove; 
   }
-  export function cellPressedUp(): void {
+  export function cellPressedUp($http: angular.IHttpService): void {
     log.info("Slided on cell:", angular.toJson(moves));
     
     let remindlines = document.getElementById("remindlines");
@@ -353,7 +361,7 @@ module game {
 
       moveService.makeMove(nextMove);
       moves = new Array();
-      
+
     } catch (e) {
       log.info(e);
       moves = new Array();
@@ -465,14 +473,14 @@ module game {
 }
 
 angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
-  .run(function () {
+  .run(['$http', function ($http:angular.IHttpService) {
     'use strict';
     let gameArea = document.getElementById("gameArea");
     let draggingLines = document.getElementById("draggingLines");
     let pline = document.getElementById("pline");
     let pline2 = document.getElementById("pline2");
     let nextZIndex = 61;
-    
+    game.$httpt = $http;
 
     dragAndDropService.addDragListener("gameArea", handleDragEvent);
     let rowsNum = gameLogic.ROWS;
@@ -546,7 +554,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
             }
             log.info(angular.toJson(game.moves));
             // draggingLines.style.webkitTransform = 'scale(1)';
-            dragDone();
+            dragDone($http);
             // draggingLines.style.webkitTransform = 'scale(1)';
           } else {
             // Drag continue
@@ -631,13 +639,13 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
         };
       }
 
-      function dragDone() {
+      function dragDone($http: angular.IHttpService) {
         $rootScope.$apply(function () {
           // Update piece in board
-          game.cellPressedUp();
+          game.cellPressedUp($http);
         });
       }
     $rootScope['game'] = game;
-    game.init();
+    game.init($http);
     resizeGameAreaService.setWidthToHeight(0.6818);
-  });
+  }]);

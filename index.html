@@ -48,28 +48,6 @@
   <!-- https://github.com/philipwalton/html-inspector#getting-started -->
   <script src="http://cdnjs.cloudflare.com/ajax/libs/html-inspector/0.8.2/html-inspector.js"></script>
   <!-- /build -->
-  <script type="text/javascript">
-      function loadXMLDoc(theURL)
-      {
-          if (window.XMLHttpRequest)
-          {// code for IE7+, Firefox, Chrome, Opera, Safari, SeaMonkey
-              xmlhttp=new XMLHttpRequest();
-          }
-          else
-          {// code for IE6, IE5
-              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-          }
-          xmlhttp.onreadystatechange=function()
-          {
-              if (xmlhttp.readyState==4 && xmlhttp.status==200)
-              {
-              }
-          }
-          xmlhttp.open("GET", theURL, false);
-          xmlhttp.send();
-      }
-  var xmlhttp=false;
-  </script>
 </head>
 <body ng-cloak style="background:#FAF0E6;"> 
   <div id="e2e_test_open_rules_modal" class="help-tip" ng-click="game.isHelpModalShown = true" aria-hidden="true"></div>

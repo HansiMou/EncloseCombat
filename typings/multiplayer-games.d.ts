@@ -1,6 +1,7 @@
 declare var $rootScope: angular.IScope;
 declare var $location: angular.ILocationService;
 declare var $timeout: angular.ITimeoutService;
+declare var $http: angular.IHttpService;
 declare var $interval: angular.IIntervalService;
 declare var highest_score_name: string; 
 declare function loadXMLDoc(url: string): void;

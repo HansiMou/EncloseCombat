@@ -15,7 +15,7 @@ var game;
     game.ismyscore = 0;
     game.shouldshowscore = true;
     game.linesstyle = false;
-    function init() {
+    function init($http) {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
         log.log("Translation of 'RULES_OF_ENCLOSECOMBAT' is " + translate('RULES_OF_ENCLOSECOMBAT'));
@@ -34,6 +34,18 @@ var game;
                 });
             }, 3000);
         }
+        $http({
+            method: 'GET',
+            url: 'http://cs.nyu.edu/~hm1305/smg/score'
+        }).then(function successCallback(response) {
+            game.record = parseInt(response.data);
+            log.info("finallll", angular.toJson(response.data));
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            log.info("finalll", response);
+            game.record = 0;
+        });
     }
     game.init = init;
     function getTranslations() {
@@ -185,6 +197,17 @@ var game;
             if (current_game_score > parseInt(game.getHighestScore())) {
                 localStorage.setItem("score", current_game_score + "");
             }
+            if (current_game_score > game.getHighestScoreGlobally()) {
+                game.$httpt({
+                    method: 'GET',
+                    url: 'http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore=' + current_game_score
+                }).then(function successCallback(response) {
+                    log.info("finallll", angular.toJson(response));
+                    game.record = current_game_score;
+                }, function errorCallback(response) {
+                    log.info("finalll", response);
+                });
+            }
         }
         log.info("Game got updateUI???:", params);
         game.animationEnded = false;
@@ -283,18 +306,7 @@ var game;
     game.getHighestScore = getHighestScore;
     // global leaderboard to maintain
     function getHighestScoreGlobally() {
-        // if (highest_score_name !== undefined && highest_score_name !== null && highest_score_name.length !== 0){
-        //   let res = highest_score_name.split(" ")[0];
-        //   log.info("high?", res);
-        //   return parseInt(res);
-        // }
-        // else{
-        //   let tosend = "http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore='use strict';var highest_score_name=";
-        //   tosend += 0;
-        //   loadXMLDoc(tosend);
-        //   log.info("high?", 0);
-        return 0;
-        // }
+        return game.record;
     }
     game.getHighestScoreGlobally = getHighestScoreGlobally;
     function isComputerTurn() {
@@ -326,7 +338,7 @@ var game;
         return game.didMakeMove;
     }
     game.animationEndedorNot = animationEndedorNot;
-    function cellPressedUp() {
+    function cellPressedUp($http) {
         log.info("Slided on cell:", angular.toJson(game.moves));
         var remindlines = document.getElementById("remindlines");
         if (window.location.search === '?throwException') {
@@ -450,171 +462,172 @@ var game;
     game.clickedOnModal = clickedOnModal;
 })(game || (game = {}));
 angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
-    .run(function () {
-    'use strict';
-    var gameArea = document.getElementById("gameArea");
-    var draggingLines = document.getElementById("draggingLines");
-    var pline = document.getElementById("pline");
-    var pline2 = document.getElementById("pline2");
-    var nextZIndex = 61;
-    dragAndDropService.addDragListener("gameArea", handleDragEvent);
-    var rowsNum = gameLogic.ROWS;
-    var colsNum = gameLogic.COLS;
-    var draggingPiece = null;
-    var draggingStartedRowCol = null; // The {row: YY, col: XX} where dragging started.
-    function handleDragEvent(type, clientX, clientY) {
-        // Center point in gameArea
-        var realTop = gameArea.offsetTop + 0.1 * gameArea.clientHeight;
-        var realHeight = gameArea.clientHeight * 0.9;
-        var x = clientX - gameArea.offsetLeft;
-        var y = clientY - realTop;
-        var row, col;
-        // Is outside gameArea?
-        if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= realHeight) {
-            if (draggingPiece) {
-            }
-            else {
-                draggingLines.style.display = "none";
-                draggingLines.offsetHeight;
-                return;
-            }
-        }
-        else {
-            // Inside gameArea. Let's find the containing square's row and col
-            col = Math.floor(colsNum * x / gameArea.clientWidth);
-            row = Math.floor(rowsNum * y / realHeight);
-            var cy = realHeight / 2 / rowsNum * (row * 2 + 1);
-            var cx = gameArea.clientWidth / 2 / colsNum * (col * 2 + 1);
-            var percent = Math.sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy)) / (realHeight / 2 / rowsNum);
-            if (game.moves.length !== 0) {
-                var XY = getSquareCenterXY(game.moves[game.moves.length - 1].row, game.moves[game.moves.length - 1].col);
-                pline2.setAttribute("x1", XY.x + "");
-                pline2.setAttribute("y1", XY.y + "");
-                pline2.setAttribute("x2", x + "");
-                pline2.setAttribute("y2", y + "");
-            }
-            // set up of the threshold
-            if (percent > 0.8) {
-                if (type === "touchend" || type === "touchcancel" || type === "touchleave") {
-                    game.moves = new Array();
-                    pline.setAttribute("points", "");
+    .run(['$http', function ($http) {
+        'use strict';
+        var gameArea = document.getElementById("gameArea");
+        var draggingLines = document.getElementById("draggingLines");
+        var pline = document.getElementById("pline");
+        var pline2 = document.getElementById("pline2");
+        var nextZIndex = 61;
+        game.$httpt = $http;
+        dragAndDropService.addDragListener("gameArea", handleDragEvent);
+        var rowsNum = gameLogic.ROWS;
+        var colsNum = gameLogic.COLS;
+        var draggingPiece = null;
+        var draggingStartedRowCol = null; // The {row: YY, col: XX} where dragging started.
+        function handleDragEvent(type, clientX, clientY) {
+            // Center point in gameArea
+            var realTop = gameArea.offsetTop + 0.1 * gameArea.clientHeight;
+            var realHeight = gameArea.clientHeight * 0.9;
+            var x = clientX - gameArea.offsetLeft;
+            var y = clientY - realTop;
+            var row, col;
+            // Is outside gameArea?
+            if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= realHeight) {
+                if (draggingPiece) {
+                }
+                else {
                     draggingLines.style.display = "none";
-                    draggingLines.style.webkitTransform = 'scale(1)';
                     draggingLines.offsetHeight;
+                    return;
                 }
-                return;
-            }
-            if (type === "touchstart" && !draggingStartedRowCol) {
-                // drag started
-                draggingStartedRowCol = { row: row, col: col };
-                draggingPiece = document.getElementById("e2e_test_div_" + draggingStartedRowCol.row + "x" + draggingStartedRowCol.col);
-            }
-            if (!draggingPiece) {
-                return;
-            }
-            if (game.isMyTurn() && type === "touchend") {
-                if (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col)) {
-                    var tt = game.isPieceR(row, col) ?
-                        document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
-                        document.getElementById("e2e_test_pieceG_" + row + "x" + col) : game.isPieceB(row, col) ?
-                        document.getElementById("e2e_test_pieceB_" + row + "x" + col) : document.getElementById("e2e_test_pieceX_" + row + "x" + col);
-                    // tt.setAttribute("r", "55%");
-                    // setTimeout(function(){tt.setAttribute("r", "40%");},100);
-                    draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
-                    game.moves.push({ row: row, col: col });
-                }
-                log.info(angular.toJson(game.moves));
-                // draggingLines.style.webkitTransform = 'scale(1)';
-                dragDone();
             }
             else {
-                // Drag continue
-                // the first point or points around the last one
-                if ((game.moves.length === 0) || (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col) && ((Math.abs(game.moves[game.moves.length - 1].row - row) <= 1) && (Math.abs(game.moves[game.moves.length - 1].col - col) <= 1)))) {
-                    // if only two points, it cannot go back and select the points in the moves. if more than two points, it cannot go back and select the points other than the first one.
-                    if ((game.moves.length < 2 || (game.moves.length === 2 && !(game.moves[0].row === row && game.moves[0].col === col)) || (game.moves.length > 2 && !containsDupOthanThanFirst(game.moves, row, col))) && !(game.moves.length >= 3 && game.moves[game.moves.length - 1].row === game.moves[0].row && game.moves[game.moves.length - 1].col === game.moves[0].col)) {
+                // Inside gameArea. Let's find the containing square's row and col
+                col = Math.floor(colsNum * x / gameArea.clientWidth);
+                row = Math.floor(rowsNum * y / realHeight);
+                var cy = realHeight / 2 / rowsNum * (row * 2 + 1);
+                var cx = gameArea.clientWidth / 2 / colsNum * (col * 2 + 1);
+                var percent = Math.sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy)) / (realHeight / 2 / rowsNum);
+                if (game.moves.length !== 0) {
+                    var XY = getSquareCenterXY(game.moves[game.moves.length - 1].row, game.moves[game.moves.length - 1].col);
+                    pline2.setAttribute("x1", XY.x + "");
+                    pline2.setAttribute("y1", XY.y + "");
+                    pline2.setAttribute("x2", x + "");
+                    pline2.setAttribute("y2", y + "");
+                }
+                // set up of the threshold
+                if (percent > 0.8) {
+                    if (type === "touchend" || type === "touchcancel" || type === "touchleave") {
+                        game.moves = new Array();
+                        pline.setAttribute("points", "");
+                        draggingLines.style.display = "none";
+                        draggingLines.style.webkitTransform = 'scale(1)';
+                        draggingLines.offsetHeight;
+                    }
+                    return;
+                }
+                if (type === "touchstart" && !draggingStartedRowCol) {
+                    // drag started
+                    draggingStartedRowCol = { row: row, col: col };
+                    draggingPiece = document.getElementById("e2e_test_div_" + draggingStartedRowCol.row + "x" + draggingStartedRowCol.col);
+                }
+                if (!draggingPiece) {
+                    return;
+                }
+                if (game.isMyTurn() && type === "touchend") {
+                    if (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col)) {
                         var tt = game.isPieceR(row, col) ?
                             document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
                             document.getElementById("e2e_test_pieceG_" + row + "x" + col) : game.isPieceB(row, col) ?
                             document.getElementById("e2e_test_pieceB_" + row + "x" + col) : document.getElementById("e2e_test_pieceX_" + row + "x" + col);
-                        tt.setAttribute("r", "47%");
-                        $timeout(function () { tt.setAttribute("r", "42%"); }, 150);
+                        // tt.setAttribute("r", "55%");
+                        // setTimeout(function(){tt.setAttribute("r", "40%");},100);
                         draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
-                        log.info("animationwhat", game.isComputerTurn());
-                        if (game.isMyTurn()) {
-                            game.moves.push({ row: row, col: col });
-                            draggingLines.style.display = "block";
-                            if (type === "touchstart") {
-                                pline2.setAttribute("x1", "0");
-                                pline2.setAttribute("y1", "0");
-                                pline2.setAttribute("x2", "0");
-                                pline2.setAttribute("y2", "0");
-                            }
-                            var centerXY = getSquareCenterXY(row, col);
-                            if (game.moves.length == 1) {
-                                pline.setAttribute("points", centerXY.x + "," + centerXY.y + " ");
+                        game.moves.push({ row: row, col: col });
+                    }
+                    log.info(angular.toJson(game.moves));
+                    // draggingLines.style.webkitTransform = 'scale(1)';
+                    dragDone($http);
+                }
+                else {
+                    // Drag continue
+                    // the first point or points around the last one
+                    if ((game.moves.length === 0) || (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col) && ((Math.abs(game.moves[game.moves.length - 1].row - row) <= 1) && (Math.abs(game.moves[game.moves.length - 1].col - col) <= 1)))) {
+                        // if only two points, it cannot go back and select the points in the moves. if more than two points, it cannot go back and select the points other than the first one.
+                        if ((game.moves.length < 2 || (game.moves.length === 2 && !(game.moves[0].row === row && game.moves[0].col === col)) || (game.moves.length > 2 && !containsDupOthanThanFirst(game.moves, row, col))) && !(game.moves.length >= 3 && game.moves[game.moves.length - 1].row === game.moves[0].row && game.moves[game.moves.length - 1].col === game.moves[0].col)) {
+                            var tt = game.isPieceR(row, col) ?
+                                document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
+                                document.getElementById("e2e_test_pieceG_" + row + "x" + col) : game.isPieceB(row, col) ?
+                                document.getElementById("e2e_test_pieceB_" + row + "x" + col) : document.getElementById("e2e_test_pieceX_" + row + "x" + col);
+                            tt.setAttribute("r", "47%");
+                            $timeout(function () { tt.setAttribute("r", "42%"); }, 150);
+                            draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
+                            log.info("animationwhat", game.isComputerTurn());
+                            if (game.isMyTurn()) {
+                                game.moves.push({ row: row, col: col });
+                                draggingLines.style.display = "block";
+                                if (type === "touchstart") {
+                                    pline2.setAttribute("x1", "0");
+                                    pline2.setAttribute("y1", "0");
+                                    pline2.setAttribute("x2", "0");
+                                    pline2.setAttribute("y2", "0");
+                                }
+                                var centerXY = getSquareCenterXY(row, col);
+                                if (game.moves.length == 1) {
+                                    pline.setAttribute("points", centerXY.x + "," + centerXY.y + " ");
+                                }
+                                else {
+                                    var tmp = pline.getAttribute("points");
+                                    pline.setAttribute("points", tmp + centerXY.x + "," + centerXY.y + " ");
+                                }
                             }
                             else {
-                                var tmp = pline.getAttribute("points");
-                                pline.setAttribute("points", tmp + centerXY.x + "," + centerXY.y + " ");
+                                pline.setAttribute("points", "");
                             }
-                        }
-                        else {
-                            pline.setAttribute("points", "");
                         }
                     }
                 }
             }
-        }
-        if (!game.didMakeMove && (type === "touchend" || type === "touchcancel" || type === "touchleave")) {
-            // drag ended
-            // return the piece to it's original style (then angular will take care to hide it).
-            draggingStartedRowCol = null;
-            draggingPiece = null;
-            draggingLines.style.display = "none";
-            draggingLines.offsetHeight;
-            draggingLines.style.webkitTransform = 'scale(1)';
-            game.moves = new Array();
-        }
-    }
-    function containsDupOthanThanFirst(moves, row, col) {
-        for (var i = 1; i < moves.length; i++) {
-            if (moves[i].row === row && moves[i].col === col) {
-                return true;
+            if (!game.didMakeMove && (type === "touchend" || type === "touchcancel" || type === "touchleave")) {
+                // drag ended
+                // return the piece to it's original style (then angular will take care to hide it).
+                draggingStartedRowCol = null;
+                draggingPiece = null;
+                draggingLines.style.display = "none";
+                draggingLines.offsetHeight;
+                draggingLines.style.webkitTransform = 'scale(1)';
+                game.moves = new Array();
             }
         }
-        return false;
-    }
-    function setDraggingPieceTopLeft(topLeft) {
-        var originalSize = getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col);
-        draggingPiece.style.left = (topLeft.left - originalSize.left) + "px";
-        draggingPiece.style.top = (topLeft.top - originalSize.top) + "px";
-    }
-    function getSquareWidthHeight() {
-        return {
-            width: gameArea.clientWidth / colsNum,
-            height: gameArea.clientHeight * 0.9 / rowsNum
-        };
-    }
-    function getSquareTopLeft(row, col) {
-        var size = getSquareWidthHeight();
-        return { top: row * size.height, left: col * size.width };
-    }
-    function getSquareCenterXY(row, col) {
-        var size = getSquareWidthHeight();
-        return {
-            x: col * size.width + size.width / 2,
-            y: row * size.height + size.height / 2
-        };
-    }
-    function dragDone() {
-        $rootScope.$apply(function () {
-            // Update piece in board
-            game.cellPressedUp();
-        });
-    }
-    $rootScope['game'] = game;
-    game.init();
-    resizeGameAreaService.setWidthToHeight(0.6818);
-});
+        function containsDupOthanThanFirst(moves, row, col) {
+            for (var i = 1; i < moves.length; i++) {
+                if (moves[i].row === row && moves[i].col === col) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        function setDraggingPieceTopLeft(topLeft) {
+            var originalSize = getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col);
+            draggingPiece.style.left = (topLeft.left - originalSize.left) + "px";
+            draggingPiece.style.top = (topLeft.top - originalSize.top) + "px";
+        }
+        function getSquareWidthHeight() {
+            return {
+                width: gameArea.clientWidth / colsNum,
+                height: gameArea.clientHeight * 0.9 / rowsNum
+            };
+        }
+        function getSquareTopLeft(row, col) {
+            var size = getSquareWidthHeight();
+            return { top: row * size.height, left: col * size.width };
+        }
+        function getSquareCenterXY(row, col) {
+            var size = getSquareWidthHeight();
+            return {
+                x: col * size.width + size.width / 2,
+                y: row * size.height + size.height / 2
+            };
+        }
+        function dragDone($http) {
+            $rootScope.$apply(function () {
+                // Update piece in board
+                game.cellPressedUp($http);
+            });
+        }
+        $rootScope['game'] = game;
+        game.init($http);
+        resizeGameAreaService.setWidthToHeight(0.6818);
+    }]);
 //# sourceMappingURL=game.js.map
