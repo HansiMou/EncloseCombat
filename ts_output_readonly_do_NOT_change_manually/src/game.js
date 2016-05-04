@@ -309,12 +309,6 @@ var game;
         return game.didMakeMove;
     }
     game.animationEndedorNot = animationEndedorNot;
-    function cellEnter(row, col) {
-        if (game.moves.length !== 0 && !(game.moves.length === 1 && game.moves[0] === { row: row, col: col })) {
-            game.moves.push({ row: row, col: col });
-        }
-    }
-    game.cellEnter = cellEnter;
     function cellPressedUp() {
         log.info("Slided on cell:", angular.toJson(game.moves));
         var remindlines = document.getElementById("remindlines");
@@ -521,12 +515,12 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 // the first point or points around the last one
                 if ((game.moves.length === 0) || (!(game.moves[game.moves.length - 1].row === row && game.moves[game.moves.length - 1].col === col) && ((Math.abs(game.moves[game.moves.length - 1].row - row) <= 1) && (Math.abs(game.moves[game.moves.length - 1].col - col) <= 1)))) {
                     // if only two points, it cannot go back and select the points in the moves. if more than two points, it cannot go back and select the points other than the first one.
-                    if (game.moves.length < 2 || (game.moves.length === 2 && !(game.moves[0].row === row && game.moves[0].col === col)) || (game.moves.length > 2 && !containsDupOthanThanFirst(game.moves, row, col))) {
+                    if ((game.moves.length < 2 || (game.moves.length === 2 && !(game.moves[0].row === row && game.moves[0].col === col)) || (game.moves.length > 2 && !containsDupOthanThanFirst(game.moves, row, col))) && !(game.moves.length >= 3 && game.moves[game.moves.length - 1].row === game.moves[0].row && game.moves[game.moves.length - 1].col === game.moves[0].col)) {
                         var tt = game.isPieceR(row, col) ?
                             document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
                             document.getElementById("e2e_test_pieceG_" + row + "x" + col) : game.isPieceB(row, col) ?
                             document.getElementById("e2e_test_pieceB_" + row + "x" + col) : document.getElementById("e2e_test_pieceX_" + row + "x" + col);
-                        tt.setAttribute("r", "49%");
+                        tt.setAttribute("r", "47%");
                         $timeout(function () { tt.setAttribute("r", "42%"); }, 150);
                         draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                         log.info("animationwhat", game.isComputerTurn());
