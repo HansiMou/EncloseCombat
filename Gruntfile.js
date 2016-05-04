@@ -185,7 +185,7 @@ module.exports = function(grunt) {
             'imgs/HelpSlide2.png',
           ],
           network: 
-            '*'
+            ['*']
           ,
           timestamp: true
         },
