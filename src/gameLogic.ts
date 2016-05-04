@@ -53,6 +53,9 @@ module gameLogic {
         // board[i][j] = 'R';
       }
     }
+    while (!CheckMovesAvaiable(board)){
+        board = getInitialBoard();
+    }
     return board;
   }
   /** Between 1 to num_of_colors, a random number is chosen and return a corresponding color */
@@ -332,33 +335,51 @@ module gameLogic {
     return {endMatchScores: endMatchScores, turnIndexAfterMove: turnIndexAfterMove, stateAfterMove: stateAfterMove};
   }
   /** check if there is more available moves */
-  function CheckMovesAvaiable(board: Board): boolean{
-      for (let i = 0; i < ROWS; i++){
-          for (let j = 0; j < COLS; j++){
-              if (j-1 >= 0 && i+1 <= ROWS-1){
-                  if (board[i][j] === board[i][j-1] && board[i][j] === board[i+1][j])
+    function CheckMovesAvaiable(board: Board): boolean {
+        log.info("really? wsgo");
+        let used: boolean[][] = [];
+        for (let i = 0; i < board.length; i++) {
+            used[i] = [];
+            for (let j = 0; j < board[0].length; j++) {
+                used[i][j] = false;
+            }
+        }
+        
+        for (let i = 0; i < board.length; i++) {
+            used[i] = [];
+            for (let j = 0; j < board[0].length; j++) {
+                if (search(board, i, j, 0, used, i, j)){
+                    log.info("really? available", board);
                     return true;
-              }
-              else if (j+1 <= COLS-1 && i+1 <= ROWS-1){
-                  if (board[i][j] === board[i][j+1] && board[i][j] === board[i+1][j])
-                    return true;
-              }
-              else if (i+1 <= ROWS-1 && j-1 >= 0){
-                  if (board[i][j] === board[i+1][j] && board[i][j] === board[i+1][j-1])
-                    return true;
-              }
-              else if (i+1 <= ROWS-1 && j+1 <= COLS-1){
-                  if (board[i][j] === board[i+1][j] && board[i][j] === board[i+1][j+1])
-                    return true;
-              }
-              else if (i >= 1 && i < ROWS-1 && j >= 1 && j < COLS-1){
-                  if (board[i-1][j] === board[i][j-1] && board[i][j-1] === board[i+1][j] && board[i+1][j] === board[i][j+1])
-                    return true;
-              }
-          }
-      }
-      return false;
-  }
+                }
+            }
+        }
+        log.info("really?", board);
+        return false;
+    }
+
+    function search(board: Board, i: number, j: number, index: number,used: boolean[][], si: number, sj: number) {
+        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length
+                || board[i][j] != board[si][sj] || used[i][j] == true)
+            return false;
+        if (index >= 2 && board[i][j] == board[si][sj] && Math.abs(si - i) <= 1
+                && Math.abs(sj - j) <= 1)
+            return true;
+
+        used[i][j] = true;
+        let res: boolean = search(board, i + 1, j, index + 1, used, si, sj)
+                || search(board, i - 1, j, index + 1, used, si, sj)
+                || search(board, i + 1, j + 1, index + 1, used, si, sj)
+                || search(board, i + 1, j - 1, index + 1, used, si, sj)
+                || search(board, i - 1, j + 1, index + 1, used, si, sj)
+                || search(board, i - 1, j - 1, index + 1, used, si, sj)
+                || search(board, i, j + 1, index + 1, used, si, sj)
+                || search(board, i, j - 1, index + 1, used, si, sj);
+        used[i][j] = false;
+        return res;
+    }
+  
+  
   /** check if this move sticks to the rule and throws responding error */
   function checkMove(board: Board, moves: BoardDelta[]): boolean{
       // all moves should be positive

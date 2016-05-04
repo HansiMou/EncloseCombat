@@ -15,6 +15,9 @@ var gameLogic;
                 board[i][j] = getRandomColor();
             }
         }
+        while (!CheckMovesAvaiable(board)) {
+            board = getInitialBoard();
+        }
         return board;
     }
     /** Between 1 to num_of_colors, a random number is chosen and return a corresponding color */
@@ -278,31 +281,44 @@ var gameLogic;
     gameLogic.createMove = createMove;
     /** check if there is more available moves */
     function CheckMovesAvaiable(board) {
-        for (var i = 0; i < gameLogic.ROWS; i++) {
-            for (var j = 0; j < gameLogic.COLS; j++) {
-                if (j - 1 >= 0 && i + 1 <= gameLogic.ROWS - 1) {
-                    if (board[i][j] === board[i][j - 1] && board[i][j] === board[i + 1][j])
-                        return true;
-                }
-                else if (j + 1 <= gameLogic.COLS - 1 && i + 1 <= gameLogic.ROWS - 1) {
-                    if (board[i][j] === board[i][j + 1] && board[i][j] === board[i + 1][j])
-                        return true;
-                }
-                else if (i + 1 <= gameLogic.ROWS - 1 && j - 1 >= 0) {
-                    if (board[i][j] === board[i + 1][j] && board[i][j] === board[i + 1][j - 1])
-                        return true;
-                }
-                else if (i + 1 <= gameLogic.ROWS - 1 && j + 1 <= gameLogic.COLS - 1) {
-                    if (board[i][j] === board[i + 1][j] && board[i][j] === board[i + 1][j + 1])
-                        return true;
-                }
-                else if (i >= 1 && i < gameLogic.ROWS - 1 && j >= 1 && j < gameLogic.COLS - 1) {
-                    if (board[i - 1][j] === board[i][j - 1] && board[i][j - 1] === board[i + 1][j] && board[i + 1][j] === board[i][j + 1])
-                        return true;
+        log.info("really? wsgo");
+        var used = [];
+        for (var i = 0; i < board.length; i++) {
+            used[i] = [];
+            for (var j = 0; j < board[0].length; j++) {
+                used[i][j] = false;
+            }
+        }
+        for (var i = 0; i < board.length; i++) {
+            used[i] = [];
+            for (var j = 0; j < board[0].length; j++) {
+                if (search(board, i, j, 0, used, i, j)) {
+                    log.info("really? available", board);
+                    return true;
                 }
             }
         }
+        log.info("really?", board);
         return false;
+    }
+    function search(board, i, j, index, used, si, sj) {
+        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length
+            || board[i][j] != board[si][sj] || used[i][j] == true)
+            return false;
+        if (index >= 2 && board[i][j] == board[si][sj] && Math.abs(si - i) <= 1
+            && Math.abs(sj - j) <= 1)
+            return true;
+        used[i][j] = true;
+        var res = search(board, i + 1, j, index + 1, used, si, sj)
+            || search(board, i - 1, j, index + 1, used, si, sj)
+            || search(board, i + 1, j + 1, index + 1, used, si, sj)
+            || search(board, i + 1, j - 1, index + 1, used, si, sj)
+            || search(board, i - 1, j + 1, index + 1, used, si, sj)
+            || search(board, i - 1, j - 1, index + 1, used, si, sj)
+            || search(board, i, j + 1, index + 1, used, si, sj)
+            || search(board, i, j - 1, index + 1, used, si, sj);
+        used[i][j] = false;
+        return res;
     }
     /** check if this move sticks to the rule and throws responding error */
     function checkMove(board, moves) {
