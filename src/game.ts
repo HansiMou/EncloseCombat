@@ -17,6 +17,7 @@ module game {
   export let animationEndedTimeout: ng.IPromise<any> = null;
   export let ismyscore = 0;
   export let shouldshowscore = true;
+  export let animationlength = 1000;
   
   export function init() {
     translate.setTranslations(getTranslations());
@@ -151,11 +152,12 @@ module game {
 
   function animationEndedCallback() {
     log.info("Hi");
-      log.info("Animation ended");
-      animationEnded = true;
-      shouldshowscore = true;
-      clearAnimationTimeout();
-      maybeSendComputerMove();
+    log.info("Animation ended");
+    animationEnded = true;
+    shouldshowscore = true;
+    animationlength = 1000;
+    clearAnimationTimeout();
+    maybeSendComputerMove();
   }
 
   function maybeSendComputerMove() {
@@ -259,14 +261,13 @@ module game {
           state = currentUpdateUI.move.stateAfterMove;
           
           shouldshowscore = false;
-          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+          animationEndedTimeout = $timeout(animationEndedCallback, animationlength);
         },1500);
       }
       else{
           state = currentUpdateUI.move.stateAfterMove;
-          animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+          animationEndedTimeout = $timeout(animationEndedCallback, animationlength);
       }
-        
     }
   }
   function clearAnimationTimeout() {
@@ -412,6 +413,7 @@ module game {
           }
       }
     }
+    animationlength = Math.max(animationlength, res * 250, 1000);
     log.info("test it out", animationEnded, row, col, res, state.changed_delta);
     if (res !== 0 && !animationEnded && state.changed_delta)
       return 'movedown'+res;

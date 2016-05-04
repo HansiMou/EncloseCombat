@@ -14,6 +14,7 @@ var game;
     game.animationEndedTimeout = null;
     game.ismyscore = 0;
     game.shouldshowscore = true;
+    game.animationlength = 1000;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -148,6 +149,7 @@ var game;
         log.info("Animation ended");
         game.animationEnded = true;
         game.shouldshowscore = true;
+        game.animationlength = 1000;
         clearAnimationTimeout();
         maybeSendComputerMove();
     }
@@ -246,12 +248,12 @@ var game;
                     // change the state
                     game.state = game.currentUpdateUI.move.stateAfterMove;
                     game.shouldshowscore = false;
-                    game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, game.animationlength);
                 }, 1500);
             }
             else {
                 game.state = game.currentUpdateUI.move.stateAfterMove;
-                game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
+                game.animationEndedTimeout = $timeout(animationEndedCallback, game.animationlength);
             }
         }
     }
@@ -402,6 +404,7 @@ var game;
                 }
             }
         }
+        game.animationlength = Math.max(game.animationlength, res * 250, 1000);
         log.info("test it out", game.animationEnded, row, col, res, game.state.changed_delta);
         if (res !== 0 && !game.animationEnded && game.state.changed_delta)
             return 'movedown' + res;
