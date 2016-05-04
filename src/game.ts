@@ -170,7 +170,6 @@ module game {
     let width = gameArea.clientWidth / gameLogic.COLS;
     let height = gameArea.clientHeight*0.9 / gameLogic.ROWS;
     
-    rline.setAttribute("style", "fill:none;;stroke:blue;stroke-dasharray: 5;stroke-width:2.0%; stroke-opacity: 0.7");
     let tmp = "";
     let nextAIMove = aiService.findSimplyComputerMove(currentUpdateUI.move);
     nextAIMove.stateAfterMove.delta.forEach(function(entry) {
@@ -178,12 +177,10 @@ module game {
         let  y = entry.row * height + height / 2;
         tmp = tmp+x+","+y+" ";
     });
-    // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
     rline.setAttribute("points", tmp);    
     scorenotice.setAttribute("z-index", "50");
     $timeout(function(){
       rline.setAttribute("points", "");
-      // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
       moveService.makeMove(nextAIMove);
     },1500);
   }
@@ -249,13 +246,12 @@ module game {
             tmp = tmp+x+","+y+" ";
         });
         shouldshowscore = true;
-        rline.setAttribute("points", tmp);
         // clear the score animation
         $timeout(function(){
           shouldshowscore = false;
         }, 1000)
+        rline.setAttribute("points", tmp);
         $timeout(function(){
-          rline.setAttribute("points", "");
           // remove the lines 
           rline.setAttribute("points", "");
           
@@ -267,12 +263,12 @@ module game {
         },1500);
       }
       else{
-        state = currentUpdateUI.move.stateAfterMove;
-        animationEndedTimeout = $timeout(animationEndedCallback, Math.max(1000, getMostMoveDownNum() * 250));
         // clear the score animation
         $timeout(function(){
           shouldshowscore = false;
         }, 1000)
+        state = currentUpdateUI.move.stateAfterMove;
+        animationEndedTimeout = $timeout(animationEndedCallback, Math.max(1000, getMostMoveDownNum() * 250));
       }
     }
   }

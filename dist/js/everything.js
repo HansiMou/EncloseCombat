@@ -546,7 +546,6 @@ var game;
         var scorenotice = document.getElementById("scorenotice");
         var width = gameArea.clientWidth / gameLogic.COLS;
         var height = gameArea.clientHeight * 0.9 / gameLogic.ROWS;
-        rline.setAttribute("style", "fill:none;;stroke:blue;stroke-dasharray: 5;stroke-width:2.0%; stroke-opacity: 0.7");
         var tmp = "";
         var nextAIMove = aiService.findSimplyComputerMove(game.currentUpdateUI.move);
         nextAIMove.stateAfterMove.delta.forEach(function (entry) {
@@ -554,12 +553,10 @@ var game;
             var y = entry.row * height + height / 2;
             tmp = tmp + x + "," + y + " ";
         });
-        // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         rline.setAttribute("points", tmp);
         scorenotice.setAttribute("z-index", "50");
         $timeout(function () {
             rline.setAttribute("points", "");
-            // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
             moveService.makeMove(nextAIMove);
         }, 1500);
     }
@@ -623,13 +620,12 @@ var game;
                     tmp = tmp + x + "," + y + " ";
                 });
                 game.shouldshowscore = true;
-                rline.setAttribute("points", tmp);
                 // clear the score animation
                 $timeout(function () {
                     game.shouldshowscore = false;
                 }, 1000);
+                rline.setAttribute("points", tmp);
                 $timeout(function () {
-                    rline.setAttribute("points", "");
                     // remove the lines 
                     rline.setAttribute("points", "");
                     // change the state
@@ -639,12 +635,12 @@ var game;
                 }, 1500);
             }
             else {
-                game.state = game.currentUpdateUI.move.stateAfterMove;
-                game.animationEndedTimeout = $timeout(animationEndedCallback, Math.max(1000, getMostMoveDownNum() * 250));
                 // clear the score animation
                 $timeout(function () {
                     game.shouldshowscore = false;
                 }, 1000);
+                game.state = game.currentUpdateUI.move.stateAfterMove;
+                game.animationEndedTimeout = $timeout(animationEndedCallback, Math.max(1000, getMostMoveDownNum() * 250));
             }
         }
     }
