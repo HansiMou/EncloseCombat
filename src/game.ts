@@ -195,12 +195,12 @@ module game {
       if (current_game_score > parseInt(game.getHighestScore())){
         localStorage.setItem("score", current_game_score+"");
       }
-      if (current_game_score > game.getHighestScoreGlobally()){
-        let tosend = 'http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore='+'"'+'use strict"'+";var highest_score_name=";
-        tosend += '"'+current_game_score+'"'+";";
-        log.info("high?", tosend);
-        loadXMLDoc(tosend);
-      }
+      // if (current_game_score > game.getHighestScoreGlobally()){
+      //   let tosend = 'http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore='+'"'+'use strict"'+";var highest_score_name=";
+      //   tosend += '"'+current_game_score+'"'+";";
+      //   // log.info("high?", tosend);
+      //   loadXMLDoc(tosend);
+      // }
     }
     
     log.info("Game got updateUI???:", params);
@@ -301,18 +301,18 @@ module game {
   
   // global leaderboard to maintain
   export function getHighestScoreGlobally(){
-    if (highest_score_name !== undefined && highest_score_name !== null && highest_score_name.length !== 0){
-      let res = highest_score_name.split(" ")[0];
-      log.info("high?", res);
-      return parseInt(res);
-    }
-    else{
-      let tosend = "http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore='use strict';var highest_score_name=";
-      tosend += 0;
-      loadXMLDoc(tosend);
-      log.info("high?", 0);
+    // if (highest_score_name !== undefined && highest_score_name !== null && highest_score_name.length !== 0){
+    //   let res = highest_score_name.split(" ")[0];
+    //   log.info("high?", res);
+    //   return parseInt(res);
+    // }
+    // else{
+    //   let tosend = "http://cs.nyu.edu/~hm1305/smg/index.php?NameAndScore='use strict';var highest_score_name=";
+    //   tosend += 0;
+    //   loadXMLDoc(tosend);
+    //   log.info("high?", 0);
       return 0;
-    }
+    // }
   }
   
   export function isComputerTurn() {
