@@ -110,6 +110,7 @@ var gameLogic;
         var cleanG = false;
         var cleanB = false;
         var cleanX = false;
+        var bonus_multiplyingpower = 1;
         // initialize the auxiliary boolean[][] array. 
         for (var i = 0; i < gameLogic.ROWS; i++) {
             helper[i] = [];
@@ -134,6 +135,7 @@ var gameLogic;
             for (var j = 0; j < gameLogic.ROWS; j++) {
                 if (j >= range.left && j <= range.right && helper[j][i] == true) {
                     if (!contains(moves, j, i)) {
+                        bonus_multiplyingpower++;
                         switch (board[j][i]) {
                             case 'R':
                                 cleanR = true;
@@ -186,7 +188,7 @@ var gameLogic;
                 flag--;
             }
         }
-        return { score: score, board: boardAfterMove, changed_delta: changed_delta };
+        return { score: score * bonus_multiplyingpower, board: boardAfterMove, changed_delta: changed_delta };
     }
     function foundRangeOfCertainRow(moves, row) {
         var left = 100;

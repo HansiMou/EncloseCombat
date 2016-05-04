@@ -152,6 +152,7 @@ module gameLogic {
       let cleanG = false;
       let cleanB = false;
       let cleanX = false;
+      let bonus_multiplyingpower = 1;
       
       // initialize the auxiliary boolean[][] array. 
       for (let i = 0; i < ROWS; i++){
@@ -177,6 +178,7 @@ module gameLogic {
           for (let j = 0; j < ROWS; j++){
               if (j >= range.left && j <= range.right && helper[j][i] == true){
                 if (!contains(moves, j, i)){
+                    bonus_multiplyingpower++;
                     switch(board[j][i])
                     {
                     case 'R':
@@ -232,7 +234,7 @@ module gameLogic {
               flag--;
           }
       }
-      return {score: score, board: boardAfterMove, changed_delta: changed_delta};
+      return {score: score * bonus_multiplyingpower, board: boardAfterMove, changed_delta: changed_delta};
   }
   function foundRangeOfCertainRow(moves: BoardDelta[], row: number): Colrange{
       let left = 100;
