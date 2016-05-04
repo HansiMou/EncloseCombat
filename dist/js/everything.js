@@ -399,7 +399,6 @@ var game;
     game.animationEndedTimeout = null;
     game.ismyscore = 0;
     game.shouldshowscore = true;
-    game.animationlength = 1000;
     function init() {
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
@@ -534,7 +533,6 @@ var game;
         log.info("Animation ended");
         game.animationEnded = true;
         game.shouldshowscore = true;
-        game.animationlength = 1000;
         clearAnimationTimeout();
         maybeSendComputerMove();
     }
@@ -637,12 +635,12 @@ var game;
                     // change the state
                     game.state = game.currentUpdateUI.move.stateAfterMove;
                     game.shouldshowscore = false;
-                    game.animationEndedTimeout = $timeout(animationEndedCallback, game.animationlength);
+                    game.animationEndedTimeout = $timeout(animationEndedCallback, Math.max(1000, getMostMoveDownNum() * 250));
                 }, 1500);
             }
             else {
                 game.state = game.currentUpdateUI.move.stateAfterMove;
-                game.animationEndedTimeout = $timeout(animationEndedCallback, game.animationlength);
+                game.animationEndedTimeout = $timeout(animationEndedCallback, Math.max(1000, getMostMoveDownNum() * 250));
                 // clear the score animation
                 $timeout(function () {
                     game.shouldshowscore = false;
@@ -788,6 +786,18 @@ var game;
         return 'PLAYER';
     }
     game.getOppoName = getOppoName;
+    function getMostMoveDownNum() {
+        var res = [0, 0, 0, 0, 0, 0];
+        var max = 0;
+        if (game.currentUpdateUI.move.stateAfterMove.changed_delta) {
+            for (var i = 0; i < game.currentUpdateUI.move.stateAfterMove.changed_delta.length; i++) {
+                res[game.currentUpdateUI.move.stateAfterMove.changed_delta[i].col]++;
+                max = Math.max(max, res[game.currentUpdateUI.move.stateAfterMove.changed_delta[i].col]);
+            }
+        }
+        return max;
+    }
+    game.getMostMoveDownNum = getMostMoveDownNum;
     function getMoveDownClass(row, col) {
         var res = 0;
         if (game.state.changed_delta) {
@@ -797,7 +807,6 @@ var game;
                 }
             }
         }
-        game.animationlength = Math.max(game.animationlength, res * 250, 1000);
         log.info("test it out", game.animationEnded, row, col, res, game.state.changed_delta);
         if (res !== 0 && !game.animationEnded && game.state.changed_delta)
             return 'movedown' + res;

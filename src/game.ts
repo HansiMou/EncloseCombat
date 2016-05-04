@@ -17,7 +17,6 @@ module game {
   export let animationEndedTimeout: ng.IPromise<any> = null;
   export let ismyscore = 0;
   export let shouldshowscore = true;
-  export let animationlength = 1000;
   
   export function init() {
     translate.setTranslations(getTranslations());
@@ -155,7 +154,6 @@ module game {
     log.info("Animation ended");
     animationEnded = true;
     shouldshowscore = true;
-    animationlength = 1000;
     clearAnimationTimeout();
     maybeSendComputerMove();
   }
@@ -265,12 +263,12 @@ module game {
           state = currentUpdateUI.move.stateAfterMove;
           
           shouldshowscore = false;
-          animationEndedTimeout = $timeout(animationEndedCallback, animationlength);
+          animationEndedTimeout = $timeout(animationEndedCallback, Math.max(1000, getMostMoveDownNum() * 250));
         },1500);
       }
       else{
         state = currentUpdateUI.move.stateAfterMove;
-        animationEndedTimeout = $timeout(animationEndedCallback, animationlength);
+        animationEndedTimeout = $timeout(animationEndedCallback, Math.max(1000, getMostMoveDownNum() * 250));
         // clear the score animation
         $timeout(function(){
           shouldshowscore = false;
@@ -411,7 +409,17 @@ module game {
     }
     return 'PLAYER';
   }
-
+  export function getMostMoveDownNum(){
+    let res :number[] = [0, 0, 0, 0, 0, 0];
+    let max = 0;
+    if (currentUpdateUI.move.stateAfterMove.changed_delta){
+      for (let i = 0; i < currentUpdateUI.move.stateAfterMove.changed_delta.length; i++) {
+        res[currentUpdateUI.move.stateAfterMove.changed_delta[i].col]++;
+        max = Math.max(max, res[currentUpdateUI.move.stateAfterMove.changed_delta[i].col]);
+      }
+    }
+    return max;
+  }
   export function getMoveDownClass(row: number, col: number): string {
     let res = 0;
     if (state.changed_delta){
@@ -421,7 +429,6 @@ module game {
           }
       }
     }
-    animationlength = Math.max(animationlength, res * 250, 1000);
     log.info("test it out", animationEnded, row, col, res, state.changed_delta);
     if (res !== 0 && !animationEnded && state.changed_delta)
       return 'movedown'+res;
@@ -528,35 +535,35 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
               if ((game.moves.length === 0)||(!(game.moves[game.moves.length-1].row === row && game.moves[game.moves.length-1].col === col)&&((Math.abs(game.moves[game.moves.length-1].row-row)<=1) && (Math.abs(game.moves[game.moves.length-1].col-col)<=1)))){
                   // if only two points, it cannot go back and select the points in the moves. if more than two points, it cannot go back and select the points other than the first one.
                   if (game.moves.length < 2 || (game.moves.length === 2 && !(game.moves[0].row === row && game.moves[0].col === col))||(game.moves.length > 2 && !containsDupOthanThanFirst(game.moves, row, col))){
-                      let tt = game.isPieceR(row, col)?
-                  document.getElementById("e2e_test_pieceR_" + row + "x" + col):game.isPieceG(row, col)?
-                  document.getElementById("e2e_test_pieceG_" + row + "x" + col):game.isPieceB(row, col)?
-                  document.getElementById("e2e_test_pieceB_" + row + "x" + col):document.getElementById("e2e_test_pieceX_" + row + "x" + col);
-                  tt.setAttribute("r", "49%");
-                  $timeout(function(){tt.setAttribute("r", "42%");},150);
-                  draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
-                  log.info("animationwhat", game.isComputerTurn());
-                  if (game.isMyTurn()){
-                    game.moves.push({row: row, col: col});
-                    draggingLines.style.display = "block";
-                    if (type === "touchstart"){
-                        pline2.setAttribute("x1","0");
-                        pline2.setAttribute("y1","0");
-                        pline2.setAttribute("x2","0");
-                        pline2.setAttribute("y2","0");
-                    }
-                    let centerXY = getSquareCenterXY(row, col);
-                    if (game.moves.length == 1){
-                        pline.setAttribute("points", centerXY.x+","+centerXY.y+" ");
+                    let tt = game.isPieceR(row, col)?
+                    document.getElementById("e2e_test_pieceR_" + row + "x" + col):game.isPieceG(row, col)?
+                    document.getElementById("e2e_test_pieceG_" + row + "x" + col):game.isPieceB(row, col)?
+                    document.getElementById("e2e_test_pieceB_" + row + "x" + col):document.getElementById("e2e_test_pieceX_" + row + "x" + col);
+                    tt.setAttribute("r", "49%");
+                    $timeout(function(){tt.setAttribute("r", "42%");},150);
+                    draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
+                    log.info("animationwhat", game.isComputerTurn());
+                    if (game.isMyTurn()){
+                      game.moves.push({row: row, col: col});
+                      draggingLines.style.display = "block";
+                      if (type === "touchstart"){
+                          pline2.setAttribute("x1","0");
+                          pline2.setAttribute("y1","0");
+                          pline2.setAttribute("x2","0");
+                          pline2.setAttribute("y2","0");
+                      }
+                      let centerXY = getSquareCenterXY(row, col);
+                      if (game.moves.length == 1){
+                          pline.setAttribute("points", centerXY.x+","+centerXY.y+" ");
+                      }
+                      else{
+                          let tmp = pline.getAttribute("points");
+                          pline.setAttribute("points", tmp+centerXY.x+","+centerXY.y+" ");
+                      }
                     }
                     else{
-                        let tmp = pline.getAttribute("points");
-                        pline.setAttribute("points", tmp+centerXY.x+","+centerXY.y+" ");
+                      pline.setAttribute("points", "");
                     }
-                  }
-                  else{
-                    pline.setAttribute("points", "");
-                  }
                   }
               }
             }
