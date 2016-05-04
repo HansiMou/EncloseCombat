@@ -44,7 +44,7 @@ var gameLogic;
     function getInitialState() {
         var ib = getInitialBoard();
         var index = Math.floor((Math.random() * 18) + 1);
-        return { board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), intialboard: angular.copy(ib), changed_delta: null, Random: index % 2 === 0 ? index - 1 : index };
+        return { board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), initialboard: angular.copy(ib), changed_delta: null, random: index % 2 === 0 ? index - 1 : index };
     }
     gameLogic.getInitialState = getInitialState;
     /**
@@ -246,8 +246,8 @@ var gameLogic;
         /**Get the updated scores */
         var scores = angular.copy(stateBeforeMove.scores);
         scores[turnIndexBeforeMove] += tmp.score;
-        var tmpp = angular.copy(stateBeforeMove.intialboard ? stateBeforeMove.intialboard : stateBeforeMove.board);
-        if (!stateBeforeMove.intialboard) {
+        var tmpp = angular.copy(stateBeforeMove.initialboard ? stateBeforeMove.initialboard : stateBeforeMove.board);
+        if (!stateBeforeMove.initialboard) {
             log.info("wtf2", stateBeforeMove);
         }
         var stateAfterMove = {
@@ -255,9 +255,9 @@ var gameLogic;
             delta: moves,
             current_turn: stateBeforeMove.current_turn + 1,
             scores: scores,
-            intialboard: tmpp,
+            initialboard: tmpp,
             changed_delta: angular.copy(tmp.changed_delta),
-            Random: stateBeforeMove.Random,
+            random: stateBeforeMove.random,
         };
         var winner = getWinner(stateAfterMove);
         var endMatchScores;

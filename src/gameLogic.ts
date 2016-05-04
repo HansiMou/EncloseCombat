@@ -83,7 +83,7 @@ module gameLogic {
   export function getInitialState(): IState {
     let ib = getInitialBoard();
     let index = Math.floor((Math.random() * 18) + 1);
-    return {board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), intialboard: angular.copy(ib), changed_delta: null, Random: index%2 === 0?index-1 : index};
+    return {board: angular.copy(ib), delta: null, current_turn: 0, scores: getIntialScores(), initialboard: angular.copy(ib), changed_delta: null, random: index%2 === 0?index-1 : index};
   }
 
   /**
@@ -302,8 +302,8 @@ module gameLogic {
     let scores: number[] = angular.copy(stateBeforeMove.scores);
     scores[turnIndexBeforeMove] += tmp.score;
     
-    let tmpp = angular.copy(stateBeforeMove.intialboard? stateBeforeMove.intialboard : stateBeforeMove.board);
-    if (!stateBeforeMove.intialboard){
+    let tmpp = angular.copy(stateBeforeMove.initialboard? stateBeforeMove.initialboard : stateBeforeMove.board);
+    if (!stateBeforeMove.initialboard){
         log.info("wtf2", stateBeforeMove);
     }
     let stateAfterMove: IState = {
@@ -311,9 +311,9 @@ module gameLogic {
         delta: moves,
         current_turn: stateBeforeMove.current_turn+1,
         scores: scores,
-        intialboard: tmpp,
+        initialboard: tmpp,
         changed_delta: angular.copy(tmp.changed_delta),
-        Random: stateBeforeMove.Random,
+        random: stateBeforeMove.random,
     };
     
     let winner = getWinner(stateAfterMove);
