@@ -632,7 +632,7 @@ var game;
                     game.state = game.currentUpdateUI.move.stateAfterMove;
                     game.shouldshowscore = false;
                     game.animationEndedTimeout = $timeout(animationEndedCallback, 1000);
-                }, 2000);
+                }, 1500);
             }
             else {
                 game.state = game.currentUpdateUI.move.stateAfterMove;
