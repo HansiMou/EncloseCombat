@@ -174,7 +174,7 @@ var game;
         // rline.setAttribute("style", "fill:none;stroke-dasharray: 20;animation: dash 5s linear;stroke:#ffb2b2;stroke-width:1.5%; stroke-opacity: 0.7");
         rline.setAttribute("points", tmp);
         scorenotice.setAttribute("z-index", "50");
-        setTimeout(function () {
+        $timeout(function () {
             rline.setAttribute("points", "");
             // rline.setAttribute("style", "fill:none;stroke:black;stroke-width:1.5%; stroke-opacity: 0");
             moveService.makeMove(nextAIMove);
@@ -474,7 +474,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                 pline2.setAttribute("y2", y + "");
             }
             // set up of the threshold
-            if (percent > 0.7) {
+            if (percent > 0.8) {
                 if (type === "touchend" || type === "touchcancel" || type === "touchleave") {
                     game.moves = new Array();
                     pline.setAttribute("points", "");
@@ -517,9 +517,8 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                             document.getElementById("e2e_test_pieceR_" + row + "x" + col) : game.isPieceG(row, col) ?
                             document.getElementById("e2e_test_pieceG_" + row + "x" + col) : game.isPieceB(row, col) ?
                             document.getElementById("e2e_test_pieceB_" + row + "x" + col) : document.getElementById("e2e_test_pieceX_" + row + "x" + col);
-                        tt.setAttribute("r", "55%");
-                        tt.setAttribute("r", "45%");
-                        setTimeout(function () { tt.setAttribute("r", "40%"); }, 100);
+                        tt.setAttribute("r", "49%");
+                        $timeout(function () { tt.setAttribute("r", "42%"); }, 150);
                         draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                         log.info("animationwhat", game.isComputerTurn());
                         if (game.isMyTurn()) {
