@@ -112,44 +112,44 @@ td {
 
 
 @keyframes movedown1 {
-  from {  top: -100%}
-  to { top: 0%}
+  from {  transform: translateY(-100%);}
+  to { transform: translateY(0);}
 }
 
 @keyframes movedown2 {
-  from {  top: -200%}
-  to { top: 0%}
+  from {  transform: translateY(-200%);}
+  to { transform: translateY(0);}
 }
 
 @keyframes movedown3 {
-  from {  top: -300%}
-  to { top: 0%}
+  from {  transform: translateY(-300%);}
+  to { transform: translateY(0);}
 }
 
 @keyframes movedown4 {
-  from {  top: -400%}
-  to { top: 0%}
+  from {  transform: translateY(-400%);}
+  to { transform: translateY(0);}
 }
 
 @keyframes movedown5 {
-  from {  top: -500%}
-  to { top: 0%}
+  from {  transform: translateY(-500%);}
+  to { transform: translateY(0);}
 }
 
 @keyframes movedown6 {
-  from {  top: -600%}
-  to { top: 0%}
+  from {  transform: translateY(-600%);}
+  to { transform: translateY(0);}
 }
 
 @keyframes movedown7 {
-  from {  top: -700%}
-  to { top: 0%}
+  from {  transform: translateY(-700%);}
+  to { transform: translateY(0);}
 }
 
 
 @keyframes movedown8 {
-  from {  top: -800%}
-  to { top: 0%}
+  from {  transform: translateY(-800%);}
+  to { transform: translateY(0);}
 }
 
 @keyframes dash {
