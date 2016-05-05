@@ -566,8 +566,8 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                   document.getElementById("e2e_test_pieceR_" + row + "x" + col):game.isPieceG(row, col)?
                   document.getElementById("e2e_test_pieceG_" + row + "x" + col):game.isPieceB(row, col)?
                   document.getElementById("e2e_test_pieceB_" + row + "x" + col):document.getElementById("e2e_test_pieceX_" + row + "x" + col);
-                  tt.setAttribute("r", "47%");
-                  $timeout(function(){tt.setAttribute("r", "42%");},150);
+                  tt.setAttribute("r", "42%");
+                  $timeout(function(){tt.setAttribute("r", "37%");},150);
                   draggingPiece = document.getElementById("e2e_test_div_" + row + "x" + col);
                   log.info("animationwhat", game.isComputerTurn());
                   if (game.isMyTurn()){
