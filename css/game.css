@@ -97,8 +97,8 @@ td {
   transform: translate3d(0,0,0);
 }
 @keyframes Fade {
-  from {opacity: 1;  top: 0%}
-  to {opacity: 0.1;  top: -25%}
+  from {opacity: 1;  transform: translateY(0)}
+  to {opacity: 0.1;  transform: translateY(-25%)}
 }
 
 .scoreBox {
@@ -106,8 +106,8 @@ td {
 }
 
 @keyframes moveup {
-  from {  top: 0%}
-  to { top: -25%}
+  from {  transform: translateY(0)}
+  to { transform: translateY(-25%)}
 }
 
 
