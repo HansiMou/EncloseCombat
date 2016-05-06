@@ -517,6 +517,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
           let percent = Math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy))/(realHeight/2/rowsNum);
           if (game.moves.length !== 0){
               let XY = getSquareCenterXY(game.moves[game.moves.length-1].row, game.moves[game.moves.length-1].col);
+              // pline2.setAttribute("stroke", getColor(row, col));
               pline2.setAttribute("x1",XY.x+"");
               pline2.setAttribute("y1",XY.y+"");
               pline2.setAttribute("x2",x+"");
@@ -578,6 +579,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                         pline2.setAttribute("y1","0");
                         pline2.setAttribute("x2","0");
                         pline2.setAttribute("y2","0");
+                        // pline2.setAttribute("stroke", getColor(row, col));
                     }
                     let centerXY = getSquareCenterXY(row, col);
                     if (game.moves.length == 1){
@@ -586,6 +588,8 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
                     // if it is not enclosed
                     else {
                         let tmp = pline.getAttribute("points");
+                        let color = getStyle(row, col);
+                        // pline.setAttribute("style", color);
                         pline.setAttribute("points", tmp+centerXY.x+","+centerXY.y+" ");
                     }
                   }
@@ -606,6 +610,34 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap', 'gameServices'])
           draggingLines.offsetHeight;
           draggingLines.style.webkitTransform = 'scale(1)';
           game.moves = new Array();
+        }
+      }
+      function getColor(row: number, col: number): string{
+        if (game.isPieceR(row, col)){
+          return "red";
+        }
+        else if (game.isPieceG(row, col)){
+          return "green";
+        }
+        else if (game.isPieceB(row, col)){
+          return "blue";
+        }
+        else if (game.isPieceX(row, col)){
+          return "yellow";
+        }
+      }
+      function getStyle(row: number, col: number): string{
+        if (game.isPieceR(row, col)){
+          return "fill:none;stroke:red;stroke-width:2%; stroke-opacity: 0.7";
+        }
+        else if (game.isPieceG(row, col)){
+          return "fill:none;stroke:green;stroke-width:2%; stroke-opacity: 0.7";
+        }
+        else if (game.isPieceB(row, col)){
+          return "fill:none;stroke:blue;stroke-width:2%; stroke-opacity: 0.7";
+        }
+        else if (game.isPieceX(row, col)){
+          return "fill:none;stroke:yellow;stroke-width:2%; stroke-opacity: 0.7";
         }
       }
       function containsDupOthanThanFirst(moves: BoardDelta[], row: number, col: number){
