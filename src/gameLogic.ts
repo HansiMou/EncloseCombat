@@ -44,7 +44,7 @@ module gameLogic {
   export const num_of_colors = 4;
 
   /** Returns the initial EncloseCombat board, which is a ROWSxCOLS matrix containing the initial of a certain color. */
-  function getInitialBoard(): Board {
+  export function getInitialBoard(): Board {
     let board: Board = [];
     for (let i = 0; i < ROWS; i++) {
       board[i] = [];
@@ -75,7 +75,7 @@ module gameLogic {
       }
   }
   
-  function getIntialScores(): number[]{
+  export function getIntialScores(): number[]{
       let scores: number[] = [];
       for (let i = 0; i < num_of_players; i++){
           scores[i] = 0;

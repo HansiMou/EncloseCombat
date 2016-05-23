@@ -38,7 +38,8 @@ module.exports = function(config) {
     plugins : [
             'karma-chrome-launcher',
             'karma-jasmine',
-            'karma-coverage'
+            'karma-coverage',
+            'karma-html-reporter'
             ]
 
   });

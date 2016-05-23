@@ -20,6 +20,7 @@ var gameLogic;
         }
         return board;
     }
+    gameLogic.getInitialBoard = getInitialBoard;
     /** Between 1 to num_of_colors, a random number is chosen and return a corresponding color */
     function getRandomColor() {
         var res = Math.floor((Math.random() * gameLogic.num_of_colors) + 1);
@@ -43,6 +44,7 @@ var gameLogic;
         }
         return scores;
     }
+    gameLogic.getIntialScores = getIntialScores;
     /** Set the first turn to be 1, and the intial score for all players to be 0 */
     function getInitialState() {
         var ib = getInitialBoard();
